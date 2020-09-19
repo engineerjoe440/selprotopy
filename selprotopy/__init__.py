@@ -9,3 +9,10 @@ Supports:
 
 _name_ = "selprotopy"
 _version_ = "0.0"
+
+# Local Imports
+from . import commands
+from . import parser
+
+
+# END
