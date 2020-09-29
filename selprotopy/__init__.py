@@ -12,7 +12,7 @@ _version_ = "0.0"
 
 # Local Imports
 from . import commands
-from . import parser
+from . import protoparser
 
 
 # END
