@@ -32,6 +32,8 @@ RE_ID_BLOCKS = {
     'SPECIAL':  RE_ID_BLOCK_8,
 }
 
+
+###################################################################################
 # Define Relay ID Block Parser
 def RelayIdBlock( data, encoding='', verbose=False ):
     """
@@ -92,7 +94,10 @@ def RelayDnaBlock( data, encoding='', verbose=False ):
         else:
             break
     return binaries
+###################################################################################
 
+
+###################################################################################
 # Define Relay Definition Block Parser
 def RelayDefinitionBlock( data, verbose=False):
     """
@@ -156,7 +161,7 @@ def RelayDefinitionBlock( data, verbose=False):
         return struct
     except:
         raise ValueError("Invalid data string response")
-
+###################################################################################
 
 
 

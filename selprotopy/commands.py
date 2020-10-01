@@ -39,6 +39,8 @@ DNA = b"DNA" + CR
 BNA = b"BNA" + CR
 
 
+
+###################################################################################
 # Define Simple Function to Evaluate Request String for Numbered Event Record
 def event_record_request(event_number):
     """
