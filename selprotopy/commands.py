@@ -39,6 +39,10 @@ DNA = b"DNA" + CR
 BNA = b"BNA" + CR
 
 
+# Define Default SEL Relay Passwords
+PASS_ACC = b"OTTER"
+PASS_2AC = b"TAIL"
+
 
 ###################################################################################
 # Define Simple Function to Evaluate Request String for Numbered Event Record
