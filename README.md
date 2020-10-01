@@ -1,4 +1,4 @@
-# sel-proto-py <img src="https://raw.githubusercontent.com/engineerjoe440/sel-proto-py/master/logo/selprotopy.svg" width="250" alt="logo" align="right">
+# sel-proto-py <img src="https://raw.githubusercontent.com/engineerjoe440/sel-proto-py/master/logo/selprotopy.png" width="250" alt="logo" align="right">
 Schweitzer Engineering Laboratories (SEL) Protocol Bindings in Python
 
 ***This project is still in early stages, much is still to come.***
