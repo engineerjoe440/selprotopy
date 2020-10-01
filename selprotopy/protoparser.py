@@ -90,10 +90,40 @@ def RelayDnaBlock( data, encoding='', verbose=False ):
                 row.append([columns[8]])
                 binaries.append( row )
             except:
-                print(f"Couldn't parse line: {line}")
+                if verbose: print(f"Couldn't parse line: {line}")
         else:
             break
     return binaries
+
+# Define Relay Status Bit Name Parser
+def RelayBnaBlock( data, encoding='', verbose=False ):
+    """
+    
+    """
+    if encoding:
+        # Decode Bytes
+        bnastring = data.decode(encoding)
+    else:
+        # Pass Data Directly
+        bnastring = data
+    # Remove Double Quotes
+    bnastring = bnastring.replace('"','')
+    # Iteratively Process Lines
+    bitnames = []
+    for line in bnastring.split('\n')
+        # Verify that Comma is Present
+        if ',' in line:
+            entries = line.split(',')
+            # Attempt Generating Binaries List
+            try:
+                names = entries[0:8]
+                names.append( [entries[8]] )
+                bitnames.append( names )
+            except:
+                if verbose: print(f"Couldn't parse line: {line}")
+        else:
+            break
+        return bitnames
 ###################################################################################
 
 
