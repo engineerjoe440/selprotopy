@@ -37,7 +37,28 @@ RE_ID_BLOCKS = {
 # Define Relay ID Block Parser
 def RelayIdBlock( data, encoding='', verbose=False ):
     """
+    `RelayIdBlock`
     
+    Parser for a relay ID/Firmware ID block to describe the relay's
+    firmware version, part number, and configuration.
+    
+    Parameters
+    ----------
+    data:       str
+                The full ID string returned from the relay, may
+                optionally be passed as a byte-string if the
+                encoding is also described.
+    encoding:   str, optional
+                Optional encoding format to describe which encoding
+                method should be used to decode the data passed.
+    verbose:    bool, optional
+                Control to optionally utilize verbose printing.
+    
+    Returns
+    -------
+    results:    dict of str
+                Dictionary containing each of the string results
+                from the various ID/FID fields.
     """
     if encoding:
         # Decode Bytes
@@ -55,6 +76,9 @@ def RelayIdBlock( data, encoding='', verbose=False ):
             results[id_key] = key_result
             results[id_key + '_checksum'] = checksum
         except:
+            # Store Empty Results
+            results[id_key] = ''
+            results[id_key + '_checksum'] = ''
             if verbose:
                 print(f'Unable to determine {id_key} parameter from relay ID.')
     # Return Parsed ID Components
@@ -63,7 +87,27 @@ def RelayIdBlock( data, encoding='', verbose=False ):
 # Define Relay DNA Block Parser
 def RelayDnaBlock( data, encoding='', verbose=False ):
     """
+    `RelayDnaBlock`
     
+    Parser for a relay digital names block to describe the configured
+    digital names for a relay.
+    
+    Parameters
+    ----------
+    data:       str
+                The full DNA string returned from the relay, may
+                optionally be passed as a byte-string if the
+                encoding is also described.
+    encoding:   str, optional
+                Optional encoding format to describe which encoding
+                method should be used to decode the data passed.
+    verbose:    bool, optional
+                Control to optionally utilize verbose printing.
+    
+    Returns
+    -------
+    binaries:   list of list
+                List of the target rows with each element's label.
     """
     dnacontrol = '>DNA'
     if encoding:
@@ -98,7 +142,27 @@ def RelayDnaBlock( data, encoding='', verbose=False ):
 # Define Relay Status Bit Name Parser
 def RelayBnaBlock( data, encoding='', verbose=False ):
     """
+    `RelayBnaBlock`
     
+    Parser for a relay bit names block to describe the configured
+    bit names for a relay.
+    
+    Parameters
+    ----------
+    data:       str
+                The full BNA string returned from the relay, may
+                optionally be passed as a byte-string if the
+                encoding is also described.
+    encoding:   str, optional
+                Optional encoding format to describe which encoding
+                method should be used to decode the data passed.
+    verbose:    bool, optional
+                Control to optionally utilize verbose printing.
+    
+    Returns
+    -------
+    bitnames:   list of list
+                List of the target rows with each element's label.
     """
     if encoding:
         # Decode Bytes
@@ -110,7 +174,7 @@ def RelayBnaBlock( data, encoding='', verbose=False ):
     bnastring = bnastring.replace('"','')
     # Iteratively Process Lines
     bitnames = []
-    for line in bnastring.split('\n')
+    for line in bnastring.split('\n'):
         # Verify that Comma is Present
         if ',' in line:
             entries = line.split(',')

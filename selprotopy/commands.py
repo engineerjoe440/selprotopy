@@ -38,10 +38,16 @@ ENA = b"ENA" + CR
 DNA = b"DNA" + CR
 BNA = b"BNA" + CR
 
-
 # Define Default SEL Relay Passwords
 PASS_ACC = b"OTTER"
 PASS_2AC = b"TAIL"
+
+# Define Access Level Indicators
+LEVEL_0 = b"="
+LEVEL_1 = b"=>"
+LEVEL_2 = b"=>>"
+LEVEL_C = b"==>>"
+PROMPT = CR + LEVEL_0
 
 
 ###################################################################################
