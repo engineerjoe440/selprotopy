@@ -4,7 +4,7 @@
 SELPROTOPY: Python Bindings for the SEL Protocol Suite
 ======================================================
 
-`selprotopy` is intended to be used as a protocol binding suite for the SEL Protocol
+**``selprotopy``** is intended to be used as a protocol binding suite for the SEL Protocol
 suite which includes SEL Fast Meter, SEL Fast Message, and SEL Fast Operate; each of
 which are proprietary protocols designed by
 `Schweitzer Engineering Laboratories <https://selinc.com/>`_ for use primarily with

@@ -1,0 +1,4 @@
+wheel
+sphinx
+pyserial
+sphinx-sitemap
