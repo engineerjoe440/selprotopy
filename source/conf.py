@@ -48,30 +48,30 @@ html_theme = 'classic'
 html_title = 'selprotopy'
 html_logo  = '../logo/selprotopy_wht_text.png'
 html_favicon = '../logo/selprotopy_bare.png'
-# html_theme_options = {
-    # 'rightsidebar':     'false'
-    # 'stickysidebar':    'false'
-    # 'collapsiblesidebar': 'false'
-    # 'externalrefs':     'false'
-    # 'footerbgcolor':    ,
-    # 'footertextcolor':  ,
-    # 'sidebarbgcolor':   ,
+html_theme_options = {
+    'rightsidebar':     'false',
+    'stickysidebar':    'false',
+    'collapsiblesidebar': 'false',
+    'externalrefs':     'false',
+    'footerbgcolor':    '#08385D',
+    'footertextcolor':  '#ffffff',
+    'sidebarbgcolor':   '#08385D',
     # 'sidebartextcolor': ,
-    # 'relbarbgcolor':    ,
-    # 'relbartextcolor':  ,
-    # 'relbarlinkcolor':  ,
-    # 'bgcolor':          ,
+    'relbarbgcolor':    '#08385D',
+    'relbartextcolor':  '#ffffff',
+    # 'relbarlinkcolor':  '#3432D8',
+    'bgcolor':          '#ffffff',
     # 'textcolor':        ,
-    # 'linkcolor':        ,
+    'linkcolor':        '#3432D8',
     # 'visitedlinkcolor': ,
-    # 'headbgcolor':      ,
-    # 'headtextcolor':    ,
-    # 'headlinkcolor':    ,
+    'headbgcolor':      '#C1C1C1',
+    'headtextcolor':    '#08385D',
+    'headlinkcolor':    '#3432D8',
     # 'codebgcolor':      ,
     # 'codetextcolor':    ,
     # 'bodyfont':         ,
     # 'headfont':         ,
-# }
+}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
