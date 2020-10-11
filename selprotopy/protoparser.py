@@ -9,6 +9,7 @@ Supports:
 
 # Import Requirements
 import re
+import binascii
 
 
 # Define ID Block for RegEx
@@ -193,7 +194,7 @@ def RelayBnaBlock( data, encoding='', verbose=False ):
 
 ###################################################################################
 # Define Relay Definition Block Parser
-def RelayDefinitionBlock( data, verbose=False):
+def RelayDefinitionBlock( data, verbose=False ):
     """
     `RelayDefinitionBlock`
     
@@ -206,10 +207,12 @@ def RelayDefinitionBlock( data, verbose=False):
     data:       bytes
                 The full byte-string returned from a
                 relay using SEL protocol.
+    verbose:    bool, optional
+                Control to optionally utilize verbose printing.
     
     Returns
     -------
-    dict
+    struct:     dict
                 Dictionary of key-value pairs describing
                 the relay's definition block.
     """
@@ -227,6 +230,7 @@ def RelayDefinitionBlock( data, verbose=False):
         struct['fmcommandinfo'] = []
         struct['statusflaginfo']= []
         if verbose:
+            print("Generic Relay Definition Block Information")
             print(struct['command'])
             print(struct['length'])
             print(struct['numprotocolsup'])
@@ -241,7 +245,9 @@ def RelayDefinitionBlock( data, verbose=False):
             struct['fmcommandinfo'].append(dict)
             ind += 4
         struct['fmtype'] = bytArr[ind]
-        if verbose: print(struct['fmcommandinfo'],'\n',struct['fmtype'])
+        if verbose:
+            print("Fast Meter Command Information")
+            print(struct['fmcommandinfo'],'\n',struct['fmtype'])
         ind += 1
         # Iterate Over the Status Flag Commands
         for _ in range(struct['statusflagssup']):
@@ -250,9 +256,98 @@ def RelayDefinitionBlock( data, verbose=False):
             dict['affectedcommand'] = bytes(bytArr[ind+2:ind+8])
             struct['statusflaginfo'].append(dict)
             ind += 8
-        if verbose: print(struct['statusflaginfo'])
+        if verbose:
+            print("Status Flag Information")
+            print(struct['statusflaginfo'])
         # Return Resultant Structure
         return struct
+    except:
+        raise ValueError("Invalid data string response")
+
+# Define Relay Definition Block Parser
+def FastMeterConfigurationBlock( data, byteorder='big', signed=True, verbose=False ):
+    """
+    `FastMeterConfigurationBlock`
+    
+    Parser for a relay's fast meter block to describe
+    the relay's available functional message, control,
+    and event blocks
+    
+    Parameters
+    ----------
+    data:       bytes
+                The full byte-string returned from a
+                relay using SEL protocol.
+    byteorder:  ['big', 'little'], optional
+                Control of how bytes are interpreted as
+                integers, using big-endian or little-endian
+                operations. Defaults to 'big'
+    signed:     bool, optional
+                Control to specify whether the bytes should
+                be interpreted as signed or unsigned integers.
+                Defaults to True
+    verbose:    bool, optional
+                Control to optionally utilize verbose printing.
+    
+    Returns
+    -------
+    struct:     dict
+                Dictionary of key-value pairs describing
+                the relay's fast meter configuration block.
+    """
+    # Capture Byte Array for Parsing
+    bytArr = bytearray(data)
+    struct = {}
+    try:
+        # Parse Data, Load Attributes
+        struct['command']       = bytes(bytArr[:2])
+        struct['length']        = bytArr[2]
+        struct['numstatusflags']= bytArr[3]
+        ind = 4
+        if bytArr[ind] == 1:
+            struct['scalefactloc']  = bytArr[ind]
+            struct['numscalefact']  = bytArr[ind+1]
+            ind += 2
+        struct['numanalogins']  = bytArr[ind]
+        struct['numsampperchan']= bytArr[ind+1]
+        struct['numdigitalbank']= bytArr[ind+2]
+        struct['numcalcblocks'] = bytArr[ind+3]
+        # Determine Offsets
+        struct['analogchanoff'] = int.from_bytes(bytArr[ind+4:ind+6],
+                                                byteorder=byteorder,
+                                                signed=signed)
+        struct['timestmpoffset']= int.from_bytes(bytArr[ind+6:ind+8],
+                                                byteorder=byteorder,
+                                                signed=signed)
+        struct['digitaloffset'] = int.from_bytes(bytArr[ind+6:ind+8],
+                                                byteorder=byteorder,
+                                                signed=signed)
+        ind += 7
+        # Iteratively Interpret the Analog Channels
+        struct['analogchannels'] = []
+        for _ in range(struct['numanalogins']):
+            dict = {}
+            bytstr = bytes(bytArr[ind:ind+6])
+            dict['name'] = ''
+            for char in bytstr:
+                if char != 0:
+                    dict['name']    += chr(char)
+            print(dict['name'])
+        if verbose:
+            print("Generic Fast Meter Block Information")
+            print("Command:", struct['command'])
+            print("Message Length:",struct['length'])
+            print("Number of Status Flags:",struct['numstatusflags'])
+            if 'scalefactloc' in struct.keys():
+                print("Scale Factor Location:",struct['scalefactloc'])
+                print("Number of Scale Factors:",struct['numscalefact'])
+            print("Number of Analog Inputs:",struct['numanalogins'])
+            print("Number of Samples per Channel:",struct['numsampperchan'])
+            print("Number of Digital Banks:",struct['numdigitalbank'])
+            print("Number of Calculation Blocks:",struct['numcalcblocks'])
+            print("Analog Channel Offset:",struct['analogchanoff'])
+            print("Time Stamp Offset:",struct['timestmpoffset'])
+            print("Digital Channel Offset:",struct['digitaloffset'])
     except:
         raise ValueError("Invalid data string response")
 ###################################################################################
