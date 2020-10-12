@@ -37,6 +37,9 @@ ID  = b"ID" + CR
 ENA = b"ENA" + CR
 DNA = b"DNA" + CR
 BNA = b"BNA" + CR
+QUIT   = b"QUI" + CR
+GO_ACC = b"ACC" + CR
+GO_2AC = b"2AC" + CR
 
 # Define Default SEL Relay Passwords
 PASS_ACC = b"OTTER"

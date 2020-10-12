@@ -23,12 +23,17 @@ __version__ = _version_ # Alias the Version String
 try:
     from . import commands
     from . import protoparser
+    from . import telnetlib_support
 except:
     import commands
     import protoparser
+    import telnetlib_support
 
 # Standard Imports
 import time
+import telnetlib
+
+telnetlib.Telnet.process_rawq = telnetlib_support.process_rawq
 
 
 # Define Simple Polling Client
@@ -120,6 +125,7 @@ class PollingClient():
         if verbose: print('Verifying Connection...')
         if not self._verify_connection(): return False # Indicate Failure
         if verbose: print('Connection Verified.')
+        self.quit()
         if autoconfig_now:
             # Run Auto-Configuration
             self.autoconfig(verbose=verbose)
@@ -142,11 +148,28 @@ class PollingClient():
         return connected
     
     # Define Method to Read All Data to Next Relay Prompt
-    def _read_to_prompt( self ):
+    def _read_to_prompt( self, prompt_str = commands.PROMPT ):
         response = self.conn.read_until( commands.PROMPT )
         if self.verbose: print(response)
         return response
     
+    # Define Method to Attempt Reading Everything (only for telnetlib)
+    def _read_everything( self ):
+        response = self.conn.read_very_eager()
+        if self.verbose: print(response)
+        return response
+    
+    # Define Method to Return to Access Level 0
+    def quit(self):
+        """
+        
+        """
+        self.conn.write( commands.QUIT )
+        self._read_to_prompt( commands.LEVEL_0 )
+    
+    # Define Method to Access Level 1
+    
+    # Define Method to Perform Auto-Configuration Process
     def autoconfig( self, verbose=False ):
         """
         `autoconfig` Method
@@ -210,17 +233,18 @@ class PollingClient():
             verbose=verbose)
         #### TESTING
         self.conn.write( self.fmcommand1 + commands.CR )
-        self._read_to_prompt()
-        self.conn.write( self.fmcommand2 + commands.CR )
-        self._read_to_prompt()
-        self.conn.write( self.fmcommand3 + commands.CR )
-        self._read_to_prompt()
+        print(len(self._read_everything()))
+        time.sleep(10)
+        print(len(self._read_everything()))
+        # self.conn.write( self.fmcommand2 + commands.CR )
+        # self._read_to_prompt()
+        # self.conn.write( self.fmcommand3 + commands.CR )
+        # self._read_to_prompt()
 
 
 
 
 if __name__ == '__main__':
-    import telnetlib
     print('Establishing Connection...')
     with telnetlib.Telnet('192.168.254.10', 23) as tn:
         print('Initializing Client...')

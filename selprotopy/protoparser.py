@@ -33,6 +33,11 @@ RE_ID_BLOCKS = {
     'SPECIAL':  RE_ID_BLOCK_8,
 }
 
+ACCEPTEDLABELCHARS = [
+    '+',
+    '-',
+]
+
 
 ###################################################################################
 # Define Relay ID Block Parser
@@ -313,26 +318,27 @@ def FastMeterConfigurationBlock( data, byteorder='big', signed=True, verbose=Fal
         struct['numdigitalbank']= bytArr[ind+2]
         struct['numcalcblocks'] = bytArr[ind+3]
         # Determine Offsets
-        struct['analogchanoff'] = int.from_bytes(bytArr[ind+4:ind+6],
-                                                byteorder=byteorder,
-                                                signed=signed)
-        struct['timestmpoffset']= int.from_bytes(bytArr[ind+6:ind+8],
-                                                byteorder=byteorder,
-                                                signed=signed)
-        struct['digitaloffset'] = int.from_bytes(bytArr[ind+6:ind+8],
-                                                byteorder=byteorder,
-                                                signed=signed)
-        ind += 7
+        struct['analogchanoff'] = bytArr[ind+4]
+        struct['timestmpoffset']= bytArr[ind+5]
+        struct['digitaloffset'] = bytArr[ind+6]
+        ind += 6
         # Iteratively Interpret the Analog Channels
         struct['analogchannels'] = []
         for _ in range(struct['numanalogins']):
             dict = {}
             bytstr = bytes(bytArr[ind:ind+6])
             dict['name'] = ''
-            for char in bytstr:
-                if char != 0:
-                    dict['name']    += chr(char)
-            print(dict['name'])
+            for byte in bytstr:
+                ind += 1
+                char = chr(byte)
+                if (char.isalnum() or char in ACCEPTEDLABELCHARS) and byte < 123:
+                    dict['name']    += char
+                elif dict['name'] != '':
+                    break
+            dict['channeltype'] = bytArr[ind-1]
+            dict['factortype']  = bytArr[ind]
+            # Append the Analog Channel Description:
+            struct['analogchannels'].append( dict )
         if verbose:
             print("Generic Fast Meter Block Information")
             print("Command:", struct['command'])
