@@ -233,13 +233,7 @@ class PollingClient():
             verbose=verbose)
         #### TESTING
         self.conn.write( self.fmcommand1 + commands.CR )
-        print(len(self._read_everything()))
-        time.sleep(10)
-        print(len(self._read_everything()))
-        # self.conn.write( self.fmcommand2 + commands.CR )
-        # self._read_to_prompt()
-        # self.conn.write( self.fmcommand3 + commands.CR )
-        # self._read_to_prompt()
+        print(len(self._read_to_prompt()))
 
 
 

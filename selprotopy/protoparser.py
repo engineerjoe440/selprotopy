@@ -308,35 +308,40 @@ def FastMeterConfigurationBlock( data, byteorder='big', signed=True, verbose=Fal
         struct['command']       = bytes(bytArr[:2])
         struct['length']        = bytArr[2]
         struct['numstatusflags']= bytArr[3]
-        ind = 4
-        if bytArr[ind] == 1:
-            struct['scalefactloc']  = bytArr[ind]
-            struct['numscalefact']  = bytArr[ind+1]
-            ind += 2
-        struct['numanalogins']  = bytArr[ind]
-        struct['numsampperchan']= bytArr[ind+1]
-        struct['numdigitalbank']= bytArr[ind+2]
-        struct['numcalcblocks'] = bytArr[ind+3]
+        struct['scalefactloc']  = bytArr[4]
+        struct['numscalefact']  = bytArr[5]
+        struct['numanalogins']  = bytArr[6]
+        struct['numsampperchan']= bytArr[7]
+        struct['numdigitalbank']= bytArr[8]
+        struct['numcalcblocks'] = bytArr[9]
         # Determine Offsets
-        struct['analogchanoff'] = bytArr[ind+4]
-        struct['timestmpoffset']= bytArr[ind+5]
-        struct['digitaloffset'] = bytArr[ind+6]
-        ind += 6
+        struct['analogchanoff'] = int.from_bytes( bytArr[10:12],
+                                                  byteorder=byteorder,
+                                                  signed=signed )
+        struct['timestmpoffset']= int.from_bytes( bytArr[12:14],
+                                                  byteorder=byteorder,
+                                                  signed=signed )
+        struct['digitaloffset'] = int.from_bytes( bytArr[14:16],
+                                                  byteorder=byteorder,
+                                                  signed=signed )
         # Iteratively Interpret the Analog Channels
+        ind = 16
         struct['analogchannels'] = []
         for _ in range(struct['numanalogins']):
             dict = {}
             bytstr = bytes(bytArr[ind:ind+6])
             dict['name'] = ''
             for byte in bytstr:
-                ind += 1
                 char = chr(byte)
-                if (char.isalnum() or char in ACCEPTEDLABELCHARS) and byte < 123:
+                if byte != 0:
                     dict['name']    += char
-                elif dict['name'] != '':
-                    break
-            dict['channeltype'] = bytArr[ind-1]
-            dict['factortype']  = bytArr[ind]
+            ind += 6
+            dict['channeltype'] = bytArr[ind]
+            dict['factortype']  = bytArr[ind+1]
+            dict['scaleoffset'] = int.from_bytes( bytArr[ind:ind+2],
+                                                  byteorder=byteorder,
+                                                  signed=signed )
+            ind += 4
             # Append the Analog Channel Description:
             struct['analogchannels'].append( dict )
         if verbose:
