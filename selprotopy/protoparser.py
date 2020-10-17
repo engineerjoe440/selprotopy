@@ -33,10 +33,43 @@ RE_ID_BLOCKS = {
     'SPECIAL':  RE_ID_BLOCK_8,
 }
 
-ACCEPTEDLABELCHARS = [
-    '+',
-    '-',
-]
+
+# Define Simple Function to Cast Binary Integer to List of Bools
+def int_to_bool_list( number, byte_like=False ):
+    """
+    `int_to_bool_list`
+    
+    This function converts an integer to a list of boolean values,
+    where the most significant value is stored in the highest point
+    of the list. That is, a binary number: 8 would be represented as
+    [False, False, False, True]
+    
+    Parameters
+    ----------
+    number:     int
+                Integer to be converted to list of boolean values
+                according to binary representation.
+    byte_like:  bool, optional
+                Control to verify that the integer is broken into a
+                list of booleans that could be composed into a byte
+                string object (i.e. length of list is divisible by 8),
+                defaults to False.
+    
+    Returns
+    -------
+    bin_list:   list of bool
+                List of boolean values cast from the binary
+                representation of the integer passed to the
+                function.
+    """
+    bin_string = format(number, '04b')
+    bin_list = [x == '1' for x in bin_string[::-1]]
+    # Extend List of Bytes if Needed
+    if byte_like:
+        len_needed = ((len(bin_list)//8)+1) * 8
+        apnd_list  = [False] * (len_needed - len(bin_list))
+        bin_list.extend(apnd_list)
+    return bin_list
 
 
 ###################################################################################
@@ -344,14 +377,76 @@ def FastMeterConfigurationBlock( data, byteorder='big', signed=True, verbose=Fal
             ind += 4
             # Append the Analog Channel Description:
             struct['analogchannels'].append( dict )
+        # Iteratively Interpret the Calculation Blocks
+        struct['calcblocks'] = []
+        for _ in range(struct['numcalcblocks']):
+            dict = {}
+            # Determine the Line Configuration
+            # rot:      Rotation
+            # vConDP:   Delta Connected, Positive Sequence
+            # vConDN:   Delta Connected, Negative Sequence
+            # iConDP:   Delta Connected, Positive Sequence
+            # iConDN:   Delta Connected, Negative Sequence
+            val = bytArr[ind]
+            [rot, vConDP, vConDN, iConDP, iConDN, na, na, na] = int_to_bool_list( val,
+                byte_like=True)
+            # Evaluate Rotation
+            dict['line'] = val
+            dict['rotation'] = 'ACB' if rot else 'ABC'
+            # Evaluate Voltage Connection
+            if vConDN:
+                dict['voltage'] = 'AC-BA-CB'
+            elif vConDP:
+                dict['voltage'] = 'AB-BC-CA'
+            else:
+                dict['voltage'] = 'Y'
+            # Evaluate Current Connection
+            if iConDN:
+                dict['current'] = 'AC-BA-CB'
+            elif iConDP:
+                dict['current'] = 'AB-BC-CA'
+            else:
+                dict['current'] = 'Y'
+            ind += 1
+            # Determine the Calculation Type
+            val = bytArr[ind]
+            dict['type'] = val
+            ind += 1
+            if val == 0:
+                dict['typedesc'] = 'standard-power'
+            elif val == 1:
+                dict['typedesc'] = '2-1/2 element Δ power'
+            elif val == 2:
+                dict['typedesc'] = 'voltages only'
+            elif val == 3:
+                dict['typedesc'] = 'currents only'
+            elif val == 4:
+                dict['typedesc'] = 'single-phase IA and VA only'
+            elif val == 5:
+                dict['typedesc'] = 'standard-power with two sets of currents'
+            else:
+                dict['typedesc'] = '2-1/2 element Δ power with two sets of currents'
+            # Determine Skew Correction offset, Rs offset, and Xs offset
+            dict['skewoffset'] = bytes(bytArr[ind:ind+2])
+            dict['rsoffset'] = bytes(bytArr[ind+2:ind+4])
+            dict['xsoffset'] = bytes(bytArr[ind+4:ind+6])
+            # Determine Current Indicies
+            ind += 1
+            dict['iaindex'] = bytArr[ind+0]
+            dict['ibindex'] = bytArr[ind+1]
+            dict['icindex'] = bytArr[ind+2]
+            dict['vaindex'] = bytArr[ind+3]
+            dict['vbindex'] = bytArr[ind+4]
+            dict['vcindex'] = bytArr[ind+5]
+            # Store Dictionary
+            struct['calcblocks'].append(dict)
         if verbose:
             print("Generic Fast Meter Block Information")
             print("Command:", struct['command'])
             print("Message Length:",struct['length'])
             print("Number of Status Flags:",struct['numstatusflags'])
-            if 'scalefactloc' in struct.keys():
-                print("Scale Factor Location:",struct['scalefactloc'])
-                print("Number of Scale Factors:",struct['numscalefact'])
+            print("Scale Factor Location:",struct['scalefactloc'])
+            print("Number of Scale Factors:",struct['numscalefact'])
             print("Number of Analog Inputs:",struct['numanalogins'])
             print("Number of Samples per Channel:",struct['numsampperchan'])
             print("Number of Digital Banks:",struct['numdigitalbank'])

@@ -113,6 +113,10 @@ class PollingClient():
     fmconfigcommand3    = commands.FAST_METER_DEMAND
     fmcommand3          = commands.FAST_METER_PEAK_DEMAND
     
+    # Allocate Space for Relay Definition Responses
+    fastMeterDef        = None
+    fastDemandDef       = None
+    fastPkDemandDef     = None
     
     def __init__( self, connApi, autoconfig_now=True, validConnChecks=5,
                   interdelay=0.025, verbose=False ):
@@ -219,21 +223,30 @@ class PollingClient():
         self.fmconfigcommand3   = definition['fmcommandinfo'][2]['configcommand']
         self.fmcommand3         = definition['fmcommandinfo'][2]['command']
         # Request the Meter Blocks
+        self.autoconfig_fastmeter( verbose=verbose )
+        #self.autoconfig_fastmeter_demand( verbose=verbose )
+        #self.autoconfig_fastmeter_peakdemand( verbose=verbose )
+
+    # Define Method to Run the Fast Meter Configuration
+    def autoconfig_fastmeter(self, verbose=False):
         # Fast Meter
         self.conn.write( self.fmconfigcommand1 + commands.CR )
-        fastMeterDef = protoparser.FastMeterConfigurationBlock(self._read_to_prompt(),
-            verbose=verbose)
+        self.fastMeterDef = protoparser.FastMeterConfigurationBlock(
+                                self._read_to_prompt(), verbose=verbose)
+    
+    # Define Method to Run the Fast Meter Demand Configuration
+    def autoconfig_fastmeter_demand(self, verbose=False):
         # Fast Meter Demand
         self.conn.write( self.fmconfigcommand2 + commands.CR )
-        fastDemandDef = protoparser.FastMeterConfigurationBlock(self._read_to_prompt(),
-            verbose=verbose)
+        self.fastDemandDef = protoparser.FastMeterConfigurationBlock(
+                                self._read_to_prompt(), verbose=verbose)
+    
+    # Define Method to Run the Fast Meter Peak Demand Configuration
+    def autoconfig_fastmeter_peakdemand(self, verbose=False):
         # Fast Meter Peak Demand
         self.conn.write( self.fmconfigcommand3 + commands.CR )
-        fastPkDemandDef = protoparser.FastMeterConfigurationBlock(self._read_to_prompt(),
-            verbose=verbose)
-        #### TESTING
-        self.conn.write( self.fmcommand1 + commands.CR )
-        print(len(self._read_to_prompt()))
+        self.fastPkDemandDef = protoparser.FastMeterConfigurationBlock(
+                                self._read_to_prompt(), verbose=verbose)
 
 
 
