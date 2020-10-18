@@ -11,8 +11,29 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 # import os
+# import re
 # import sys
-# sys.path.insert(0, os.path.abspath('.'))
+# print("Build with:", sys.version)
+# parent_dir = os.path.dirname(os.getcwd())
+# initfile = os.path.join(parent_dir,'selprotopy','__init__.py')
+# sys.path.insert(0,parent_dir)
+# print(parent_dir)
+# # Gather Version Information from Python File
+# with open(initfile) as fh:
+    # file_str = fh.read()
+    # name = re.search('_name_ = \"(.*)\"', file_str).group(1)
+    # ver = re.search('_version_ = \"(.*)\"', file_str).group(1)
+    # # Version Breakdown:
+    # # MAJOR CHANGE . MINOR CHANGE . MICRO CHANGE
+    # print("Sphinx HTML Build For:",name,"   Version:",ver)
+
+
+# Verify Import
+try:
+    import selprotopy
+except:
+    print("Couldn't import `selprotopy` module!")
+    sys.exit(9)
 
 
 # -- Project information -----------------------------------------------------
@@ -27,8 +48,14 @@ author = 'Joe Stanley'
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = [
+extensions = [  'sphinx.ext.autodoc',
+                'sphinx.ext.napoleon',
+                'sphinx.ext.autosummary',
+                'numpydoc',
+                'sphinx_sitemap',
 ]
+autosummary_generate = True
+numpydoc_show_class_members = True
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -76,4 +103,9 @@ html_theme_options = {
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+html_static_path = ['static']
+
+
+
+
+# END

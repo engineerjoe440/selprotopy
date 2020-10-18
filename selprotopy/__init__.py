@@ -38,9 +38,9 @@ telnetlib.Telnet.process_rawq = telnetlib_support.process_rawq
 
 
 # Define Simple Polling Client
-class PollingClient():
+class SelClient():
     """
-    `PollingClient` Class
+    `SelClient` Class
     
     The basic polling class intended to interact with an SEL relay which has
     already been connected to by way of a Telnet or Serial connection using one
@@ -512,7 +512,7 @@ if __name__ == '__main__':
     import electricpy as ep
     with telnetlib.Telnet('192.168.254.10', 23) as tn:
         print('Initializing Client...')
-        poller = PollingClient( tn, verbose=True, debug=True )
+        poller = SelClient( tn, verbose=True, debug=True )
         print(poller.access_level_2())
         for _ in range(10):
             d = poller.poll_fast_meter()#verbose=True)

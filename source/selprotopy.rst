@@ -1,10 +1,17 @@
-.. _selprotopy.py:
+API Reference
+=============
 
-.. rubric:: Modules
+.. autoclass:: selprotopy.SelClient
+   :members:
 
-.. autosummary::
-   :recursive:
-   :toctree: _autosummary
-   :template: module.rst
 
-   selprotopy
+Sub-Modules and Other Package API References
+--------------------------------------------
+
+.. toctree::
+   :maxdepth: 1
+   
+   common
+   commands
+   protoparser
+   telnetlib_support
