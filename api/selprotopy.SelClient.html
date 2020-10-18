@@ -5,39 +5,31 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>API Reference &#8212; selprotopy</title>
-    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <title>SelClient &#8212; selprotopy</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
     
-    <link rel="shortcut icon" href="_static/selprotopy_bare.png"/>
-    <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="&lt;no title&gt;" href="common.html" />
-    <link rel="prev" title="SELPROTOPY: Python Bindings for the SEL Protocol Suite" href="index.html" /> 
+    <link rel="shortcut icon" href="../_static/selprotopy_bare.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
+          <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
+          <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="common.html" title="&lt;no title&gt;"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="index.html" title="SELPROTOPY: Python Bindings for the SEL Protocol Suite"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">selprotopy</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">API Reference</a></li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">selprotopy</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">SelClient</a></li> 
       </ul>
     </div>  
 
@@ -46,12 +38,13 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="api-reference">
-<h1>API Reference<a class="headerlink" href="#api-reference" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="selclient">
+<h1>SelClient<a class="headerlink" href="#selclient" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="selprotopy.SelClient">
 <em class="property">class </em><code class="sig-prename descclassname">selprotopy.</code><code class="sig-name descname">SelClient</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">connApi</span></em>, <em class="sig-param"><span class="n">autoconfig_now</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">validConnChecks</span><span class="o">=</span><span class="default_value">5</span></em>, <em class="sig-param"><span class="n">interdelay</span><span class="o">=</span><span class="default_value">0.025</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">debug</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#selprotopy.SelClient" title="Permalink to this definition">¶</a></dt>
-<dd><p><cite>SelClient</cite> Class</p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p><cite>SelClient</cite> Class</p>
 <p>The basic polling class intended to interact with an SEL relay which has
 already been connected to by way of a Telnet or Serial connection using one
 of the following Python libraries:</p>
@@ -199,28 +192,28 @@ Defaults to False</p></li>
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#selprotopy.SelClient.access_level_1" title="selprotopy.SelClient.access_level_1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">access_level_1</span></code></a>([level_1_pass])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.access_level_1" title="selprotopy.SelClient.access_level_1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">access_level_1</span></code></a>([level_1_pass])</p></td>
 <td><p><cite>access_level_1</cite> Method</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#selprotopy.SelClient.access_level_2" title="selprotopy.SelClient.access_level_2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">access_level_2</span></code></a>([level_2_pass])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.access_level_2" title="selprotopy.SelClient.access_level_2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">access_level_2</span></code></a>([level_2_pass])</p></td>
 <td><p><cite>access_level_2</cite> Method</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#selprotopy.SelClient.autoconfig" title="selprotopy.SelClient.autoconfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig</span></code></a>([verbose])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig" title="selprotopy.SelClient.autoconfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig</span></code></a>([verbose])</p></td>
 <td><p><cite>autoconfig</cite> Method</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#selprotopy.SelClient.autoconfig_fastmeter" title="selprotopy.SelClient.autoconfig_fastmeter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_fastmeter</span></code></a>([verbose])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig_fastmeter" title="selprotopy.SelClient.autoconfig_fastmeter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_fastmeter</span></code></a>([verbose])</p></td>
 <td><p><cite>autoconfig_fastmeter</cite> Method</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#selprotopy.SelClient.autoconfig_fastmeter_demand" title="selprotopy.SelClient.autoconfig_fastmeter_demand"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_fastmeter_demand</span></code></a>([verbose])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig_fastmeter_demand" title="selprotopy.SelClient.autoconfig_fastmeter_demand"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_fastmeter_demand</span></code></a>([verbose])</p></td>
 <td><p><cite>autoconfig_fastmeter_demand</cite> Method</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#selprotopy.SelClient.autoconfig_fastmeter_peakdemand" title="selprotopy.SelClient.autoconfig_fastmeter_peakdemand"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_fastmeter_peakdemand</span></code></a>([verbose])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig_fastmeter_peakdemand" title="selprotopy.SelClient.autoconfig_fastmeter_peakdemand"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_fastmeter_peakdemand</span></code></a>([verbose])</p></td>
 <td><p><cite>autoconfig_fastmeter_peakdemand</cite> Method</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#selprotopy.SelClient.poll_fast_meter" title="selprotopy.SelClient.poll_fast_meter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">poll_fast_meter</span></code></a>([minAccLevel, verbose])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.poll_fast_meter" title="selprotopy.SelClient.poll_fast_meter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">poll_fast_meter</span></code></a>([minAccLevel, verbose])</p></td>
 <td><p><cite>poll_fast_meter</cite> Method</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#selprotopy.SelClient.quit" title="selprotopy.SelClient.quit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">quit</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.quit" title="selprotopy.SelClient.quit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">quit</span></code></a>()</p></td>
 <td><p><cite>quit</cite> Method</p></td>
 </tr>
 </tbody>
@@ -236,6 +229,43 @@ Defaults to False</p></li>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Methods Summary</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.access_level" title="selprotopy.SelClient.access_level"><code class="xref py py-obj docutils literal notranslate"><span class="pre">access_level</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.access_level_1" title="selprotopy.SelClient.access_level_1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">access_level_1</span></code></a>([level_1_pass])</p></td>
+<td><p><cite>access_level_1</cite> Method</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.access_level_2" title="selprotopy.SelClient.access_level_2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">access_level_2</span></code></a>([level_2_pass])</p></td>
+<td><p><cite>access_level_2</cite> Method</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig" title="selprotopy.SelClient.autoconfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig</span></code></a>([verbose])</p></td>
+<td><p><cite>autoconfig</cite> Method</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig_fastmeter" title="selprotopy.SelClient.autoconfig_fastmeter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_fastmeter</span></code></a>([verbose])</p></td>
+<td><p><cite>autoconfig_fastmeter</cite> Method</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig_fastmeter_demand" title="selprotopy.SelClient.autoconfig_fastmeter_demand"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_fastmeter_demand</span></code></a>([verbose])</p></td>
+<td><p><cite>autoconfig_fastmeter_demand</cite> Method</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig_fastmeter_peakdemand" title="selprotopy.SelClient.autoconfig_fastmeter_peakdemand"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_fastmeter_peakdemand</span></code></a>([verbose])</p></td>
+<td><p><cite>autoconfig_fastmeter_peakdemand</cite> Method</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.poll_fast_meter" title="selprotopy.SelClient.poll_fast_meter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">poll_fast_meter</span></code></a>([minAccLevel, verbose])</p></td>
+<td><p><cite>poll_fast_meter</cite> Method</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.quit" title="selprotopy.SelClient.quit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">quit</span></code></a>()</p></td>
+<td><p><cite>quit</cite> Method</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods Documentation</p>
 <dl class="py method">
 <dt id="selprotopy.SelClient.access_level">
 <code class="sig-name descname">access_level</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#selprotopy.SelClient.access_level" title="Permalink to this definition">¶</a></dt>
@@ -252,9 +282,9 @@ method will deescalate the permission level to ACC.</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <dl class="simple">
-<dt><a class="reference internal" href="#selprotopy.SelClient.quit" title="selprotopy.SelClient.quit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">quit()</span></code></a></dt><dd><p>Relinquish all permission with relay</p>
+<dt><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.quit" title="selprotopy.SelClient.quit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">quit()</span></code></a></dt><dd><p>Relinquish all permission with relay</p>
 </dd>
-<dt><a class="reference internal" href="#selprotopy.SelClient.access_level_2" title="selprotopy.SelClient.access_level_2"><code class="xref py py-meth docutils literal notranslate"><span class="pre">access_level_2()</span></code></a></dt><dd><p>Elevate permission to 2AC</p>
+<dt><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.access_level_2" title="selprotopy.SelClient.access_level_2"><code class="xref py py-meth docutils literal notranslate"><span class="pre">access_level_2()</span></code></a></dt><dd><p>Elevate permission to 2AC</p>
 </dd>
 </dl>
 </div>
@@ -284,9 +314,9 @@ method will deescalate the permission level to 2AC.</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <dl class="simple">
-<dt><a class="reference internal" href="#selprotopy.SelClient.quit" title="selprotopy.SelClient.quit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">quit()</span></code></a></dt><dd><p>Relinquish all permission with relay</p>
+<dt><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.quit" title="selprotopy.SelClient.quit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">quit()</span></code></a></dt><dd><p>Relinquish all permission with relay</p>
 </dd>
-<dt><a class="reference internal" href="#selprotopy.SelClient.access_level_1" title="selprotopy.SelClient.access_level_1"><code class="xref py py-meth docutils literal notranslate"><span class="pre">access_level_1()</span></code></a></dt><dd><p>Elevate permission to ACC</p>
+<dt><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.access_level_1" title="selprotopy.SelClient.access_level_1"><code class="xref py py-meth docutils literal notranslate"><span class="pre">access_level_1()</span></code></a></dt><dd><p>Elevate permission to ACC</p>
 </dd>
 </dl>
 </div>
@@ -331,11 +361,11 @@ meter blocks by way of separate method calls.</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <dl class="simple">
-<dt><a class="reference internal" href="#selprotopy.SelClient.autoconfig_fastmeter" title="selprotopy.SelClient.autoconfig_fastmeter"><code class="xref py py-meth docutils literal notranslate"><span class="pre">autoconfig_fastmeter()</span></code></a></dt><dd><p>Auto Configuration for Fast Meter</p>
+<dt><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig_fastmeter" title="selprotopy.SelClient.autoconfig_fastmeter"><code class="xref py py-meth docutils literal notranslate"><span class="pre">autoconfig_fastmeter()</span></code></a></dt><dd><p>Auto Configuration for Fast Meter</p>
 </dd>
-<dt><a class="reference internal" href="#selprotopy.SelClient.autoconfig_fastmeter_demand" title="selprotopy.SelClient.autoconfig_fastmeter_demand"><code class="xref py py-meth docutils literal notranslate"><span class="pre">autoconfig_fastmeter_demand()</span></code></a></dt><dd><p>Auto Configuration for Fast Meter Demand</p>
+<dt><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig_fastmeter_demand" title="selprotopy.SelClient.autoconfig_fastmeter_demand"><code class="xref py py-meth docutils literal notranslate"><span class="pre">autoconfig_fastmeter_demand()</span></code></a></dt><dd><p>Auto Configuration for Fast Meter Demand</p>
 </dd>
-<dt><a class="reference internal" href="#selprotopy.SelClient.autoconfig_fastmeter_peakdemand" title="selprotopy.SelClient.autoconfig_fastmeter_peakdemand"><code class="xref py py-meth docutils literal notranslate"><span class="pre">autoconfig_fastmeter_peakdemand()</span></code></a></dt><dd><p>Auto Configuration for Fast Meter Peak Demand</p>
+<dt><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig_fastmeter_peakdemand" title="selprotopy.SelClient.autoconfig_fastmeter_peakdemand"><code class="xref py py-meth docutils literal notranslate"><span class="pre">autoconfig_fastmeter_peakdemand()</span></code></a></dt><dd><p>Auto Configuration for Fast Meter Peak Demand</p>
 </dd>
 </dl>
 </div>
@@ -365,11 +395,11 @@ parameters of the relay.</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <dl class="simple">
-<dt><a class="reference internal" href="#selprotopy.SelClient.autoconfig" title="selprotopy.SelClient.autoconfig"><code class="xref py py-meth docutils literal notranslate"><span class="pre">autoconfig()</span></code></a></dt><dd><p>Relay Auto Configuration</p>
+<dt><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig" title="selprotopy.SelClient.autoconfig"><code class="xref py py-meth docutils literal notranslate"><span class="pre">autoconfig()</span></code></a></dt><dd><p>Relay Auto Configuration</p>
 </dd>
-<dt><a class="reference internal" href="#selprotopy.SelClient.autoconfig_fastmeter_demand" title="selprotopy.SelClient.autoconfig_fastmeter_demand"><code class="xref py py-meth docutils literal notranslate"><span class="pre">autoconfig_fastmeter_demand()</span></code></a></dt><dd><p>Auto Configuration for Fast Meter Demand</p>
+<dt><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig_fastmeter_demand" title="selprotopy.SelClient.autoconfig_fastmeter_demand"><code class="xref py py-meth docutils literal notranslate"><span class="pre">autoconfig_fastmeter_demand()</span></code></a></dt><dd><p>Auto Configuration for Fast Meter Demand</p>
 </dd>
-<dt><a class="reference internal" href="#selprotopy.SelClient.autoconfig_fastmeter_peakdemand" title="selprotopy.SelClient.autoconfig_fastmeter_peakdemand"><code class="xref py py-meth docutils literal notranslate"><span class="pre">autoconfig_fastmeter_peakdemand()</span></code></a></dt><dd><p>Auto Configuration for Fast Meter Peak Demand</p>
+<dt><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig_fastmeter_peakdemand" title="selprotopy.SelClient.autoconfig_fastmeter_peakdemand"><code class="xref py py-meth docutils literal notranslate"><span class="pre">autoconfig_fastmeter_peakdemand()</span></code></a></dt><dd><p>Auto Configuration for Fast Meter Peak Demand</p>
 </dd>
 </dl>
 </div>
@@ -392,11 +422,11 @@ parameters of the relay.</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <dl class="simple">
-<dt><a class="reference internal" href="#selprotopy.SelClient.autoconfig" title="selprotopy.SelClient.autoconfig"><code class="xref py py-meth docutils literal notranslate"><span class="pre">autoconfig()</span></code></a></dt><dd><p>Relay Auto Configuration</p>
+<dt><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig" title="selprotopy.SelClient.autoconfig"><code class="xref py py-meth docutils literal notranslate"><span class="pre">autoconfig()</span></code></a></dt><dd><p>Relay Auto Configuration</p>
 </dd>
-<dt><a class="reference internal" href="#selprotopy.SelClient.autoconfig_fastmeter" title="selprotopy.SelClient.autoconfig_fastmeter"><code class="xref py py-meth docutils literal notranslate"><span class="pre">autoconfig_fastmeter()</span></code></a></dt><dd><p>Auto Configuration for Fast Meter</p>
+<dt><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig_fastmeter" title="selprotopy.SelClient.autoconfig_fastmeter"><code class="xref py py-meth docutils literal notranslate"><span class="pre">autoconfig_fastmeter()</span></code></a></dt><dd><p>Auto Configuration for Fast Meter</p>
 </dd>
-<dt><a class="reference internal" href="#selprotopy.SelClient.autoconfig_fastmeter_peakdemand" title="selprotopy.SelClient.autoconfig_fastmeter_peakdemand"><code class="xref py py-meth docutils literal notranslate"><span class="pre">autoconfig_fastmeter_peakdemand()</span></code></a></dt><dd><p>Auto Configuration for Fast Meter Peak Demand</p>
+<dt><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig_fastmeter_peakdemand" title="selprotopy.SelClient.autoconfig_fastmeter_peakdemand"><code class="xref py py-meth docutils literal notranslate"><span class="pre">autoconfig_fastmeter_peakdemand()</span></code></a></dt><dd><p>Auto Configuration for Fast Meter Peak Demand</p>
 </dd>
 </dl>
 </div>
@@ -419,11 +449,11 @@ parameters of the relay.</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <dl class="simple">
-<dt><a class="reference internal" href="#selprotopy.SelClient.autoconfig" title="selprotopy.SelClient.autoconfig"><code class="xref py py-meth docutils literal notranslate"><span class="pre">autoconfig()</span></code></a></dt><dd><p>Relay Auto Configuration</p>
+<dt><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig" title="selprotopy.SelClient.autoconfig"><code class="xref py py-meth docutils literal notranslate"><span class="pre">autoconfig()</span></code></a></dt><dd><p>Relay Auto Configuration</p>
 </dd>
-<dt><a class="reference internal" href="#selprotopy.SelClient.autoconfig_fastmeter" title="selprotopy.SelClient.autoconfig_fastmeter"><code class="xref py py-meth docutils literal notranslate"><span class="pre">autoconfig_fastmeter()</span></code></a></dt><dd><p>Auto Configuration for Fast Meter</p>
+<dt><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig_fastmeter" title="selprotopy.SelClient.autoconfig_fastmeter"><code class="xref py py-meth docutils literal notranslate"><span class="pre">autoconfig_fastmeter()</span></code></a></dt><dd><p>Auto Configuration for Fast Meter</p>
 </dd>
-<dt><a class="reference internal" href="#selprotopy.SelClient.autoconfig_fastmeter_demand" title="selprotopy.SelClient.autoconfig_fastmeter_demand"><code class="xref py py-meth docutils literal notranslate"><span class="pre">autoconfig_fastmeter_demand()</span></code></a></dt><dd><p>Auto Configuration for Fast Meter Demand</p>
+<dt><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig_fastmeter_demand" title="selprotopy.SelClient.autoconfig_fastmeter_demand"><code class="xref py py-meth docutils literal notranslate"><span class="pre">autoconfig_fastmeter_demand()</span></code></a></dt><dd><p>Auto Configuration for Fast Meter Demand</p>
 </dd>
 </dl>
 </div>
@@ -445,7 +475,7 @@ settings (use <cite>autoconfig</cite> method to configure protocol settings).</p
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <dl class="simple">
-<dt><a class="reference internal" href="#selprotopy.SelClient.autoconfig" title="selprotopy.SelClient.autoconfig"><code class="xref py py-meth docutils literal notranslate"><span class="pre">autoconfig()</span></code></a></dt><dd><p>Relay Auto Configuration</p>
+<dt><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig" title="selprotopy.SelClient.autoconfig"><code class="xref py py-meth docutils literal notranslate"><span class="pre">autoconfig()</span></code></a></dt><dd><p>Relay Auto Configuration</p>
 </dd>
 </dl>
 </div>
@@ -471,9 +501,9 @@ actively connected relay.</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <dl class="simple">
-<dt><a class="reference internal" href="#selprotopy.SelClient.access_level_1" title="selprotopy.SelClient.access_level_1"><code class="xref py py-meth docutils literal notranslate"><span class="pre">access_level_1()</span></code></a></dt><dd><p>Elevate permission to ACC</p>
+<dt><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.access_level_1" title="selprotopy.SelClient.access_level_1"><code class="xref py py-meth docutils literal notranslate"><span class="pre">access_level_1()</span></code></a></dt><dd><p>Elevate permission to ACC</p>
 </dd>
-<dt><a class="reference internal" href="#selprotopy.SelClient.access_level_2" title="selprotopy.SelClient.access_level_2"><code class="xref py py-meth docutils literal notranslate"><span class="pre">access_level_2()</span></code></a></dt><dd><p>Elevate permission to 2AC</p>
+<dt><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.access_level_2" title="selprotopy.SelClient.access_level_2"><code class="xref py py-meth docutils literal notranslate"><span class="pre">access_level_2()</span></code></a></dt><dd><p>Elevate permission to 2AC</p>
 </dd>
 </dl>
 </div>
@@ -481,17 +511,6 @@ actively connected relay.</p>
 
 </dd></dl>
 
-<div class="section" id="sub-modules-and-other-package-api-references">
-<h2>Sub-Modules and Other Package API References<a class="headerlink" href="#sub-modules-and-other-package-api-references" title="Permalink to this headline">¶</a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="api/selprotopy.common.html">selprotopy.common</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/selprotopy.commands.html">selprotopy.commands</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/selprotopy.protoparser.html">selprotopy.protoparser</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/selprotopy.telnetlib_support.html">selprotopy.telnetlib_support</a></li>
-</ul>
-</div>
-</div>
 </div>
 
 
@@ -501,34 +520,20 @@ actively connected relay.</p>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-            <p class="logo"><a href="index.html">
-              <img class="logo" src="_static/selprotopy_wht_text.png" alt="Logo"/>
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/selprotopy_wht_text.png" alt="Logo"/>
             </a></p>
-  <h3><a href="index.html">Table of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">API Reference</a><ul>
-<li><a class="reference internal" href="#sub-modules-and-other-package-api-references">Sub-Modules and Other Package API References</a></li>
-</ul>
-</li>
-</ul>
-
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="index.html"
-                        title="previous chapter">SELPROTOPY: Python Bindings for the SEL Protocol Suite</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="common.html"
-                        title="next chapter">&lt;no title&gt;</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/selprotopy.rst.txt"
+      <li><a href="../_sources/api/selprotopy.SelClient.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
-    <form class="search" action="search.html" method="get">
+    <form class="search" action="../search.html" method="get">
       <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
     </form>
@@ -543,19 +548,13 @@ actively connected relay.</p>
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
+          <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
+          <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="common.html" title="&lt;no title&gt;"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="index.html" title="SELPROTOPY: Python Bindings for the SEL Protocol Suite"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">selprotopy</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">API Reference</a></li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">selprotopy</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">SelClient</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

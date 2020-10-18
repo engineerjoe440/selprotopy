@@ -1,0 +1,145 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>selprotopy.commands.event_record_request &#8212; selprotopy</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    
+    <link rel="shortcut icon" href="../_static/selprotopy_bare.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="&lt;no title&gt;" href="../protoparser.html" />
+    <link rel="prev" title="selprotopy.commands" href="selprotopy.commands.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../protoparser.html" title="&lt;no title&gt;"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="selprotopy.commands.html" title="selprotopy.commands"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">selprotopy</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../selprotopy.html" >API Reference</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../commands.html" >&lt;no title&gt;</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="selprotopy.commands.html" accesskey="U">selprotopy.commands</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">selprotopy.commands.event_record_request</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="selprotopy-commands-event-record-request">
+<h1>selprotopy.commands.event_record_request<a class="headerlink" href="#selprotopy-commands-event-record-request" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="selprotopy.commands.event_record_request">
+<code class="sig-prename descclassname">selprotopy.commands.</code><code class="sig-name descname">event_record_request</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event_number</span></em><span class="sig-paren">)</span><a class="headerlink" href="#selprotopy.commands.event_record_request" title="Permalink to this definition">¶</a></dt>
+<dd><p><cite>event_record_request</cite></p>
+<p>A simple function to evaluate the request byte-string
+to request a numbered event (zero-based) from the relay’s
+event history.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>event_number</strong> (<em>int</em>) – The zero-based event number index. Zero (0)
+is the most recent event.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>request</strong> – The byte-string request which to provide the
+indexed event desired.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bytes</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ValueError</strong> – Raised when the requested event number is: greater than 64.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/selprotopy_wht_text.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="selprotopy.commands.html"
+                        title="previous chapter">selprotopy.commands</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../protoparser.html"
+                        title="next chapter">&lt;no title&gt;</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/selprotopy.commands.event_record_request.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../protoparser.html" title="&lt;no title&gt;"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="selprotopy.commands.html" title="selprotopy.commands"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">selprotopy</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../selprotopy.html" >API Reference</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../commands.html" >&lt;no title&gt;</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="selprotopy.commands.html" >selprotopy.commands</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">selprotopy.commands.event_record_request</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Joe Stanley.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
+    </div>
+  </body>
+</html>

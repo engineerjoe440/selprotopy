@@ -17,7 +17,8 @@
     
     <link rel="shortcut icon" href="_static/selprotopy_bare.png"/>
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" /> 
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API Reference" href="selprotopy.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -25,6 +26,12 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="selprotopy.html" title="API Reference"
+             accesskey="N">next</a> |</li>
         <li class="nav-item nav-item-0"><a href="#">selprotopy</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">SELPROTOPY: Python Bindings for the SEL Protocol Suite</a></li> 
       </ul>
@@ -49,12 +56,37 @@ control of SEL protective relays. SEL provided a very supportive
 <a class="reference external" href="https://selinc.com/api/download/5026/?lang=en">application guide</a> which provides great
 detail about the protocol’s implementation.</p>
 <div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="selprotopy.html">API Reference</a></li>
+</ul>
 </div>
+</div>
+<div class="section" id="dependencies">
+<h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h2>
+<p>This package requires connection to an SEL relay, and to support this connection, one of
+two connections is standard. SEL relays are typically connected to by way of a serial
+connection or an Telnet channel over Ethernet. As a result of this requirement, it is
+necessary to use either the standard Python <a class="reference external" href="https://docs.python.org/3/library/telnetlib.html">telnetlib</a>,
+however, there is also the option of using <a class="reference external" href="https://pyserial.readthedocs.io/en/latest/pyserial.html">pySerial</a>
+for direct serial connections. One, or perhaps both, of these libraries will be required
+for use of this package.</p>
+</div>
+<div class="section" id="project-information">
+<h2>Project Information<a class="headerlink" href="#project-information" title="Permalink to this headline">¶</a></h2>
+<p>For additional information related to this project, please refer to the links and materials
+linked below.</p>
 <div class="section" id="contact-info">
 <h3>Contact Info:<a class="headerlink" href="#contact-info" title="Permalink to this headline">¶</a></h3>
 <p>For issues found in the source code itself, please feel free to open an
 <a class="reference external" href="https://github.com/engineerjoe440/sel-proto-py/issues">issue</a>, but for general inquiries
-and other contact, feel free to address Joe Stanley.</p>
+and other contact, feel free to address <a class="reference external" href="mailto:joe_stanley&#37;&#52;&#48;selinc&#46;com">Joe Stanley</a>.</p>
+</div>
+<div class="section" id="source-repository-and-package-release-pypi">
+<h3>Source Repository and Package Release (PyPI):<a class="headerlink" href="#source-repository-and-package-release-pypi" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>GitHub: <a class="reference external" href="https://github.com/engineerjoe440/sel-proto-py">https://github.com/engineerjoe440/sel-proto-py</a></p></li>
+<li><p>PyPI: no-link-available-yet</p></li>
+</ul>
 </div>
 </div>
 </div>
@@ -72,14 +104,20 @@ and other contact, feel free to address Joe Stanley.</p>
   <h3><a href="#">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">SELPROTOPY: Python Bindings for the SEL Protocol Suite</a><ul>
-<li><a class="reference internal" href="#protocol-documentation">Protocol Documentation:</a><ul>
+<li><a class="reference internal" href="#protocol-documentation">Protocol Documentation:</a></li>
+<li><a class="reference internal" href="#dependencies">Dependencies</a></li>
+<li><a class="reference internal" href="#project-information">Project Information</a><ul>
 <li><a class="reference internal" href="#contact-info">Contact Info:</a></li>
+<li><a class="reference internal" href="#source-repository-and-package-release-pypi">Source Repository and Package Release (PyPI):</a></li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
 
+  <h4>Next topic</h4>
+  <p class="topless"><a href="selprotopy.html"
+                        title="next chapter">API Reference</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -107,6 +145,12 @@ and other contact, feel free to address Joe Stanley.</p>
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="selprotopy.html" title="API Reference"
+             >next</a> |</li>
         <li class="nav-item nav-item-0"><a href="#">selprotopy</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">SELPROTOPY: Python Bindings for the SEL Protocol Suite</a></li> 
       </ul>
