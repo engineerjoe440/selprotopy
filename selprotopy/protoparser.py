@@ -143,6 +143,7 @@ def RelayDnaBlock( data, encoding='', verbose=False ):
     binaries:   list of list
                 List of the target rows with each element's label.
     """
+    print('alo')
     dnacontrol = '>DNA'
     if encoding:
         # Decode Bytes

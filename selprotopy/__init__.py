@@ -131,7 +131,8 @@ class PollingClient():
         
         # Verify Connection by Searching for Prompt
         if verbose: print('Verifying Connection...')
-        if not self._verify_connection(): return False # Indicate Failure
+        if not self._verify_connection():
+            raise ValueError("Could not verify connection.") # TODO: Custom exception
         if verbose: print('Connection Verified.')
         self.quit()
         if autoconfig_now:
@@ -174,6 +175,26 @@ class PollingClient():
         if self.debug: print(response)
         return response
     
+    # Define Method to Identify Current Access Level
+    def access_level(self):
+        """
+        
+        """
+        # Retrieve Prompt Twice
+        self.conn.write( commands.CR )
+        resp = self._read_to_prompt()
+        self.conn.write( commands.CR )
+        resp += self._read_to_prompt()
+        # Look for Each Level, Return Highest Found
+        if commands.LEVEL_C in resp:
+            return (3,'CAL')
+        elif commands.LEVEL_2 in resp:
+            return (2,'2AC')
+        elif commands.LEVEL_1 in resp:
+            return (1,'ACC')
+        else:
+            return (0,'')
+    
     # Define Method to Return to Access Level 0
     def quit(self):
         """
@@ -191,7 +212,7 @@ class PollingClient():
         self._read_to_prompt( commands.LEVEL_0 )
     
     # Define Method to Access Level 1
-    def access_level_1(self, level_1_pass='', **kwargs):
+    def access_level_1(self, level_1_pass=commands.PASS_ACC, **kwargs):
         """
         `access_level_1` Method
         
@@ -211,12 +232,32 @@ class PollingClient():
                             Password necessary to access the ACC
                             level, only required if accessing ACC
                             from level 0 (i.e. logging in).
+        
+        Returns
+        -------
+        success:            bool
+                            Indicator of whether the login failed.
         """
-        # TODO
-        pass
+        # Identify Current Access Level
+        time.sleep( self.delay )
+        level, name = self.access_level()
+        if self.debug: print("Logging in to ACC")
+        self.conn.write( commands.GO_ACC )
+        # Provide Password
+        if level == 0:
+            time.sleep( int(self.delay * 3) )
+            self.conn.write( level_1_pass + commands.CR )
+            time.sleep( self.delay )
+        resp = self._read_to_prompt( commands.LEVEL_0 )
+        if b'Invalid' in resp:
+            if self.debug: print("Log-In Failed")
+            return False
+        else:
+            if self.debug: print("Log-In Succeeded")
+            return True
     
     # Define Method to Access Level 2
-    def access_level_2(self, level_2_pass='', **kwargs):
+    def access_level_2(self, level_2_pass=commands.PASS_2AC, **kwargs):
         """
         `access_level_2` Method
         
@@ -236,12 +277,34 @@ class PollingClient():
                             Password necessary to access the 2AC
                             level, only required if accessing 2AC
                             from level 1 (i.e. logging in).
+        
+        Returns
+        -------
+        success:            bool
+                            Indicator of whether the login failed.
         """
-        # TODO
-        pass
+        # Identify Current Access Level
+        level, name = self.access_level()
+        # Provide Password
+        if level == 0:
+            if not self.access_level_1( **kwargs ):
+                return False
+        if self.debug: print("Logging in to 2AC")
+        self.conn.write( commands.GO_2AC )
+        if level in [0,1]:
+            time.sleep( int(self.delay * 3) )
+            self.conn.write( level_2_pass + commands.CR )
+            time.sleep( self.delay )
+        resp = self._read_to_prompt( commands.LEVEL_0 )
+        if b'Invalid' in resp:
+            if self.debug: print("Log-In Failed")
+            return False
+        else:
+            if self.debug: print("Log-In Succeeded")
+            return True
     
     # Define Method to Perform Auto-Configuration Process
-    def autoconfig( self, verbose=False ):
+    def autoconfig( self, verbose=False, **kwargs ):
         """
         `autoconfig` Method
         
@@ -294,10 +357,17 @@ class PollingClient():
         self.devid  = id_block['DEVID']
         self.partno = id_block['PARTNO']
         self.config = id_block['CONFIG']
+        # Access Level 1 Required to Configure
+        self.access_level_1( **kwargs )
+        # Request Relay DNA Block
+        self.conn.write( commands.DNA )
+        dna_block = protoparser.RelayDnaBlock(self._read_to_prompt(),
+            encoding='utf-8', verbose=verbose)
+        if self.debug: print(dna_block)
         # Request Relay Definition
-        self.conn.write( commands.RELAY_DEFENITION + bytes.fromhex('0000') + commands.CR )
-        definition = protoparser.RelayDefinitionBlock(self._read_to_prompt(),
-            verbose=verbose)
+        self.conn.write( commands.RELAY_DEFENITION + commands.CR )
+        definition = protoparser.RelayDefinitionBlock(
+            self._read_command_response(commands.RELAY_DEFENITION), verbose=verbose)
         # Load the Relay Definition Information
         self.fmconfigcommand1   = definition['fmcommandinfo'][0]['configcommand']
         self.fmcommand1         = definition['fmcommandinfo'][0]['command']
@@ -442,7 +512,8 @@ if __name__ == '__main__':
     import electricpy as ep
     with telnetlib.Telnet('192.168.254.10', 23) as tn:
         print('Initializing Client...')
-        poller = PollingClient( tn, verbose=True )
+        poller = PollingClient( tn, verbose=True, debug=True )
+        print(poller.access_level_2())
         for _ in range(10):
             d = poller.poll_fast_meter()#verbose=True)
             for name, value in d['analogs'].items():
