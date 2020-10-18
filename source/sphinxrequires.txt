@@ -1,4 +1,5 @@
 wheel
 sphinx
 pyserial
+numpydoc
 sphinx-sitemap
