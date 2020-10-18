@@ -9,8 +9,15 @@ Supports:
 
 # Import Requirements
 import re
+import math
+import struct
 import binascii
 
+# Local Imports
+try:
+    from .common import int_to_bool_list, ieee4bytefps
+except:
+    from common import int_to_bool_list, ieee4bytefps
 
 # Define ID Block for RegEx
 RE_ID_BLOCK_1 = re.compile(r'''"FID\=(SEL.*)","(\w*)"''')
@@ -33,43 +40,31 @@ RE_ID_BLOCKS = {
     'SPECIAL':  RE_ID_BLOCK_8,
 }
 
+# Define Look-Up-Table for Number of Bytes Associated with an Analog Type
+ANALOG_SIZE_LOOKUP = {
+    0: 2,
+    1: 4,
+    2: 8,
+    3: 8,
+}
 
-# Define Simple Function to Cast Binary Integer to List of Bools
-def int_to_bool_list( number, byte_like=False ):
+# Define Look-Up-Table for Formatting Functions for Various Analog Channel Types
+ANALOG_TYPE_FORMATTERS = {
+    0: int.from_bytes, # 2-Byte Integer
+    1: ieee4bytefps, # 4-Byte IEEE FPS
+    2: None, # 8-Byte IEEE FPS
+    3: None, # 8-Byte Time Stamp
+}
+
+
+# Define Simple Function to Cast Byte Array and Clean Ordering
+def _cast_bytearray( data ):
     """
-    `int_to_bool_list`
     
-    This function converts an integer to a list of boolean values,
-    where the most significant value is stored in the highest point
-    of the list. That is, a binary number: 8 would be represented as
-    [False, False, False, True]
-    
-    Parameters
-    ----------
-    number:     int
-                Integer to be converted to list of boolean values
-                according to binary representation.
-    byte_like:  bool, optional
-                Control to verify that the integer is broken into a
-                list of booleans that could be composed into a byte
-                string object (i.e. length of list is divisible by 8),
-                defaults to False.
-    
-    Returns
-    -------
-    bin_list:   list of bool
-                List of boolean values cast from the binary
-                representation of the integer passed to the
-                function.
     """
-    bin_string = format(number, '04b')
-    bin_list = [x == '1' for x in bin_string[::-1]]
-    # Extend List of Bytes if Needed
-    if byte_like:
-        len_needed = ((len(bin_list)//8)+1) * 8
-        apnd_list  = [False] * (len_needed - len(bin_list))
-        bin_list.extend(apnd_list)
-    return bin_list
+    offset = data.find(b'\xa5')
+    bytArr = bytearray(data)[offset:]
+    return bytArr
 
 
 ###################################################################################
@@ -255,7 +250,7 @@ def RelayDefinitionBlock( data, verbose=False ):
                 the relay's definition block.
     """
     # Capture Byte Array for Parsing
-    bytArr = bytearray(data)
+    bytArr = _cast_bytearray(data)
     struct = {}
     try:
         # Parse Data, Load Attributes
@@ -334,7 +329,7 @@ def FastMeterConfigurationBlock( data, byteorder='big', signed=True, verbose=Fal
                 the relay's fast meter configuration block.
     """
     # Capture Byte Array for Parsing
-    bytArr = bytearray(data)
+    bytArr = _cast_bytearray(data)
     struct = {}
     try:
         # Parse Data, Load Attributes
@@ -441,7 +436,7 @@ def FastMeterConfigurationBlock( data, byteorder='big', signed=True, verbose=Fal
             # Store Dictionary
             struct['calcblocks'].append(dict)
         if verbose:
-            print("Generic Fast Meter Block Information")
+            print("Generic Fast Meter Configuration Block Information")
             print("Command:", struct['command'])
             print("Message Length:",struct['length'])
             print("Number of Status Flags:",struct['numstatusflags'])
@@ -454,10 +449,109 @@ def FastMeterConfigurationBlock( data, byteorder='big', signed=True, verbose=Fal
             print("Analog Channel Offset:",struct['analogchanoff'])
             print("Time Stamp Offset:",struct['timestmpoffset'])
             print("Digital Channel Offset:",struct['digitaloffset'])
+        # Return the Generated Structure
+        return struct
     except:
         raise ValueError("Invalid data string response")
 ###################################################################################
 
+###################################################################################
+# Define Function to Parse a Fast Meter Response Given the Configuration
+def FastMeterBlock( data, definition, byteorder='big', signed=True, verbose=False ):
+    """
+    `FastMeterBlock`
+    
+    Parser for a relay's fast meter block for the various analog
+    and digital points.
+    
+    Parameters
+    ----------
+    data:       bytes
+                The full byte-string returned from a
+                relay using SEL protocol.
+    definition: struct
+                The previously defined relay definition
+                for the applicable fast meter block.
+    byteorder:  ['big', 'little'], optional
+                Control of how bytes are interpreted as
+                integers, using big-endian or little-endian
+                operations. Defaults to 'big'
+    signed:     bool, optional
+                Control to specify whether the bytes should
+                be interpreted as signed or unsigned integers.
+                Defaults to True
+    verbose:    bool, optional
+                Control to optionally utilize verbose printing.
+    
+    Returns
+    -------
+    struct:     dict
+                Dictionary of key-value pairs describing
+                the relay's fast meter data points.
+    """
+    # Capture Byte Array for Parsing
+    bytArr = _cast_bytearray( data )
+    struct = {}
+    try:
+        # Parse Data, Load Attributes
+        struct['command']       = bytes(bytArr[:2])
+        struct['length']        = bytArr[2]
+        struct['statusflag']    = bytArr[3:3+definition['numstatusflags']]
+        if verbose:
+            print("Generic Fast Meter Block Information")
+            print("Command:", struct['command'])
+            print("Message Length:",struct['length'])
+            print("Status Flag:",struct['statusflag'])
+        # Handle Analog Points
+        struct['analogs'] = {}
+        ind = definition['analogchanoff']
+        samples = definition['numsampperchan']
+        # Iterate over Samples
+        for samp_n in range(samples):
+            # Iterate over Analogs
+            for analog_desc in definition['analogchannels']:
+                name = analog_desc['name']
+                type = analog_desc['channeltype']
+                size = ANALOG_SIZE_LOOKUP[type]
+                scale_type = analog_desc['factortype']
+                # Handle Non-Scaling Values
+                if scale_type == 255:
+                    scale = 1
+                # Extract Value to be Interpreted
+                value = bytes(bytArr[ind:ind+size])
+                # Apply Formatting
+                value = ANALOG_TYPE_FORMATTERS[type]( value )
+                # Evaluate Result
+                analog_data = value*scale
+                # Handle Different Analog Sample Types
+                if samples == 1:        # Each is Magnitude
+                    # Record Magnitude Directly
+                    struct['analogs'][name] = analog_data
+                elif samples == 2:      # Set of Imaginary, Real Group
+                    # Manage Real/Imaginary Quantities
+                    if samp_n == 0: # Imaginary
+                        if analog_data > 1e-8:
+                            struct['analogs'][name] = analog_data * 1j
+                        else:
+                            struct['analogs'][name] = 0
+                    else:          # Real
+                        struct['analogs'][name] += analog_data
+                else:                   # 1st, 2nd, 5th, 6th qtr cycle
+                    if samp_n == 0:
+                        struct['analogs'][name] = [analog_data]
+                    else:
+                        struct['analogs'][name].append(analog_data)
+                ind += size
+                if verbose: print("Analog {}: {}".format(name,analog_data))
+        # Iteratively Handle Digital Points
+        struct['digitals'] = {}
+        ind = definition['digitaloffset']
+        print("Digital Offset",ind)
+        # Return the Resultant Structure
+        return struct
+    except:
+        raise ValueError("Invalid data string response")
+###################################################################################
 
 
 
