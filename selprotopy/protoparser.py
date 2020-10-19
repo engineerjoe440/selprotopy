@@ -457,7 +457,8 @@ def FastMeterConfigurationBlock( data, byteorder='big', signed=True, verbose=Fal
 
 ###################################################################################
 # Define Function to Parse a Fast Meter Response Given the Configuration
-def FastMeterBlock( data, definition, byteorder='big', signed=True, verbose=False ):
+def FastMeterBlock( data, definition, dna_def, byteorder='big', signed=True,
+        verbose=False ):
     """
     `FastMeterBlock`
     
@@ -472,6 +473,9 @@ def FastMeterBlock( data, definition, byteorder='big', signed=True, verbose=Fals
     definition: struct
                 The previously defined relay definition
                 for the applicable fast meter block.
+    dna_def:    list of list of str
+                The previously defined relay digital name
+                alias reference.
     byteorder:  ['big', 'little'], optional
                 Control of how bytes are interpreted as
                 integers, using big-endian or little-endian

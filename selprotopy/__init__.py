@@ -504,8 +504,9 @@ class SelClient():
         self.conn.write( self.fmcommand1 + commands.CR )
         self.debug=True
         response = protoparser.FastMeterBlock(  self._read_command_response(
-                                                        self.fmcommand1),
+                                                    self.fmcommand1),
                                                 self.fastMeterDef,
+                                                self.dnaDef,
                                                 verbose=verbose )
         # Return the Response
         return response
@@ -518,8 +519,7 @@ if __name__ == '__main__':
     import electricpy as ep
     with telnetlib.Telnet('192.168.254.10', 23) as tn:
         print('Initializing Client...')
-        poller = SelClient( tn, verbose=True, debug=True )
-        print(poller.access_level_2())
+        poller = SelClient( tn, verbose=True)#, debug=True )
         for _ in range(10):
             d = poller.poll_fast_meter()#verbose=True)
             for name, value in d['analogs'].items():
