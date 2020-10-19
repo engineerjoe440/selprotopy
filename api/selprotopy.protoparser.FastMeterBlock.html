@@ -53,7 +53,7 @@
 <h1>selprotopy.protoparser.FastMeterBlock<a class="headerlink" href="#selprotopy-protoparser-fastmeterblock" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="selprotopy.protoparser.FastMeterBlock">
-<code class="sig-prename descclassname">selprotopy.protoparser.</code><code class="sig-name descname">FastMeterBlock</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">definition</span></em>, <em class="sig-param"><span class="n">byteorder</span><span class="o">=</span><span class="default_value">'big'</span></em>, <em class="sig-param"><span class="n">signed</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#selprotopy.protoparser.FastMeterBlock" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">selprotopy.protoparser.</code><code class="sig-name descname">FastMeterBlock</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">definition</span></em>, <em class="sig-param"><span class="n">dna_def</span></em>, <em class="sig-param"><span class="n">byteorder</span><span class="o">=</span><span class="default_value">'big'</span></em>, <em class="sig-param"><span class="n">signed</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#selprotopy.protoparser.FastMeterBlock" title="Permalink to this definition">¶</a></dt>
 <dd><p><cite>FastMeterBlock</cite></p>
 <p>Parser for a relay’s fast meter block for the various analog
 and digital points.</p>
@@ -64,6 +64,8 @@ and digital points.</p>
 relay using SEL protocol.</p></li>
 <li><p><strong>definition</strong> (<em>struct</em>) – The previously defined relay definition
 for the applicable fast meter block.</p></li>
+<li><p><strong>dna_def</strong> (<em>list of list of str</em>) – The previously defined relay digital name
+alias reference.</p></li>
 <li><p><strong>byteorder</strong> (<em>[</em><em>'big'</em><em>, </em><em>'little'</em><em>]</em><em>, </em><em>optional</em>) – Control of how bytes are interpreted as
 integers, using big-endian or little-endian
 operations. Defaults to ‘big’</p></li>
