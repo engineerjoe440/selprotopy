@@ -346,24 +346,10 @@ class SelClient():
                         Relay's Configured FID as Confirmation of Successful
                         Automatic Configuration
         """
-        # Request Relay ID Block
-        self.conn.write( commands.ID )
-        id_block = protoparser.RelayIdBlock(self._read_to_prompt(),
-            encoding='utf-8', verbose=verbose)
-        # Store Relay Information
-        self.fid    = id_block['FID']
-        self.bfid   = id_block['BFID']
-        self.cid    = id_block['CID']
-        self.devid  = id_block['DEVID']
-        self.partno = id_block['PARTNO']
-        self.config = id_block['CONFIG']
-        # Access Level 1 Required to Configure
-        self.access_level_1( **kwargs )
-        # Request Relay DNA Block
-        self.conn.write( commands.DNA )
-        dna_block = protoparser.RelayDnaBlock(self._read_to_prompt(),
-            encoding='utf-8', verbose=verbose)
-        if self.debug: print(dna_block)
+        # Determine if Level 0, and Escalate Accordingly
+        if self.access_level()[0] == 0:
+            # Access Level 1 Required to Request DNA
+            self.access_level_1( **kwargs )
         # Request Relay Definition
         self.conn.write( commands.RELAY_DEFENITION + commands.CR )
         definition = protoparser.RelayDefinitionBlock(
@@ -379,6 +365,26 @@ class SelClient():
         self.autoconfig_fastmeter( verbose=verbose )
         self.autoconfig_fastmeter_demand( verbose=verbose )
         self.autoconfig_fastmeter_peakdemand( verbose=verbose )
+        # Request Relay ENA Block
+        ## TODO
+        # Request Relay DNA Block
+        self.conn.write( commands.DNA )
+        self.dnaDef = protoparser.RelayDnaBlock(self._read_to_prompt(),
+            encoding='utf-8', verbose=verbose)
+        if self.debug: print(self.dnaDef)
+        # Request Relay BNA Block
+        ## TODO
+        # Request Relay ID Block
+        self.conn.write( commands.ID )
+        id_block = protoparser.RelayIdBlock(self._read_to_prompt(),
+            encoding='utf-8', verbose=verbose)
+        # Store Relay Information
+        self.fid    = id_block['FID']
+        self.bfid   = id_block['BFID']
+        self.cid    = id_block['CID']
+        self.devid  = id_block['DEVID']
+        self.partno = id_block['PARTNO']
+        self.config = id_block['CONFIG']
         # Return the Relay's FID
         return self.fid
 
