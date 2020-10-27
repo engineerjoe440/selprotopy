@@ -14,24 +14,24 @@ Homepage: https://github.com/engineerjoe440/sel-proto-py
 SEL Protocol Application Guide: https://selinc.com/api/download/5026/?lang=en
 """
 
-# Describe Package for External Interpretation
-_name_ = "selprotopy"
-_version_ = "0.0"
-__version__ = _version_ # Alias the Version String
+# Standard Imports
+import time
+import telnetlib
 
 # Local Imports
 try:
     from . import commands
     from . import protoparser
     from . import telnetlib_support
-except:
+except ImportError:
     import commands
     import protoparser
     import telnetlib_support
 
-# Standard Imports
-import time
-import telnetlib
+# Describe Package for External Interpretation
+_name_ = "selprotopy"
+_version_ = "0.0"
+__version__ = _version_  # Alias the Version String
 
 # `telnetlib` Discards Null Characters, but SEL Protocol Requires them
 telnetlib.Telnet.process_rawq = telnetlib_support.process_rawq
@@ -41,14 +41,14 @@ telnetlib.Telnet.process_rawq = telnetlib_support.process_rawq
 class SelClient():
     """
     `SelClient` Class
-    
+
     The basic polling class intended to interact with an SEL relay which has
     already been connected to by way of a Telnet or Serial connection using one
     of the following Python libraries:
-    
+
     - telnetlib     https://docs.python.org/3/library/telnetlib.html
     - pyserial      https://pyserial.readthedocs.io/en/latest/pyserial.html
-    
+
     Parameters
     ----------
     connApi:            [telnetlib.Telnet, serial.Serial]
@@ -60,17 +60,18 @@ class SelClient():
                         should normally be set to True to allow autoconfig.
                         Defaults to True
     validConnChecks:    int, optional
-                        Integer control to indicate maximum number of connection
-                        attempts should be issued to relay in the process of
-                        verifying established connection(s). Defaults to 5
+                        Integer control to indicate maximum number of
+                        connection attempts should be issued to relay in the
+                        process of verifying established connection(s).
+                        Defaults to 5
     interdelay:         float, optional
                         Floating control which describes the amount of time in
                         seconds between iterative connection verification
                         attempts. Defaults to 0.025 (seconds)
     verbose:            bool, optional
                         Control to dictate whether verbose printing operations
-                        should be used (often for debugging and learning purposes).
-                        Defaults to False
+                        should be used (often for debugging and learning 
+                        purposes). Defaults to False
     
     Attributes
     ----------
@@ -85,7 +86,8 @@ class SelClient():
                 Time (in seconds) to delay between connection attempts
                 (set by `interdelay`)
     fid:        str
-                Relay's described Firmware ID string (set by connection with relay)
+                Relay's described Firmware ID string (set by connection with
+                relay)
     bfid:       str
                 Relay's described BFID string (set by connection with relay)
     cid:        str
@@ -93,14 +95,16 @@ class SelClient():
     devid:      str
                 Relay's described DEVID string (set by connection with relay)
     partno:     str
-                Relay's described part number string (set by connection with relay)
+                Relay's described part number string (set by connection with
+                relay)
     config:     str
-                Relay's described configuration string (set by connection with relay)
+                Relay's described configuration string (set by connection with
+                relay)
     """
     
     def __init__( self, connApi, autoconfig_now=True, validConnChecks=5,
                   interdelay=0.025, verbose=False, debug=False ):
-        """ Initialization Method - Returns False if Connection Attempt Fails """
+        """ Initialization Method - Returns False if Connection Fails """
         # Initialize Inputs
         self.conn = connApi
         self.verbose = verbose
@@ -132,7 +136,7 @@ class SelClient():
         # Verify Connection by Searching for Prompt
         if verbose: print('Verifying Connection...')
         if not self._verify_connection():
-            raise ValueError("Could not verify connection.") # TODO: Custom exception
+            raise ValueError("Could not verify connection.")  # TODO: Custom exception
         if verbose: print('Connection Verified.')
         self.quit()
         if autoconfig_now:
@@ -157,7 +161,7 @@ class SelClient():
         return connected
     
     # Define Method to Read All Data to Next Relay Prompt
-    def _read_to_prompt( self, prompt_str = commands.PROMPT ):
+    def _read_to_prompt( self, prompt_str=commands.PROMPT ):
         response = self.conn.read_until( commands.PROMPT )
         if self.debug: print(response)
         return response
@@ -187,13 +191,13 @@ class SelClient():
         resp += self._read_to_prompt()
         # Look for Each Level, Return Highest Found
         if commands.LEVEL_C in resp:
-            return (3,'CAL')
+            return (3, 'CAL')
         elif commands.LEVEL_2 in resp:
-            return (2,'2AC')
+            return (2, '2AC')
         elif commands.LEVEL_1 in resp:
-            return (1,'ACC')
+            return (1, 'ACC')
         else:
-            return (0,'')
+            return (0, '')
     
     # Define Method to Return to Access Level 0
     def quit(self):
@@ -291,7 +295,7 @@ class SelClient():
                 return False
         if self.debug: print("Logging in to 2AC")
         self.conn.write( commands.GO_2AC )
-        if level in [0,1]:
+        if level in [0, 1]:
             time.sleep( int(self.delay * 3) )
             self.conn.write( level_2_pass + commands.CR )
             time.sleep( self.delay )
@@ -330,15 +334,17 @@ class SelClient():
         See Also
         --------
         autoconfig_fastmeter            : Auto Configuration for Fast Meter
-        autoconfig_fastmeter_demand     : Auto Configuration for Fast Meter Demand
-        autoconfig_fastmeter_peakdemand : Auto Configuration for Fast Meter Peak Demand
+        autoconfig_fastmeter_demand     : Auto Configuration for Fast Meter 
+                                            Demand
+        autoconfig_fastmeter_peakdemand : Auto Configuration for Fast Meter
+                                            Peak Demand
         
         Parameters
         ----------
         verbose:        bool, optional
                         Control to dictate whether verbose printing operations
-                        should be used (often for debugging and learning purposes).
-                        Defaults to False
+                        should be used (often for debugging and learning
+                        purposes). Defaults to False
         
         Returns
         -------
@@ -353,7 +359,8 @@ class SelClient():
         # Request Relay Definition
         self.conn.write( commands.RELAY_DEFENITION + commands.CR )
         definition = protoparser.RelayDefinitionBlock(
-            self._read_command_response(commands.RELAY_DEFENITION), verbose=verbose)
+            self._read_command_response(commands.RELAY_DEFENITION),
+                                        verbose=verbose)
         # Load the Relay Definition Information
         self.fmconfigcommand1   = definition['fmcommandinfo'][0]['configcommand']
         self.fmcommand1         = definition['fmcommandinfo'][0]['command']
@@ -366,18 +373,20 @@ class SelClient():
         self.autoconfig_fastmeter_demand( verbose=verbose )
         self.autoconfig_fastmeter_peakdemand( verbose=verbose )
         # Request Relay ENA Block
-        ## TODO
+        # TODO
         # Request Relay DNA Block
         self.conn.write( commands.DNA )
         self.dnaDef = protoparser.RelayDnaBlock(self._read_to_prompt(),
-            encoding='utf-8', verbose=verbose)
+                                                encoding='utf-8',
+                                                verbose=verbose)
         if self.debug: print(self.dnaDef)
         # Request Relay BNA Block
         ## TODO
         # Request Relay ID Block
         self.conn.write( commands.ID )
         id_block = protoparser.RelayIdBlock(self._read_to_prompt(),
-            encoding='utf-8', verbose=verbose)
+                                            encoding='utf-8',
+                                            verbose=verbose)
         # Store Relay Information
         self.fid    = id_block['FID']
         self.bfid   = id_block['BFID']
@@ -392,17 +401,17 @@ class SelClient():
     def autoconfig_fastmeter(self, verbose=False):
         """
         `autoconfig_fastmeter` Method
-        
+
         Method to operate the standard auto-configuration process
         with a connected relay to identify the standard fast meter
         parameters of the relay.
-        
+
         See Also
         --------
         autoconfig                      : Relay Auto Configuration
         autoconfig_fastmeter_demand     : Auto Configuration for Fast Meter Demand
         autoconfig_fastmeter_peakdemand : Auto Configuration for Fast Meter Peak Demand
-        
+
         Parameters
         ----------
         verbose:        bool, optional
@@ -419,17 +428,17 @@ class SelClient():
     def autoconfig_fastmeter_demand(self, verbose=False):
         """
         `autoconfig_fastmeter_demand` Method
-        
+
         Method to operate the standard auto-configuration process
         with a connected relay to identify the fast meter demand
         parameters of the relay.
-        
+
         See Also
         --------
         autoconfig                      : Relay Auto Configuration
         autoconfig_fastmeter            : Auto Configuration for Fast Meter
         autoconfig_fastmeter_peakdemand : Auto Configuration for Fast Meter Peak Demand
-        
+
         Parameters
         ----------
         verbose:        bool, optional
@@ -441,22 +450,22 @@ class SelClient():
         self.conn.write( self.fmconfigcommand2 + commands.CR )
         self.fastDemandDef = protoparser.FastMeterConfigurationBlock(
                                 self._read_to_prompt(), verbose=verbose)
-    
+
     # Define Method to Run the Fast Meter Peak Demand Configuration
     def autoconfig_fastmeter_peakdemand(self, verbose=False):
         """
         `autoconfig_fastmeter_peakdemand` Method
-        
+
         Method to operate the standard auto-configuration process
         with a connected relay to identify the fast meter peak demand
         parameters of the relay.
-        
+
         See Also
         --------
         autoconfig                      : Relay Auto Configuration
         autoconfig_fastmeter            : Auto Configuration for Fast Meter
         autoconfig_fastmeter_demand     : Auto Configuration for Fast Meter Demand
-        
+
         Parameters
         ----------
         verbose:        bool, optional
@@ -468,19 +477,19 @@ class SelClient():
         self.conn.write( self.fmconfigcommand3 + commands.CR )
         self.fastPkDemandDef = protoparser.FastMeterConfigurationBlock(
                                 self._read_to_prompt(), verbose=verbose)
-    
+
     # Define Method to Perform Fast Meter Polling
     def poll_fast_meter(self, minAccLevel=0, verbose=False, **kwargs):
         """
         `poll_fast_meter` Method
-        
+
         Method to poll the connected relay with the configured protocol
         settings (use `autoconfig` method to configure protocol settings).
-        
+
         See Also
         --------
         autoconfig                      : Relay Auto Configuration
-        
+
         Parameters
         ----------
         minAccLevel:    int, optional
@@ -502,7 +511,6 @@ class SelClient():
             self.access_level_2( **kwargs )
         # Poll Client for Data
         self.conn.write( self.fmcommand1 + commands.CR )
-        self.debug=True
         response = protoparser.FastMeterBlock(  self._read_command_response(
                                                     self.fmcommand1),
                                                 self.fastMeterDef,
@@ -516,14 +524,13 @@ class SelClient():
 
 if __name__ == '__main__':
     print('Establishing Connection...')
-    import electricpy as ep
     with telnetlib.Telnet('192.168.254.10', 23) as tn:
         print('Initializing Client...')
-        poller = SelClient( tn, verbose=True)#, debug=True )
+        poller = SelClient( tn, verbose=True)  # , debug=True )
         for _ in range(10):
-            d = poller.poll_fast_meter()#verbose=True)
+            d = poller.poll_fast_meter()  # verbose=True)
             for name, value in d['analogs'].items():
-                ep.cprint(value, label=name)
+                print(name, value)
             time.sleep(1)
 
 # END
