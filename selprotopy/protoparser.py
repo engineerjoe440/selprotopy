@@ -15,8 +15,10 @@ import binascii
 
 # Local Imports
 try:
+    from . import commands
     from .common import int_to_bool_list, ieee4bytefps
 except:
+    import commands
     from common import int_to_bool_list, ieee4bytefps
 
 # Define ID Block for RegEx
@@ -301,6 +303,62 @@ def RelayDefinitionBlock( data, verbose=False ):
         if verbose:
             print("Status Flag Information")
             print(struct['statusflaginfo'])
+        # Manage Protocol Specific Data
+        struct['protocols'] = []
+        struct['fopcommandinfo']  = ''
+        struct['fmsgcommandinfo'] = ''
+        for _ in range(struct['numprotocolsup']):
+            data = int_to_bool_list( bytArr[ind] )
+            data.extend([False,False]) # This should be at least two bits
+            prot = bytArr[ind+1]
+            # Manage SEL-Protocol Types
+            if prot == 0:
+                proto_desc = {
+                    'type'          : 'SEL_STANDARD',
+                    'fast_op_en'    : data[0],
+                    'fast_msg_en'   : data[1]
+                }
+                if data[0]:
+                    struct['fopcommandinfo'] = commands.FO_CONFIG_BLOCK
+                if data[1]:
+                    struct['fmsgcommandinfo'] = commands.FAST_MSG_CONFIG_BLOCK
+            elif prot == 1:
+                proto_desc = {
+                    'type'          : 'SEL_LMD',
+                    'fast_op_en'    : data[0],
+                    'fast_msg_en'   : data[1]
+                }
+                if data[0]:
+                    struct['fopcommandinfo'] = commands.FO_CONFIG_BLOCK
+                if data[1]:
+                    struct['fmsgcommandinfo'] = commands.FAST_MSG_CONFIG_BLOCK
+            elif prot == 2:
+                proto_desc = {
+                    'type'  : 'MODBUS'
+                }
+            elif prot == 3:
+                proto_desc = {
+                    'type'  : 'SY_MAX'
+                }
+            elif prot == 4:
+                proto_desc = {
+                    'type'  : 'R_SEL'
+                }
+            elif prot == 5:
+                proto_desc = {
+                    'type'  : 'DNP3'
+                }
+            elif prot == 6:
+                proto_desc = {
+                    'type'  : 'R6_SEL'
+                }
+            if verbose:
+                print('Protocol Type:',proto_desc['type'])
+                if 'fast_op_en' in proto_desc.keys():
+                    print('Fast Operate Enable:',proto_desc['fast_op_en'])
+                    print('Fast Message Enable:',proto_desc['fast_msg_en'])
+            struct['protocols'].append(proto_desc)
+            ind += 2
         # Return Resultant Structure
         return struct
     except:

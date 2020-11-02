@@ -30,6 +30,7 @@ OLDEST_UNAK_EVNT_REP    = bytes.fromhex('A5B2') # Oldest unacknowledged event re
 ACK_RECNT_SENT_EVNT_REP = bytes.fromhex('A5B5') # Acknowledge event report most recently sent.
 CLEAR_STA_POWER_SETTING = bytes.fromhex('A5B9') # Clear status bits: power-up, setting change.
 MOST_RECENT_EVNT_REP    = bytes.fromhex('A560') # Most recent event report packet.
+FAST_MSG_CONFIG_BLOCK   = bytes.fromhex('A546') # A configuration block for Fast Message command.
 
 # Define Various ASCII Requests
 CR  = b"\r\n" # Carriage Return to be Used Throughout

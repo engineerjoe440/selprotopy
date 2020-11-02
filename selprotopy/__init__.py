@@ -127,6 +127,8 @@ class SelClient():
         self.fmcommand2         = commands.FAST_METER_REGULAR
         self.fmconfigcommand3   = commands.FAST_METER_DEMAND
         self.fmcommand3         = commands.FAST_METER_PEAK_DEMAND
+        self.fopcommandinfo     = commands.FO_CONFIG_BLOCK
+        self.fmsgcommandinfo    = commands.FAST_MSG_CONFIG_BLOCK
         
         # Allocate Space for Relay Definition Responses
         self.fastMeterDef       = None
@@ -182,7 +184,18 @@ class SelClient():
     # Define Method to Identify Current Access Level
     def access_level(self):
         """
-        
+        `access_level`
+
+        Simple method to identify what the current access level
+        is for the connected relay. Provides an integer and
+        string.
+
+        Returns
+        -------
+        int:    Integer representing the access level
+                as a value in the range of [0, 1, 2, 3]
+        desc:   String describing the access level,
+                will return empty string for level-0.
         """
         # Retrieve Prompt Twice
         self.conn.write( commands.CR )
@@ -368,6 +381,8 @@ class SelClient():
         self.fmcommand2         = definition['fmcommandinfo'][1]['command']
         self.fmconfigcommand3   = definition['fmcommandinfo'][2]['configcommand']
         self.fmcommand3         = definition['fmcommandinfo'][2]['command']
+        self.fopcommandinfo     = definition['fopcommandinfo']
+        self.fmsgcommandinfo    = definition['fmsgcommandinfo']
         # Request the Meter Blocks
         self.autoconfig_fastmeter( verbose=verbose )
         self.autoconfig_fastmeter_demand( verbose=verbose )

@@ -71,6 +71,11 @@ def ieee4bytefps( binary_bytes, total_digits=7 ):
     total_digits:   int, optional
                     Number of digits (i.e. decimal accuracy) which
                     should be evaluated, defaults to 7.
+    
+    Returns
+    -------
+    float:          IEEE floating-point representation of the 4-byte
+                    bytestring passed as an argument.
     """
     # Define the Internal Functions to Utilize
     def magnitude(x):
