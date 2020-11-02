@@ -379,7 +379,6 @@ class SelClient():
         self.dnaDef = protoparser.RelayDnaBlock(self._read_to_prompt(),
                                                 encoding='utf-8',
                                                 verbose=verbose)
-        if self.debug: print(self.dnaDef)
         # Request Relay BNA Block
         ## TODO
         # Request Relay ID Block
@@ -527,10 +526,12 @@ if __name__ == '__main__':
     with telnetlib.Telnet('192.168.254.10', 23) as tn:
         print('Initializing Client...')
         poller = SelClient( tn, verbose=True)  # , debug=True )
+        d = None
         for _ in range(10):
             d = poller.poll_fast_meter()  # verbose=True)
             for name, value in d['analogs'].items():
                 print(name, value)
             time.sleep(1)
+        print(d['digitals'])
 
 # END

@@ -40,6 +40,9 @@ RE_ID_BLOCKS = {
     'SPECIAL':  RE_ID_BLOCK_8,
 }
 
+# Define RegEx for Hex Character Replacement
+RE_HEX_CHAR = re.compile(r'[^\x20-\x7F]+')
+
 # Define Look-Up-Table for Number of Bytes Associated with an Analog Type
 ANALOG_SIZE_LOOKUP = {
     0: 2,
@@ -119,7 +122,7 @@ def RelayIdBlock( data, encoding='', verbose=False ):
     return results
 
 # Define Relay DNA Block Parser
-def RelayDnaBlock( data, encoding='', verbose=False ):
+def RelayDnaBlock( data, encoding='', checksum=False, verbose=False ):
     """
     `RelayDnaBlock`
     
@@ -135,6 +138,9 @@ def RelayDnaBlock( data, encoding='', verbose=False ):
     encoding:   str, optional
                 Optional encoding format to describe which encoding
                 method should be used to decode the data passed.
+    checksum:   bool, optional
+                Control option to capture the checksum for each
+                target row description.
     verbose:    bool, optional
                 Control to optionally utilize verbose printing.
     
@@ -164,8 +170,11 @@ def RelayDnaBlock( data, encoding='', verbose=False ):
             columns = line.split(',')
             # Attempt Generating Binaries List
             try:
-                row = columns[0:8]
-                row.append([columns[8]])
+                # Capture and Clean the Columns
+                row = [re.sub(RE_HEX_CHAR, '', target) for target in columns[0:8]]
+                # Only Keep the Checksum when Appropriate
+                if checksum:
+                    row.append([columns[8]])
                 binaries.append( row )
             except:
                 if verbose: print(f"Couldn't parse line: {line}")
@@ -550,7 +559,21 @@ def FastMeterBlock( data, definition, dna_def, byteorder='big', signed=True,
         # Iteratively Handle Digital Points
         struct['digitals'] = {}
         ind = definition['digitaloffset']
-        print("Digital Offset",ind)
+        for target_row_index in range(definition['numdigitalbank']):
+            # Verify Length of Points
+            if definition['numdigitalbank'] != len(dna_def):
+                # TODO - Create more useful exception!
+                raise ValueError('Number of digital banks does not match DNA definition.')
+            # Grab the Applicable Names for this Target Row (byte)
+            point_names = dna_def[target_row_index][:8] # grab first 8 entries
+            # Grab the list of binary statuses from the target row info
+            target_data = int_to_bool_list(bytArr[ind+target_row_index],
+                                            byte_like=True, reverse=True)
+            target_row = dict(zip(point_names,target_data))
+            # Load the Digital Dictionary with new Points
+            struct['digitals'].update(target_row)
+        # Remove the '*' Key from Dictionary
+        struct['digitals'].pop('*')
         # Return the Resultant Structure
         return struct
     except:
