@@ -53,7 +53,7 @@
 <h1>selprotopy.common.int_to_bool_list<a class="headerlink" href="#selprotopy-common-int-to-bool-list" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="selprotopy.common.int_to_bool_list">
-<code class="sig-prename descclassname">selprotopy.common.</code><code class="sig-name descname">int_to_bool_list</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">number</span></em>, <em class="sig-param"><span class="n">byte_like</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#selprotopy.common.int_to_bool_list" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">selprotopy.common.</code><code class="sig-name descname">int_to_bool_list</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">number</span></em>, <em class="sig-param"><span class="n">byte_like</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">reverse</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#selprotopy.common.int_to_bool_list" title="Permalink to this definition">¶</a></dt>
 <dd><p><cite>int_to_bool_list</cite></p>
 <p>This function converts an integer to a list of boolean values,
 where the most significant value is stored in the highest point
@@ -68,6 +68,8 @@ according to binary representation.</p></li>
 list of booleans that could be composed into a byte
 string object (i.e. length of list is divisible by 8),
 defaults to False.</p></li>
+<li><p><strong>reverse</strong> (<em>bool</em><em>, </em><em>optional</em>) – Control to reverse the order of the binary/boolean
+points.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
