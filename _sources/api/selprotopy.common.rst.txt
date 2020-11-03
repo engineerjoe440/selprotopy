@@ -1,4 +1,4 @@
-selprotopy.common
+﻿selprotopy.common
 =================
 
 .. rubric:: Description
@@ -14,6 +14,8 @@ selprotopy.common
 
 .. autosummary::
     :toctree: .
+    
+    eval_checksum
     
     ieee4bytefps
     

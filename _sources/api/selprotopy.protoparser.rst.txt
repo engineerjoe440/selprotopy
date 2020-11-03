@@ -1,4 +1,4 @@
-selprotopy.protoparser
+﻿selprotopy.protoparser
 ======================
 
 .. rubric:: Description
@@ -18,6 +18,8 @@ selprotopy.protoparser
     FastMeterBlock
     
     FastMeterConfigurationBlock
+    
+    FastOpConfigurationBlock
     
     RelayBnaBlock
     

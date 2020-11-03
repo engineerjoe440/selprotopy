@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>selprotopy.protoparser.RelayDnaBlock &#8212; selprotopy</title>
+    <title>selprotopy.protoparser.FastOpConfigurationBlock &#8212; selprotopy</title>
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     
@@ -18,8 +18,8 @@
     <link rel="shortcut icon" href="../_static/selprotopy_bare.png"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="selprotopy.protoparser.RelayIdBlock" href="selprotopy.protoparser.RelayIdBlock.html" />
-    <link rel="prev" title="selprotopy.protoparser.RelayDefinitionBlock" href="selprotopy.protoparser.RelayDefinitionBlock.html" /> 
+    <link rel="next" title="selprotopy.protoparser.RelayBnaBlock" href="selprotopy.protoparser.RelayBnaBlock.html" />
+    <link rel="prev" title="selprotopy.protoparser.FastMeterConfigurationBlock" href="selprotopy.protoparser.FastMeterConfigurationBlock.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -31,16 +31,16 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="selprotopy.protoparser.RelayIdBlock.html" title="selprotopy.protoparser.RelayIdBlock"
+          <a href="selprotopy.protoparser.RelayBnaBlock.html" title="selprotopy.protoparser.RelayBnaBlock"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="selprotopy.protoparser.RelayDefinitionBlock.html" title="selprotopy.protoparser.RelayDefinitionBlock"
+          <a href="selprotopy.protoparser.FastMeterConfigurationBlock.html" title="selprotopy.protoparser.FastMeterConfigurationBlock"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">selprotopy</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../selprotopy.html" >API Reference</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../protoparser.html" >&lt;no title&gt;</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="selprotopy.protoparser.html" accesskey="U">selprotopy.protoparser</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">selprotopy.protoparser.RelayDnaBlock</a></li> 
+        <li class="nav-item nav-item-this"><a href="">selprotopy.protoparser.FastOpConfigurationBlock</a></li> 
       </ul>
     </div>  
 
@@ -49,22 +49,19 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="selprotopy-protoparser-relaydnablock">
-<h1>selprotopy.protoparser.RelayDnaBlock<a class="headerlink" href="#selprotopy-protoparser-relaydnablock" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="selprotopy-protoparser-fastopconfigurationblock">
+<h1>selprotopy.protoparser.FastOpConfigurationBlock<a class="headerlink" href="#selprotopy-protoparser-fastopconfigurationblock" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
-<dt id="selprotopy.protoparser.RelayDnaBlock">
-<code class="sig-prename descclassname">selprotopy.protoparser.</code><code class="sig-name descname">RelayDnaBlock</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">encoding</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">byteorder</span><span class="o">=</span><span class="default_value">'big'</span></em>, <em class="sig-param"><span class="n">signed</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#selprotopy.protoparser.RelayDnaBlock" title="Permalink to this definition">¶</a></dt>
-<dd><p><cite>RelayDnaBlock</cite></p>
-<p>Parser for a relay digital names block to describe the configured
-digital names for a relay.</p>
+<dt id="selprotopy.protoparser.FastOpConfigurationBlock">
+<code class="sig-prename descclassname">selprotopy.protoparser.</code><code class="sig-name descname">FastOpConfigurationBlock</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">byteorder</span><span class="o">=</span><span class="default_value">'big'</span></em>, <em class="sig-param"><span class="n">signed</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#selprotopy.protoparser.FastOpConfigurationBlock" title="Permalink to this definition">¶</a></dt>
+<dd><p><cite>FastOpConfigurationBlock</cite></p>
+<p>Parser for a fast operate configuration block to describe
+the relay’s available fast operate options.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<em>str</em>) – The full DNA string returned from the relay, may
-optionally be passed as a byte-string if the
-encoding is also described.</p></li>
-<li><p><strong>encoding</strong> (<em>str</em><em>, </em><em>optional</em>) – Optional encoding format to describe which encoding
-method should be used to decode the data passed.</p></li>
+<li><p><strong>data</strong> (<em>bytes</em>) – The full byte-string returned from a
+relay using SEL protocol.</p></li>
 <li><p><strong>byteorder</strong> (<em>[</em><em>'big'</em><em>, </em><em>'little'</em><em>]</em><em>, </em><em>optional</em>) – Control of how bytes are interpreted as
 integers, using big-endian or little-endian
 operations. Defaults to ‘big’</p></li>
@@ -75,10 +72,11 @@ Defaults to True</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>binaries</strong> – List of the target rows with each element’s label.</p>
+<dd class="field-even"><p><strong>struct</strong> – Dictionary of key-value pairs describing
+the relay’s fast meter configuration block.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>list of list</p>
+<dd class="field-odd"><p>dict</p>
 </dd>
 </dl>
 </dd></dl>
@@ -96,15 +94,15 @@ Defaults to True</p></li>
               <img class="logo" src="../_static/selprotopy_wht_text.png" alt="Logo"/>
             </a></p>
   <h4>Previous topic</h4>
-  <p class="topless"><a href="selprotopy.protoparser.RelayDefinitionBlock.html"
-                        title="previous chapter">selprotopy.protoparser.RelayDefinitionBlock</a></p>
+  <p class="topless"><a href="selprotopy.protoparser.FastMeterConfigurationBlock.html"
+                        title="previous chapter">selprotopy.protoparser.FastMeterConfigurationBlock</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="selprotopy.protoparser.RelayIdBlock.html"
-                        title="next chapter">selprotopy.protoparser.RelayIdBlock</a></p>
+  <p class="topless"><a href="selprotopy.protoparser.RelayBnaBlock.html"
+                        title="next chapter">selprotopy.protoparser.RelayBnaBlock</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../_sources/api/selprotopy.protoparser.RelayDnaBlock.rst.txt"
+      <li><a href="../_sources/api/selprotopy.protoparser.FastOpConfigurationBlock.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -132,16 +130,16 @@ Defaults to True</p></li>
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="selprotopy.protoparser.RelayIdBlock.html" title="selprotopy.protoparser.RelayIdBlock"
+          <a href="selprotopy.protoparser.RelayBnaBlock.html" title="selprotopy.protoparser.RelayBnaBlock"
              >next</a> |</li>
         <li class="right" >
-          <a href="selprotopy.protoparser.RelayDefinitionBlock.html" title="selprotopy.protoparser.RelayDefinitionBlock"
+          <a href="selprotopy.protoparser.FastMeterConfigurationBlock.html" title="selprotopy.protoparser.FastMeterConfigurationBlock"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">selprotopy</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../selprotopy.html" >API Reference</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../protoparser.html" >&lt;no title&gt;</a> &#187;</li>
           <li class="nav-item nav-item-3"><a href="selprotopy.protoparser.html" >selprotopy.protoparser</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">selprotopy.protoparser.RelayDnaBlock</a></li> 
+        <li class="nav-item nav-item-this"><a href="">selprotopy.protoparser.FastOpConfigurationBlock</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

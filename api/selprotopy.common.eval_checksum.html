@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>selprotopy.commands.event_record_request &#8212; selprotopy</title>
+    <title>selprotopy.common.eval_checksum &#8212; selprotopy</title>
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     
@@ -18,8 +18,8 @@
     <link rel="shortcut icon" href="../_static/selprotopy_bare.png"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="&lt;no title&gt;" href="../protoparser.html" />
-    <link rel="prev" title="selprotopy.commands" href="selprotopy.commands.html" /> 
+    <link rel="next" title="selprotopy.common.ieee4bytefps" href="selprotopy.common.ieee4bytefps.html" />
+    <link rel="prev" title="selprotopy.common" href="selprotopy.common.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -31,16 +31,16 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../protoparser.html" title="&lt;no title&gt;"
+          <a href="selprotopy.common.ieee4bytefps.html" title="selprotopy.common.ieee4bytefps"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="selprotopy.commands.html" title="selprotopy.commands"
+          <a href="selprotopy.common.html" title="selprotopy.common"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">selprotopy</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../selprotopy.html" >API Reference</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="../commands.html" >&lt;no title&gt;</a> &#187;</li>
-          <li class="nav-item nav-item-3"><a href="selprotopy.commands.html" accesskey="U">selprotopy.commands</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">selprotopy.commands.event_record_request</a></li> 
+          <li class="nav-item nav-item-2"><a href="../common.html" >&lt;no title&gt;</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="selprotopy.common.html" accesskey="U">selprotopy.common</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">selprotopy.common.eval_checksum</a></li> 
       </ul>
     </div>  
 
@@ -49,29 +49,29 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="selprotopy-commands-event-record-request">
-<h1>selprotopy.commands.event_record_request<a class="headerlink" href="#selprotopy-commands-event-record-request" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="selprotopy-common-eval-checksum">
+<h1>selprotopy.common.eval_checksum<a class="headerlink" href="#selprotopy-common-eval-checksum" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
-<dt id="selprotopy.commands.event_record_request">
-<code class="sig-prename descclassname">selprotopy.commands.</code><code class="sig-name descname">event_record_request</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event_number</span></em><span class="sig-paren">)</span><a class="headerlink" href="#selprotopy.commands.event_record_request" title="Permalink to this definition">¶</a></dt>
-<dd><p><cite>event_record_request</cite></p>
-<p>A simple function to evaluate the request byte-string
-to request a numbered event (zero-based) from the relay’s
-event history.</p>
+<dt id="selprotopy.common.eval_checksum">
+<code class="sig-prename descclassname">selprotopy.common.</code><code class="sig-name descname">eval_checksum</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">constrain</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#selprotopy.common.eval_checksum" title="Permalink to this definition">¶</a></dt>
+<dd><p><cite>eval_checksum</cite></p>
+<p>This function accepts a byte-string, and calculates the checksum
+of the bytes provided.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>event_number</strong> (<em>int</em>) – The zero-based event number index. Zero (0)
-is the most recent event.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>[</em><em>str</em><em>, </em><em>bytes</em><em>]</em>) – The bytestring which should be evaluated for the
+checksum.</p></li>
+<li><p><strong>constrain</strong> (<em>bool</em><em>, </em><em>optional</em>) – Control to specify whether the value should be
+constrained to an 8-bit representation, defaults
+to False.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>request</strong> – The byte-string request which to provide the
-indexed event desired.</p>
+<dd class="field-even"><p><strong>checksum</strong> – The fully evaluated checksum.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>bytes</p>
-</dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><p><strong>ValueError</strong> – Raised when the requested event number is: greater than 64.</p>
+<dd class="field-odd"><p>int</p>
 </dd>
 </dl>
 </dd></dl>
@@ -89,15 +89,15 @@ indexed event desired.</p>
               <img class="logo" src="../_static/selprotopy_wht_text.png" alt="Logo"/>
             </a></p>
   <h4>Previous topic</h4>
-  <p class="topless"><a href="selprotopy.commands.html"
-                        title="previous chapter">selprotopy.commands</a></p>
+  <p class="topless"><a href="selprotopy.common.html"
+                        title="previous chapter">selprotopy.common</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="../protoparser.html"
-                        title="next chapter">&lt;no title&gt;</a></p>
+  <p class="topless"><a href="selprotopy.common.ieee4bytefps.html"
+                        title="next chapter">selprotopy.common.ieee4bytefps</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../_sources/api/selprotopy.commands.event_record_request.rst.txt"
+      <li><a href="../_sources/api/selprotopy.common.eval_checksum.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -125,16 +125,16 @@ indexed event desired.</p>
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../protoparser.html" title="&lt;no title&gt;"
+          <a href="selprotopy.common.ieee4bytefps.html" title="selprotopy.common.ieee4bytefps"
              >next</a> |</li>
         <li class="right" >
-          <a href="selprotopy.commands.html" title="selprotopy.commands"
+          <a href="selprotopy.common.html" title="selprotopy.common"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">selprotopy</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../selprotopy.html" >API Reference</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="../commands.html" >&lt;no title&gt;</a> &#187;</li>
-          <li class="nav-item nav-item-3"><a href="selprotopy.commands.html" >selprotopy.commands</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">selprotopy.commands.event_record_request</a></li> 
+          <li class="nav-item nav-item-2"><a href="../common.html" >&lt;no title&gt;</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="selprotopy.common.html" >selprotopy.common</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">selprotopy.common.eval_checksum</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

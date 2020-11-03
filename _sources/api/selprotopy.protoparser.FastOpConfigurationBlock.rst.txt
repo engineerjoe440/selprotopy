@@ -1,0 +1,6 @@
+selprotopy.protoparser.FastOpConfigurationBlock
+===============================================
+
+.. currentmodule:: selprotopy.protoparser
+
+.. autofunction:: FastOpConfigurationBlock

@@ -1,4 +1,4 @@
-
+﻿
 
 SelClient
 ====================
@@ -30,6 +30,7 @@ SelClient
       ~SelClient.autoconfig_fastmeter
       ~SelClient.autoconfig_fastmeter_demand
       ~SelClient.autoconfig_fastmeter_peakdemand
+      ~SelClient.autoconfig_fastoperate
       ~SelClient.poll_fast_meter
       ~SelClient.quit
 
@@ -53,6 +54,7 @@ SelClient
    .. automethod:: autoconfig_fastmeter
    .. automethod:: autoconfig_fastmeter_demand
    .. automethod:: autoconfig_fastmeter_peakdemand
+   .. automethod:: autoconfig_fastoperate
    .. automethod:: poll_fast_meter
    .. automethod:: quit
 
