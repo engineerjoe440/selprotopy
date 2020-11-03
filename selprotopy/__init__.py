@@ -343,6 +343,7 @@ class SelClient():
         - Fast Meter Configuration Block
         - Fast Meter Demand Configuration Block
         - Fast Meter Peak Demand Configuration Block
+        - Fast Operate Configuration Block
         
         See Also
         --------
@@ -351,6 +352,7 @@ class SelClient():
                                             Demand
         autoconfig_fastmeter_peakdemand : Auto Configuration for Fast Meter
                                             Peak Demand
+        autoconfig_fastoperate          : Auto Configuration for Fast Operate
         
         Parameters
         ----------
@@ -387,6 +389,7 @@ class SelClient():
         self.autoconfig_fastmeter( verbose=verbose )
         self.autoconfig_fastmeter_demand( verbose=verbose )
         self.autoconfig_fastmeter_peakdemand( verbose=verbose )
+        self.autoconfig_fastoperate( verbose=verbose )
         # Request Relay ENA Block
         # TODO
         # Request Relay DNA Block
@@ -425,6 +428,7 @@ class SelClient():
         autoconfig                      : Relay Auto Configuration
         autoconfig_fastmeter_demand     : Auto Configuration for Fast Meter Demand
         autoconfig_fastmeter_peakdemand : Auto Configuration for Fast Meter Peak Demand
+        autoconfig_fastoperate          : Auto Configuration for Fast Operate
 
         Parameters
         ----------
@@ -452,6 +456,7 @@ class SelClient():
         autoconfig                      : Relay Auto Configuration
         autoconfig_fastmeter            : Auto Configuration for Fast Meter
         autoconfig_fastmeter_peakdemand : Auto Configuration for Fast Meter Peak Demand
+        autoconfig_fastoperate          : Auto Configuration for Fast Operate
 
         Parameters
         ----------
@@ -479,6 +484,7 @@ class SelClient():
         autoconfig                      : Relay Auto Configuration
         autoconfig_fastmeter            : Auto Configuration for Fast Meter
         autoconfig_fastmeter_demand     : Auto Configuration for Fast Meter Demand
+        autoconfig_fastoperate          : Auto Configuration for Fast Operate
 
         Parameters
         ----------
@@ -490,6 +496,34 @@ class SelClient():
         # Fast Meter Peak Demand
         self.conn.write( self.fmconfigcommand3 + commands.CR )
         self.fastPkDemandDef = protoparser.FastMeterConfigurationBlock(
+                                self._read_to_prompt(), verbose=verbose)
+    
+    # Define Method to Run the Fast Operate Configuration
+    def autoconfig_fastoperate(self, verbose=False):
+        """
+        `autoconfig_fastoperate` Method
+
+        Method to operate the standard auto-configuration process
+        with a connected relay to identify the fast operate parameters
+        of the relay.
+
+        See Also
+        --------
+        autoconfig                      : Relay Auto Configuration
+        autoconfig_fastmeter            : Auto Configuration for Fast Meter
+        autoconfig_fastmeter_demand     : Auto Configuration for Fast Meter Demand
+        autoconfig_fastmeter_peakdemand : Auto Configuration for Fast Meter Peak Demand
+
+        Parameters
+        ----------
+        verbose:        bool, optional
+                        Control to dictate whether verbose printing operations
+                        should be used (often for debugging and learning purposes).
+                        Defaults to False
+        """
+        # Fast Meter Peak Demand
+        self.conn.write( self.fopcommandinfo + commands.CR )
+        self.fastOpDef = protoparser.FastOpConfigurationBlock(
                                 self._read_to_prompt(), verbose=verbose)
 
     # Define Method to Perform Fast Meter Polling

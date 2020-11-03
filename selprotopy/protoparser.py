@@ -16,10 +16,10 @@ import binascii
 # Local Imports
 try:
     from . import commands
-    from .common import int_to_bool_list, ieee4bytefps
+    from .common import int_to_bool_list, ieee4bytefps, eval_checksum
 except:
     import commands
-    from common import int_to_bool_list, ieee4bytefps
+    from common import int_to_bool_list, ieee4bytefps, eval_checksum
 
 # Define ID Block for RegEx
 RE_ID_BLOCK_1 = re.compile(r'''"FID\=(SEL.*)","(\w*)"''')
@@ -62,19 +62,29 @@ ANALOG_TYPE_FORMATTERS = {
 }
 
 
+# Define Simple Function to Validate Checksum for Byte Array
+def _validate_checksum( bytArr ):
+    """ Use the last byte in a byte array as checksum to verify preceding bytes. """
+    # Assume Valid Message, and Find the Length of the Data
+    dataLen = bytArr[2]  # Third Byte, Message Length
+    # Collect the Checksum from the Data
+    checksum_byte = bytArr[dataLen - 1]  # Extract checksum byte
+    data = bytArr[:dataLen - 1]  # Don't include last byte
+    if checksum_byte != eval_checksum(data, constrain=True):
+        raise ValueError("Invalid Checksum Found for Data Stream.")
+
 # Define Simple Function to Cast Byte Array and Clean Ordering
 def _cast_bytearray( data ):
-    """
-    
-    """
+    """ Cast the data to a byte-array. """
     offset = data.find(b'\xa5')
     bytArr = bytearray(data)[offset:]
+    _validate_checksum( bytArr=bytArr )
     return bytArr
 
 
 ###################################################################################
 # Define Relay ID Block Parser
-def RelayIdBlock( data, encoding='', verbose=False ):
+def RelayIdBlock( data, encoding='', byteorder='big', signed=True, verbose=False ):
     """
     `RelayIdBlock`
     
@@ -90,6 +100,14 @@ def RelayIdBlock( data, encoding='', verbose=False ):
     encoding:   str, optional
                 Optional encoding format to describe which encoding
                 method should be used to decode the data passed.
+    byteorder:  ['big', 'little'], optional
+                Control of how bytes are interpreted as
+                integers, using big-endian or little-endian
+                operations. Defaults to 'big'
+    signed:     bool, optional
+                Control to specify whether the bytes should
+                be interpreted as signed or unsigned integers.
+                Defaults to True
     verbose:    bool, optional
                 Control to optionally utilize verbose printing.
     
@@ -110,21 +128,27 @@ def RelayIdBlock( data, encoding='', verbose=False ):
     for id_key, re_param in RE_ID_BLOCKS.items():
         try:
             # Capture the Important Pieces from the Input
-            key_result, checksum = re.findall(re_param, idstring)[0]
+            key_result, checksum_chars = re.findall(re_param, idstring)[0]
+            # Validate Checksum
+            calc_checksum = eval_checksum( f'"{id_key}={key_result}",' )
+            checksum = int.from_bytes( bytes.fromhex(checksum_chars),
+                                        byteorder=byteorder,
+                                        signed=signed )
+            if checksum != calc_checksum:
+                # TODO Raise more Useful Error
+                raise ValueError(f"Invalid Checksum Found for {id_key}")
             # Store the Results
             results[id_key] = key_result
-            results[id_key + '_checksum'] = checksum
-        except:
+        except KeyError:
             # Store Empty Results
             results[id_key] = ''
-            results[id_key + '_checksum'] = ''
             if verbose:
                 print(f'Unable to determine {id_key} parameter from relay ID.')
     # Return Parsed ID Components
     return results
 
 # Define Relay DNA Block Parser
-def RelayDnaBlock( data, encoding='', checksum=False, verbose=False ):
+def RelayDnaBlock( data, encoding='', byteorder='big', signed=True, verbose=False ):
     """
     `RelayDnaBlock`
     
@@ -140,9 +164,14 @@ def RelayDnaBlock( data, encoding='', checksum=False, verbose=False ):
     encoding:   str, optional
                 Optional encoding format to describe which encoding
                 method should be used to decode the data passed.
-    checksum:   bool, optional
-                Control option to capture the checksum for each
-                target row description.
+    byteorder:  ['big', 'little'], optional
+                Control of how bytes are interpreted as
+                integers, using big-endian or little-endian
+                operations. Defaults to 'big'
+    signed:     bool, optional
+                Control to specify whether the bytes should
+                be interpreted as signed or unsigned integers.
+                Defaults to True
     verbose:    bool, optional
                 Control to optionally utilize verbose printing.
     
@@ -174,9 +203,15 @@ def RelayDnaBlock( data, encoding='', checksum=False, verbose=False ):
             try:
                 # Capture and Clean the Columns
                 row = [re.sub(RE_HEX_CHAR, '', target) for target in columns[0:8]]
-                # Only Keep the Checksum when Appropriate
-                if checksum:
-                    row.append([columns[8]])
+                # Verify Checksum
+                calc_checksum = eval_checksum( '"{}",'.format('","'.join(row)) )
+                checksum = int.from_bytes( bytes.fromhex(columns[8]),
+                                        byteorder=byteorder,
+                                        signed=signed )
+                # Indicate Failed Checksum Validation
+                if calc_checksum != checksum:
+                    # TODO Raise more Useful Error
+                    raise ValueError(f"Invalid Checksum Found for {id_key}")
                 binaries.append( row )
             except:
                 if verbose: print(f"Couldn't parse line: {line}")
@@ -517,6 +552,83 @@ def FastMeterConfigurationBlock( data, byteorder='big', signed=True, verbose=Fal
             print("Time Stamp Offset:",struct['timestmpoffset'])
             print("Digital Channel Offset:",struct['digitaloffset'])
         # Return the Generated Structure
+        return struct
+    except:
+        raise ValueError("Invalid data string response")
+
+# Define Function to Parse a Fast Operate Configuration Block
+def FastOpConfigurationBlock( data, byteorder='big', signed=True, verbose=False ):
+    """
+    `FastOpConfigurationBlock`
+    
+    Parser for a fast operate configuration block to describe
+    the relay's available fast operate options.
+    
+    Parameters
+    ----------
+    data:       bytes
+                The full byte-string returned from a
+                relay using SEL protocol.
+    byteorder:  ['big', 'little'], optional
+                Control of how bytes are interpreted as
+                integers, using big-endian or little-endian
+                operations. Defaults to 'big'
+    signed:     bool, optional
+                Control to specify whether the bytes should
+                be interpreted as signed or unsigned integers.
+                Defaults to True
+    verbose:    bool, optional
+                Control to optionally utilize verbose printing.
+    
+    Returns
+    -------
+    struct:     dict
+                Dictionary of key-value pairs describing
+                the relay's fast meter configuration block.
+    """
+    # Capture Byte Array for Parsing
+    bytArr = _cast_bytearray(data)
+    struct = {}
+    try:
+        # Parse Data, Load Attributes
+        struct['command']       = bytes(bytArr[:2])
+        struct['length']        = bytArr[2]
+        struct['numbreakers']   = bytArr[3]
+        struct['numremotebits'] = int.from_bytes( bytArr[4:6],
+                                                  byteorder=byteorder,
+                                                  signed=signed )
+        struct['pulsesupported']= bytArr[6]
+        reservedpoint           = bytArr[7]
+        # Iterate Over Breaker Bits
+        ind = 8
+        struct['breakerconfig'] = []
+        for _ in range(struct['numbreakers']):
+            struct['breakerconfig'].append({
+                'opencode'  : bytArr[ind],
+                'closecode' : bytArr[ind+1],
+            })
+            ind += 2
+        # Iterate Over Remote Bits
+        struct['remotebitconfig'] = []
+        for _ in range(struct['numremotebits']):
+            remotebitstruct = {
+                'clearcode' : bytArr[ind],
+                'setcode'   : bytArr[ind+1],
+            }
+            ind += 2
+            if struct['pulsesupported'] == 1:
+                remotebitstruct['pulsecode'] = bytArr[ind]
+                ind += 1
+            # Append Structure
+            struct['remotebitconfig'].append(remotebitstruct)
+        if verbose:
+            print("Generic Fast Operate Configuration Block Information")
+            print("Command:", struct['command'])
+            print("Message Length:",struct['length'])
+            print("Number of Breakers:",struct['breakerconfig'])
+            print("Number of Remote Bits:",struct['numremotebits'])
+            print("Pulse Command Supported:",struct['pulsesupported'])
+        # Return Structure
         return struct
     except:
         raise ValueError("Invalid data string response")

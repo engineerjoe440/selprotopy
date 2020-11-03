@@ -86,5 +86,38 @@ def ieee4bytefps( binary_bytes, total_digits=7 ):
     return round_total_digits(  x=struct.unpack('>f', binary_bytes)[0],
                                 digits=total_digits )
 
+# Define Function to Evaluate Checksum
+def eval_checksum( data, constrain=False ):
+    """
+    `eval_checksum`
+
+    This function accepts a byte-string, and calculates the checksum
+    of the bytes provided.
+
+    Parameters
+    ----------
+    data:       [str, bytes]
+                The bytestring which should be evaluated for the
+                checksum.
+    constrain:  bool, optional
+                Control to specify whether the value should be
+                constrained to an 8-bit representation, defaults
+                to False.
+    
+    Returns
+    -------
+    checksum:   int
+                The fully evaluated checksum.
+    """
+    # Evaluate the sum
+    if isinstance(data, str):
+        checksum = sum(map(ord, data))
+    else:
+        checksum = sum(data)
+    # Cap the Value if Needed
+    if constrain:
+        checksum = checksum & 0xff # Bit-wise and with 8-bit maximum
+    return checksum
+
 
 # END
