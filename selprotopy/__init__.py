@@ -165,8 +165,10 @@ class SelClient():
     # Define Method to "Clear" the Buffer
     def _clear_input_buffer( self ):
         try:
-            while b'' != self.conn.read_very_eager():
-                time.sleep(self.delay)
+            resp = self.conn.read_very_eager()
+            while b'' != resp:
+                time.sleep(self.delay*10)
+                resp = self.conn.read_very_eager()
         except:
             self.conn.reset_input_buffer()
     
@@ -197,7 +199,7 @@ class SelClient():
                 count = 0
             time.sleep(self.delay)
         self._clear_input_buffer() # Empty anything left in the buffer
-        time.sleep(self.delay*2)
+        time.sleep(self.delay)
     
     # Define Method to Attempt Reading Everything (only for telnetlib)
     def _read_everything( self ):

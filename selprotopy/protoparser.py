@@ -22,7 +22,10 @@ except:
     from common import int_to_bool_list, ieee4bytefps, eval_checksum
 
 # Define Clean Prompt Characters for RegEx
-RE_CLEAN_PROMPT_CHARS = re.compile(r'^[^\=\r\n\> ]*$')
+RE_CLEAN_PROMPT_CHARS = re.compile(r'^[^\x02\x03\=\r\n\> ]*$')
+
+# Define DNA Control Character String for RegEx
+RE_DNA_CONTROL = re.compile(r'\>.*DNA')
 
 # Define ID Block for RegEx
 RE_ID_BLOCK_1 = re.compile(r'''"FID\=(SEL.*)","(\w*)"''')
@@ -99,8 +102,8 @@ def CleanPrompt( data, encoding='utf-8' ):
     if encoding:
         # Decode Bytes
         data = data.decode(encoding)
-    match = re.match(RE_CLEAN_PROMPT_CHARS, data)
-    if match == None or match.match == '':
+    match = re.search(RE_CLEAN_PROMPT_CHARS, data)
+    if match == None:
         return True
     else:
         return False
@@ -204,7 +207,6 @@ def RelayDnaBlock( data, encoding='', byteorder='big', signed=True, verbose=Fals
     binaries:   list of list
                 List of the target rows with each element's label.
     """
-    dnacontrol = '>DNA'
     if encoding:
         # Decode Bytes
         dnastring = data.decode(encoding)
@@ -213,8 +215,8 @@ def RelayDnaBlock( data, encoding='', byteorder='big', signed=True, verbose=Fals
         dnastring = data
     dnastring = dnastring.upper()
     # Remove the Leading Command if Present
-    if dnacontrol in dnastring:
-        dnastring = dnastring[dnastring.find(dnacontrol)+len(dnacontrol):]
+    if None != re.search(RE_DNA_CONTROL, dnastring):
+        dnastring = re.split(RE_DNA_CONTROL,dnastring)[1]
     # Remove Double Quotes
     dnastring = dnastring.replace('"','')
     # Format the List of Lists
@@ -235,12 +237,10 @@ def RelayDnaBlock( data, encoding='', byteorder='big', signed=True, verbose=Fals
                 # Indicate Failed Checksum Validation
                 if calc_checksum != checksum:
                     # TODO Raise more Useful Error
-                    raise ValueError(f"Invalid Checksum Found for {id_key}")
+                    raise ValueError(f"Invalid Checksum Found for {line}")
                 binaries.append( row )
             except:
                 if verbose: print(f"Couldn't parse line: {line}")
-        else:
-            break
     return binaries
 
 # Define Relay Status Bit Name Parser
@@ -753,6 +753,7 @@ def FastMeterBlock( data, definition, dna_def, byteorder='big', signed=True,
         # Iteratively Handle Digital Points
         struct['digitals'] = {}
         ind = definition['digitaloffset']
+        print("numdigitals", len(dna_def), definition['numdigitalbank'])
         for target_row_index in range(definition['numdigitalbank']):
             # Verify Length of Points
             if definition['numdigitalbank'] != len(dna_def):
