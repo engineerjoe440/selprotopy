@@ -21,9 +21,12 @@ except:
     import commands
     from common import int_to_bool_list, ieee4bytefps, eval_checksum
 
+# Define Clean Prompt Characters for RegEx
+RE_CLEAN_PROMPT_CHARS = re.compile(r'^[^\=\r\n\> ]*$')
+
 # Define ID Block for RegEx
 RE_ID_BLOCK_1 = re.compile(r'''"FID\=(SEL.*)","(\w*)"''')
-RE_ID_BLOCK_2 = re.compile(r'''"BFID\=(SEL.*)","(\w*)"''')
+RE_ID_BLOCK_2 = re.compile(r'''"BFID\=(\w.*)","(\w*)"''')
 RE_ID_BLOCK_3 = re.compile(r'''"CID\=(\w*)","(\w*)"''')
 RE_ID_BLOCK_4 = re.compile(r'''"DEVID\=(.*)","(\w*)"''')
 RE_ID_BLOCK_5 = re.compile(r'''"DEVCODE\=(\w*)","(\w*)"''')
@@ -74,14 +77,33 @@ def _validate_checksum( bytArr ):
         raise ValueError("Invalid Checksum Found for Data Stream.")
 
 # Define Simple Function to Cast Byte Array and Clean Ordering
-def _cast_bytearray( data ):
+def _cast_bytearray( data, debug=True ):
     """ Cast the data to a byte-array. """
     offset = data.find(b'\xa5')
+    # Determine Invalid Criteria
+    if offset == -1:
+        # TODO: Make more useful error
+        if debug:
+            print("Debug Cast Data:", data )
+        raise ValueError("Invalid response request.")
     bytArr = bytearray(data)[offset:]
     _validate_checksum( bytArr=bytArr )
     return bytArr
 
 
+###################################################################################
+# Define Clear Prompt Interpreter
+def CleanPrompt( data, encoding='utf-8' ):
+    """
+    """
+    if encoding:
+        # Decode Bytes
+        data = data.decode(encoding)
+    match = re.match(RE_CLEAN_PROMPT_CHARS, data)
+    if match == None or match.match == '':
+        return True
+    else:
+        return False
 ###################################################################################
 # Define Relay ID Block Parser
 def RelayIdBlock( data, encoding='', byteorder='big', signed=True, verbose=False ):
@@ -144,6 +166,8 @@ def RelayIdBlock( data, encoding='', byteorder='big', signed=True, verbose=False
             results[id_key] = ''
             if verbose:
                 print(f'Unable to determine {id_key} parameter from relay ID.')
+        except:
+            print(idstring, re.findall(re_param, idstring))
     # Return Parsed ID Components
     return results
 
@@ -296,7 +320,7 @@ def RelayDefinitionBlock( data, verbose=False ):
                 the relay's definition block.
     """
     # Capture Byte Array for Parsing
-    bytArr = _cast_bytearray(data)
+    bytArr = _cast_bytearray(data, verbose)
     struct = {}
     try:
         # Parse Data, Load Attributes
@@ -310,11 +334,11 @@ def RelayDefinitionBlock( data, verbose=False ):
         struct['statusflaginfo']= []
         if verbose:
             print("Generic Relay Definition Block Information")
-            print(struct['command'])
-            print(struct['length'])
-            print(struct['numprotocolsup'])
-            print(struct['fmmessagesup'])
-            print(struct['statusflagssup'])
+            print("Command:",struct['command'])
+            print("Length:",struct['length'])
+            print("Number of Supported Protocols:",struct['numprotocolsup'])
+            print("Fast Meter Message Support:",struct['fmmessagesup'])
+            print("Status Flag Support:",struct['statusflagssup'])
         # Iterate over the Fast Meter Commands
         ind = 6
         for _ in range(struct['fmmessagesup']):

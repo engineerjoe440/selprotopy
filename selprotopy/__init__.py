@@ -162,6 +162,14 @@ class SelClient():
         # Return Status
         return connected
     
+    # Define Method to "Clear" the Buffer
+    def _clear_input_buffer( self ):
+        try:
+            while b'' != self.conn.read_very_eager():
+                time.sleep(self.delay)
+        except:
+            self.conn.reset_input_buffer()
+    
     # Define Method to Read All Data to Next Relay Prompt
     def _read_to_prompt( self, prompt_str=commands.PROMPT ):
         response = self.conn.read_until( commands.PROMPT )
@@ -174,6 +182,22 @@ class SelClient():
         while response.find(command) == -1:
             response += self._read_to_prompt( prompt_str=prompt_str )
         return response
+    
+    # Define Method to Read Until a "Clean" Prompt is Viewed
+    def _read_clean_prompt( self ):
+        count = 0
+        response = b''
+        while count < 3:
+            self.conn.write( commands.CR )      # Write
+            response += self._read_to_prompt()   # Read
+            # Count the Number of Clean Prompt Responses
+            if protoparser.CleanPrompt(response):
+                count += 1
+            else:
+                count = 0
+            time.sleep(self.delay)
+        self._clear_input_buffer() # Empty anything left in the buffer
+        time.sleep(self.delay*2)
     
     # Define Method to Attempt Reading Everything (only for telnetlib)
     def _read_everything( self ):
@@ -367,41 +391,46 @@ class SelClient():
                         Relay's Configured FID as Confirmation of Successful
                         Automatic Configuration
         """
-        # Determine if Level 0, and Escalate Accordingly
-        if self.access_level()[0] == 0:
-            # Access Level 1 Required to Request DNA
-            self.access_level_1( **kwargs )
+        self.quit()
         # Request Relay Definition
         self.conn.write( commands.RELAY_DEFENITION + commands.CR )
         definition = protoparser.RelayDefinitionBlock(
             self._read_command_response(commands.RELAY_DEFENITION),
                                         verbose=verbose)
-        # Load the Relay Definition Information
-        self.fmconfigcommand1   = definition['fmcommandinfo'][0]['configcommand']
-        self.fmcommand1         = definition['fmcommandinfo'][0]['command']
-        self.fmconfigcommand2   = definition['fmcommandinfo'][1]['configcommand']
-        self.fmcommand2         = definition['fmcommandinfo'][1]['command']
-        self.fmconfigcommand3   = definition['fmcommandinfo'][2]['configcommand']
-        self.fmcommand3         = definition['fmcommandinfo'][2]['command']
-        self.fopcommandinfo     = definition['fopcommandinfo']
-        self.fmsgcommandinfo    = definition['fmsgcommandinfo']
-        # Request the Meter Blocks
-        self.autoconfig_fastmeter( verbose=verbose )
-        self.autoconfig_fastmeter_demand( verbose=verbose )
-        self.autoconfig_fastmeter_peakdemand( verbose=verbose )
-        self.autoconfig_fastoperate( verbose=verbose )
+        # Load the Relay Definition Information and Request the Meter Blocks
+        if definition['fmmessagesup'] >= 1:
+            self.fmconfigcommand1   = definition['fmcommandinfo'][0]['configcommand']
+            self.fmcommand1         = definition['fmcommandinfo'][0]['command']
+            self.autoconfig_fastmeter( verbose=verbose )
+        if definition['fmmessagesup'] >= 2:
+            self.fmconfigcommand2   = definition['fmcommandinfo'][1]['configcommand']
+            self.fmcommand2         = definition['fmcommandinfo'][1]['command']
+            self.autoconfig_fastmeter_demand( verbose=verbose )
+        if definition['fmmessagesup'] >= 3:
+            self.fmconfigcommand3   = definition['fmcommandinfo'][2]['configcommand']
+            self.fmcommand3         = definition['fmcommandinfo'][2]['command']
+            self.autoconfig_fastmeter_peakdemand( verbose=verbose )
+        if definition['fopcommandinfo'] != '':
+            self.fopcommandinfo     = definition['fopcommandinfo']
+            self.autoconfig_fastoperate( verbose=verbose )
+        if definition['fmsgcommandinfo'] != '':
+            self.fmsgcommandinfo    = definition['fmsgcommandinfo']
+        # Determine if Level 0, and Escalate Accordingly
+        if self.access_level()[0] == 0:
+            # Access Level 1 Required to Request DNA
+            self.access_level_1( **kwargs )
         # Request Relay ENA Block
         # TODO
         # Request Relay DNA Block
         self.conn.write( commands.DNA )
-        self.dnaDef = protoparser.RelayDnaBlock(self._read_to_prompt(),
+        self.dnaDef = protoparser.RelayDnaBlock(self._read_command_response(commands.DNA),
                                                 encoding='utf-8',
                                                 verbose=verbose)
         # Request Relay BNA Block
         ## TODO
         # Request Relay ID Block
         self.conn.write( commands.ID )
-        id_block = protoparser.RelayIdBlock(self._read_to_prompt(),
+        id_block = protoparser.RelayIdBlock(self._read_command_response(commands.ID),
                                             encoding='utf-8',
                                             verbose=verbose)
         # Store Relay Information
@@ -438,6 +467,7 @@ class SelClient():
                         Defaults to False
         """
         # Fast Meter
+        self._read_clean_prompt()
         self.conn.write( self.fmconfigcommand1 + commands.CR )
         self.fastMeterDef = protoparser.FastMeterConfigurationBlock(
                                 self._read_to_prompt(), verbose=verbose)
@@ -466,6 +496,7 @@ class SelClient():
                         Defaults to False
         """
         # Fast Meter Demand
+        self._read_clean_prompt()
         self.conn.write( self.fmconfigcommand2 + commands.CR )
         self.fastDemandDef = protoparser.FastMeterConfigurationBlock(
                                 self._read_to_prompt(), verbose=verbose)
@@ -494,6 +525,7 @@ class SelClient():
                         Defaults to False
         """
         # Fast Meter Peak Demand
+        self._read_clean_prompt()
         self.conn.write( self.fmconfigcommand3 + commands.CR )
         self.fastPkDemandDef = protoparser.FastMeterConfigurationBlock(
                                 self._read_to_prompt(), verbose=verbose)
@@ -522,6 +554,7 @@ class SelClient():
                         Defaults to False
         """
         # Fast Meter Peak Demand
+        self._read_clean_prompt()
         self.conn.write( self.fopcommandinfo + commands.CR )
         self.fastOpDef = protoparser.FastOpConfigurationBlock(
                                 self._read_to_prompt(), verbose=verbose)
@@ -558,6 +591,7 @@ class SelClient():
         if minAccLevel == 2:
             self.access_level_2( **kwargs )
         # Poll Client for Data
+        self._read_clean_prompt()
         self.conn.write( self.fmcommand1 + commands.CR )
         response = protoparser.FastMeterBlock(  self._read_command_response(
                                                     self.fmcommand1),
@@ -572,9 +606,9 @@ class SelClient():
 
 if __name__ == '__main__':
     print('Establishing Connection...')
-    with telnetlib.Telnet('192.168.254.10', 23) as tn:
+    with telnetlib.Telnet('10.203.123.3', 23) as tn:
         print('Initializing Client...')
-        poller = SelClient( tn, verbose=True)  # , debug=True )
+        poller = SelClient( tn, verbose=True , debug=True )
         d = None
         for _ in range(10):
             d = poller.poll_fast_meter()  # verbose=True)
