@@ -25,7 +25,7 @@ except:
 RE_CLEAN_PROMPT_CHARS = re.compile(r'^[^\x02\x03\=\r\n\> ]*$')
 
 # Define DNA Control Character String for RegEx
-RE_DNA_CONTROL = re.compile(r'\>.*DNA')
+RE_DNA_CONTROL = re.compile(r'\>?.*DNA')
 
 # Define ID Block for RegEx
 RE_ID_BLOCK_1 = re.compile(r'''"FID\=(SEL.*)","(\w*)"''')

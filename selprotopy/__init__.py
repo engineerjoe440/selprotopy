@@ -166,9 +166,11 @@ class SelClient():
     def _clear_input_buffer( self ):
         try:
             resp = self.conn.read_very_eager()
+            if self.debug: print('Clearing buffer:', resp)
             while b'' != resp:
                 time.sleep(self.delay*10)
                 resp = self.conn.read_very_eager()
+                if self.debug: print('Clearing buffer:', resp)
         except:
             self.conn.reset_input_buffer()
     
@@ -180,6 +182,13 @@ class SelClient():
     
     # Define Method to Read All Data After a Command (and to next relay prompt)
     def _read_command_response( self, command, prompt_str=commands.PROMPT ):
+        if isinstance(command,bytes):
+            command = command.replace(b'\n',b'')
+            command = command.replace(b'\r',b'')
+        elif isinstance(command,str):
+            command = command.replace('\n','')
+            command = command.replace('\r','')
+        print(command)
         response = b''
         while response.find(command) == -1:
             response += self._read_to_prompt( prompt_str=prompt_str )
@@ -192,6 +201,7 @@ class SelClient():
         while count < 3:
             self.conn.write( commands.CR )      # Write
             response += self._read_to_prompt()   # Read
+            if self.debug: print('Clean prompt response:',response)
             # Count the Number of Clean Prompt Responses
             if protoparser.CleanPrompt(response):
                 count += 1
@@ -424,6 +434,8 @@ class SelClient():
         # Request Relay ENA Block
         # TODO
         # Request Relay DNA Block
+        print('DNA')
+        self._read_clean_prompt()
         self.conn.write( commands.DNA )
         self.dnaDef = protoparser.RelayDnaBlock(self._read_command_response(commands.DNA),
                                                 encoding='utf-8',
@@ -608,7 +620,7 @@ class SelClient():
 
 if __name__ == '__main__':
     print('Establishing Connection...')
-    with telnetlib.Telnet('10.203.123.3', 23) as tn:
+    with telnetlib.Telnet('192.168.254.10', 23) as tn:
         print('Initializing Client...')
         poller = SelClient( tn, verbose=True , debug=True )
         d = None
