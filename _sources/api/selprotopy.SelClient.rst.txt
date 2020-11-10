@@ -33,6 +33,8 @@ SelClient
       ~SelClient.autoconfig_fastoperate
       ~SelClient.poll_fast_meter
       ~SelClient.quit
+      ~SelClient.send_breaker_bit_fast_op
+      ~SelClient.send_remote_bit_fast_op
 
    
    
@@ -57,6 +59,8 @@ SelClient
    .. automethod:: autoconfig_fastoperate
    .. automethod:: poll_fast_meter
    .. automethod:: quit
+   .. automethod:: send_breaker_bit_fast_op
+   .. automethod:: send_remote_bit_fast_op
 
    
    
