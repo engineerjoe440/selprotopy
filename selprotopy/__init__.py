@@ -614,6 +614,19 @@ class SelClient():
                                                 verbose=verbose )
         # Return the Response
         return response
+    
+    # Define Method to Send Fast Operate Command for Breaker Bit
+    def send_breaker_bit_fast_op(self, control_point, command='trip'):
+        """
+
+        """
+
+    
+    # Define Method to Send Fast Operate Command for Remote Bit
+    def send_remote_bit_fast_op(self, control_point, command='pulse'):
+        """
+
+        """
 
 
 
