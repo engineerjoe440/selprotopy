@@ -628,20 +628,20 @@ def FastOpConfigurationBlock( data, byteorder='big', signed=True, verbose=False 
         struct['breakerconfig'] = []
         for _ in range(struct['numbreakers']):
             struct['breakerconfig'].append({
-                'opencode'  : bytArr[ind],
-                'closecode' : bytArr[ind+1],
+                'open'  : bytArr[ind],
+                'close' : bytArr[ind+1],
             })
             ind += 2
         # Iterate Over Remote Bits
         struct['remotebitconfig'] = []
         for _ in range(struct['numremotebits']):
             remotebitstruct = {
-                'clearcode' : bytArr[ind],
-                'setcode'   : bytArr[ind+1],
+                'clear' : bytArr[ind],
+                'set'   : bytArr[ind+1],
             }
             ind += 2
             if struct['pulsesupported'] == 1:
-                remotebitstruct['pulsecode'] = bytArr[ind]
+                remotebitstruct['pulse'] = bytArr[ind]
                 ind += 1
             # Append Structure
             struct['remotebitconfig'].append(remotebitstruct)
@@ -753,7 +753,6 @@ def FastMeterBlock( data, definition, dna_def, byteorder='big', signed=True,
         # Iteratively Handle Digital Points
         struct['digitals'] = {}
         ind = definition['digitaloffset']
-        print("numdigitals", len(dna_def), definition['numdigitalbank'])
         for target_row_index in range(definition['numdigitalbank']):
             # Verify Length of Points
             if definition['numdigitalbank'] != len(dna_def):

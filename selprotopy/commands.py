@@ -6,6 +6,8 @@ Supports:
   - SEL Fast Message
   - SEL Fast Operate
 """
+import re
+from common import eval_checksum
 
 # Define Various Binary Requests
 RELAY_DEFENITION        = bytes.fromhex('A5C0') # The relay definition block.
@@ -90,8 +92,41 @@ def event_record_request(event_number):
         return request
     else:
         raise ValueError("Event number may not be greater than 64.")
+###################################################################################
+# Define Function to Prepare Fast Operate Command
+def prepare_fastop_command(control_type, control_point, command,
+                            fastop_def):
+    """
+    Prepare a fast operate command for a relay.
 
-
+    Prepare the binary message required to set/clear/pulse/open/close
+    the respective control point using fast operate.
+    """
+    # Prepare the Point Number
+    if isinstance(control_point, str):
+        control_point = int(re.findall(r'(\d+)',control_point)[0])
+    # Verify the Command Type
+    if command.lower() not in ['set','clear','pulse','open','close']:
+        # TODO: Raise more descriptive error
+        raise ValueError("Invalid command type")
+    # Set up Breaker or Remote Control
+    if control_type.lower() == 'remote_bit':
+        command_string = FAST_OP_REMOTE_BIT
+    elif control_type.lower() == 'breaker_bit':
+        command_string = FAST_OP_BREAKER_BIT
+    else:
+        # TODO: Raise more descriptive error
+        raise ValueError("Invalid control type described.")
+    command_string += bytes([6]) # Length (in bytes)
+    try:
+        control = fastop_def['remotebitconfig'][control_point+1][command]
+    except KeyError as e:
+        raise ValueError("Improper command type for control point.") from e
+    op_validation = (control * 4 + 1) & 0xff
+    command_string += bytes([control, op_validation])
+    command_string += bytes([eval_checksum(command_string, constrain=True)])
+    # Return the Configured Command
+    return command_string
 
 
 

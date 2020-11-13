@@ -143,7 +143,7 @@ class SelClient():
         self.quit()
         if autoconfig_now:
             # Run Auto-Configuration
-            self.autoconfig(verbose=debug)
+            self.autoconfig(verbose=verbose)
         
     # Define Connectivity Check Method
     def _verify_connection( self ):
@@ -188,7 +188,6 @@ class SelClient():
         elif isinstance(command,str):
             command = command.replace('\n','')
             command = command.replace('\r','')
-        print(command)
         response = b''
         while response.find(command) == -1:
             response += self._read_to_prompt( prompt_str=prompt_str )
@@ -405,27 +404,33 @@ class SelClient():
         """
         self.quit()
         # Request Relay Definition
+        if verbose: print("Reading Relay Definition Block...")
         self.conn.write( commands.RELAY_DEFENITION + commands.CR )
         definition = protoparser.RelayDefinitionBlock(
             self._read_command_response(commands.RELAY_DEFENITION),
-                                        verbose=verbose)
+                                        verbose=self.debug)
         # Load the Relay Definition Information and Request the Meter Blocks
         if definition['fmmessagesup'] >= 1:
+            if verbose: print("Reading Relay Fast Meter Definition Block...")
             self.fmconfigcommand1   = definition['fmcommandinfo'][0]['configcommand']
             self.fmcommand1         = definition['fmcommandinfo'][0]['command']
-            self.autoconfig_fastmeter( verbose=verbose )
+            self.autoconfig_fastmeter( verbose=self.debug )
         if definition['fmmessagesup'] >= 2:
+            if verbose: print("Reading Relay Fast Meter Demand Definition Block...")
             self.fmconfigcommand2   = definition['fmcommandinfo'][1]['configcommand']
             self.fmcommand2         = definition['fmcommandinfo'][1]['command']
-            self.autoconfig_fastmeter_demand( verbose=verbose )
+            self.autoconfig_fastmeter_demand( verbose=self.debug )
         if definition['fmmessagesup'] >= 3:
+            if verbose: print("Reading Relay Fast Meter Peak Demand Definition Block...")
             self.fmconfigcommand3   = definition['fmcommandinfo'][2]['configcommand']
             self.fmcommand3         = definition['fmcommandinfo'][2]['command']
-            self.autoconfig_fastmeter_peakdemand( verbose=verbose )
+            self.autoconfig_fastmeter_peakdemand( verbose=self.debug )
         if definition['fopcommandinfo'] != '':
+            if verbose: print("Reading Relay Fast Operate Definition Block...")
             self.fopcommandinfo     = definition['fopcommandinfo']
-            self.autoconfig_fastoperate( verbose=verbose )
+            self.autoconfig_fastoperate( verbose=self.debug )
         if definition['fmsgcommandinfo'] != '':
+            if verbose: print("Reading Relay Fast Message Definition Block...")
             self.fmsgcommandinfo    = definition['fmsgcommandinfo']
         # Determine if Level 0, and Escalate Accordingly
         if self.access_level()[0] == 0:
@@ -434,19 +439,20 @@ class SelClient():
         # Request Relay ENA Block
         # TODO
         # Request Relay DNA Block
-        print('DNA')
         self._read_clean_prompt()
+        if verbose: print("Reading Relay DNA Block...")
         self.conn.write( commands.DNA )
         self.dnaDef = protoparser.RelayDnaBlock(self._read_command_response(commands.DNA),
                                                 encoding='utf-8',
-                                                verbose=verbose)
+                                                verbose=self.debug)
         # Request Relay BNA Block
         ## TODO
         # Request Relay ID Block
+        if verbose: print("Reading Relay ID Block...")
         self.conn.write( commands.ID )
         id_block = protoparser.RelayIdBlock(self._read_command_response(commands.ID),
                                             encoding='utf-8',
-                                            verbose=verbose)
+                                            verbose=self.debug)
         # Store Relay Information
         self.fid    = id_block['FID']
         self.bfid   = id_block['BFID']
@@ -627,7 +633,13 @@ class SelClient():
         """
 
         """
-
+        # Write the Command
+        command_str = commands.prepare_fastop_command(
+            control_type='remote_bit', control_point=control_point,
+            command=command, fastop_def=self.fastOpDef
+        )
+        print(command_str)
+        self.conn.write( command_str )
 
 
 
@@ -635,13 +647,16 @@ if __name__ == '__main__':
     print('Establishing Connection...')
     with telnetlib.Telnet('192.168.254.10', 23) as tn:
         print('Initializing Client...')
-        poller = SelClient( tn, verbose=True , debug=True )
+        poller = SelClient( tn, verbose=True)# , debug=True )
+        print( poller.fastOpDef )
+        poller.send_remote_bit_fast_op('RB1','pulse')
         d = None
         for _ in range(10):
             d = poller.poll_fast_meter()  # verbose=True)
             for name, value in d['analogs'].items():
                 print(name, value)
             time.sleep(1)
-        print(d['digitals'])
+        poller.send_remote_bit_fast_op('RB1','pulse')
+        
 
 # END
