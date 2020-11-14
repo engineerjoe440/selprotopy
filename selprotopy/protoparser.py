@@ -17,7 +17,7 @@ import binascii
 try:
     from . import commands
     from .common import int_to_bool_list, ieee4bytefps, eval_checksum
-except:
+except ImportError:
     import commands
     from common import int_to_bool_list, ieee4bytefps, eval_checksum
 

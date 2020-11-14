@@ -12,7 +12,7 @@ import re
 # Local Imports
 try:
     from .common import eval_checksum
-except:
+except ImportError:
     from common import eval_checksum
 
 # Define Various Binary Requests
