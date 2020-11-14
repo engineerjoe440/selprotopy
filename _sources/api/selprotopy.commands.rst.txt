@@ -1,4 +1,4 @@
-selprotopy.commands
+﻿selprotopy.commands
 ===================
 
 .. rubric:: Description
@@ -16,5 +16,7 @@ selprotopy.commands
     :toctree: .
     
     event_record_request
+    
+    prepare_fastop_command
     
 

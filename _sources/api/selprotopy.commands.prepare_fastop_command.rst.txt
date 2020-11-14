@@ -1,0 +1,6 @@
+selprotopy.commands.prepare\_fastop\_command
+============================================
+
+.. currentmodule:: selprotopy.commands
+
+.. autofunction:: prepare_fastop_command

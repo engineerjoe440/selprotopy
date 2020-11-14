@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>selprotopy.telnetlib_support.process_rawq &#8212; selprotopy</title>
+    <title>selprotopy.commands.prepare_fastop_command &#8212; selprotopy</title>
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     
@@ -18,7 +18,8 @@
     <link rel="shortcut icon" href="../_static/selprotopy_bare.png"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="prev" title="selprotopy.telnetlib_support" href="selprotopy.telnetlib_support.html" /> 
+    <link rel="next" title="&lt;no title&gt;" href="../protoparser.html" />
+    <link rel="prev" title="selprotopy.commands.event_record_request" href="selprotopy.commands.event_record_request.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -30,13 +31,16 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="selprotopy.telnetlib_support.html" title="selprotopy.telnetlib_support"
+          <a href="../protoparser.html" title="&lt;no title&gt;"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="selprotopy.commands.event_record_request.html" title="selprotopy.commands.event_record_request"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">selprotopy</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../selprotopy.html" >API Reference</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="../telnetlib_support.html" >&lt;no title&gt;</a> &#187;</li>
-          <li class="nav-item nav-item-3"><a href="selprotopy.telnetlib_support.html" accesskey="U">selprotopy.telnetlib_support</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">selprotopy.telnetlib_support.process_rawq</a></li> 
+          <li class="nav-item nav-item-2"><a href="../commands.html" >&lt;no title&gt;</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="selprotopy.commands.html" accesskey="U">selprotopy.commands</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">selprotopy.commands.prepare_fastop_command</a></li> 
       </ul>
     </div>  
 
@@ -45,14 +49,14 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="selprotopy-telnetlib-support-process-rawq">
-<h1>selprotopy.telnetlib_support.process_rawq<a class="headerlink" href="#selprotopy-telnetlib-support-process-rawq" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="selprotopy-commands-prepare-fastop-command">
+<h1>selprotopy.commands.prepare_fastop_command<a class="headerlink" href="#selprotopy-commands-prepare-fastop-command" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
-<dt id="selprotopy.telnetlib_support.process_rawq">
-<code class="sig-prename descclassname">selprotopy.telnetlib_support.</code><code class="sig-name descname">process_rawq</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="headerlink" href="#selprotopy.telnetlib_support.process_rawq" title="Permalink to this definition">¶</a></dt>
-<dd><p>Transfer from raw queue to cooked queue.</p>
-<p>Set self.eof when connection is closed.  Don’t block unless in
-the midst of an IAC sequence.</p>
+<dt id="selprotopy.commands.prepare_fastop_command">
+<code class="sig-prename descclassname">selprotopy.commands.</code><code class="sig-name descname">prepare_fastop_command</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">control_type</span></em>, <em class="sig-param"><span class="n">control_point</span></em>, <em class="sig-param"><span class="n">command</span></em>, <em class="sig-param"><span class="n">fastop_def</span></em><span class="sig-paren">)</span><a class="headerlink" href="#selprotopy.commands.prepare_fastop_command" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prepare a fast operate command for a relay.</p>
+<p>Prepare the binary message required to set/clear/pulse/open/close
+the respective control point using fast operate.</p>
 </dd></dl>
 
 </div>
@@ -68,12 +72,15 @@ the midst of an IAC sequence.</p>
               <img class="logo" src="../_static/selprotopy_wht_text.png" alt="Logo"/>
             </a></p>
   <h4>Previous topic</h4>
-  <p class="topless"><a href="selprotopy.telnetlib_support.html"
-                        title="previous chapter">selprotopy.telnetlib_support</a></p>
+  <p class="topless"><a href="selprotopy.commands.event_record_request.html"
+                        title="previous chapter">selprotopy.commands.event_record_request</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../protoparser.html"
+                        title="next chapter">&lt;no title&gt;</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../_sources/api/selprotopy.telnetlib_support.process_rawq.rst.txt"
+      <li><a href="../_sources/api/selprotopy.commands.prepare_fastop_command.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -101,13 +108,16 @@ the midst of an IAC sequence.</p>
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="selprotopy.telnetlib_support.html" title="selprotopy.telnetlib_support"
+          <a href="../protoparser.html" title="&lt;no title&gt;"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="selprotopy.commands.event_record_request.html" title="selprotopy.commands.event_record_request"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">selprotopy</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../selprotopy.html" >API Reference</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="../telnetlib_support.html" >&lt;no title&gt;</a> &#187;</li>
-          <li class="nav-item nav-item-3"><a href="selprotopy.telnetlib_support.html" >selprotopy.telnetlib_support</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">selprotopy.telnetlib_support.process_rawq</a></li> 
+          <li class="nav-item nav-item-2"><a href="../commands.html" >&lt;no title&gt;</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="selprotopy.commands.html" >selprotopy.commands</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">selprotopy.commands.prepare_fastop_command</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
