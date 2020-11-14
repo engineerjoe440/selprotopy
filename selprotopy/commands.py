@@ -6,8 +6,14 @@ Supports:
   - SEL Fast Message
   - SEL Fast Operate
 """
+# Standard Package Imports
 import re
-from common import eval_checksum
+
+# Local Imports
+try:
+    from .common import eval_checksum
+except:
+    from common import eval_checksum
 
 # Define Various Binary Requests
 RELAY_DEFENITION        = bytes.fromhex('A5C0') # The relay definition block.
