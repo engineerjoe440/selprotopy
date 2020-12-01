@@ -10,10 +10,7 @@ Supports:
 import re
 
 # Local Imports
-try:
-    from .common import eval_checksum
-except ImportError:
-    from common import eval_checksum
+from selprotopy.common import eval_checksum
 
 # Define Various Binary Requests
 RELAY_DEFENITION        = bytes.fromhex('A5C0') # The relay definition block.

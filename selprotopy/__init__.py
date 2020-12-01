@@ -19,14 +19,9 @@ import time
 import telnetlib
 
 # Local Imports
-try:
-    from . import commands
-    from . import protoparser
-    from . import telnetlib_support
-except ImportError:
-    import commands
-    import protoparser
-    import telnetlib_support
+from selprotopy import commands
+from selprotopy import protoparser
+from selprotopy import telnetlib_support
 
 # Describe Package for External Interpretation
 _name_ = "selprotopy"

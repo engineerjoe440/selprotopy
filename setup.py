@@ -34,6 +34,6 @@ setuptools.setup(
     project_urls={
         "Source Repository": "https://github.com/engineerjoe440/sel-proto-py",
         "Bug Tracker": "https://github.com/engineerjoe440/sel-proto-py/issues",
-        "Documentation": "https://engineerjoe440.github.io/ElectricPy/",
+        "Documentation": "https://engineerjoe440.github.io/sel-proto-py/",
         }
 )

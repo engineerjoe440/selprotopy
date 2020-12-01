@@ -14,12 +14,8 @@ import struct
 import binascii
 
 # Local Imports
-try:
-    from . import commands
-    from .common import int_to_bool_list, ieee4bytefps, eval_checksum
-except ImportError:
-    import commands
-    from common import int_to_bool_list, ieee4bytefps, eval_checksum
+from selprotopy import commands
+from selprotopy.common import int_to_bool_list, ieee4bytefps, eval_checksum
 
 # Define Clean Prompt Characters for RegEx
 RE_CLEAN_PROMPT_CHARS = re.compile(r'^[^\x02\x03\=\r\n\> ]*$')
