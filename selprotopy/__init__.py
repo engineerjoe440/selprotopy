@@ -63,6 +63,8 @@ class SelClient():
                         Floating control which describes the amount of time in
                         seconds between iterative connection verification
                         attempts. Defaults to 0.025 (seconds)
+    logger:             logging.logger
+                        Logging object to record communications messages.
     verbose:            bool, optional
                         Control to dictate whether verbose printing operations
                         should be used (often for debugging and learning 
@@ -98,14 +100,22 @@ class SelClient():
     """
     
     def __init__( self, connApi, autoconfig_now=True, validConnChecks=5,
-                  interdelay=0.025, verbose=False, debug=False ):
+                  interdelay=0.025, logger=None, verbose=False,
+                  debug=False, **kwargs ):
         """ Initialization Method - Returns False if Connection Fails """
         # Initialize Inputs
         self.conn = connApi
         self.verbose = verbose
         self.check = validConnChecks
         self.delay = interdelay
+        self.logger = logger
         self.debug = debug
+        
+        # Initialize Timout if Applicable
+        if 'timeout' in kwargs.keys():
+            self.timeout = kwargs['timeout']
+        else:
+            self.timeout = 60
         
         # Define Basic Parameter Defaults
         self.fid     = ''
@@ -161,31 +171,43 @@ class SelClient():
     def _clear_input_buffer( self ):
         try:
             resp = self.conn.read_very_eager()
+            if self.logger: self.logger.info(f'Rx: {resp}')
             if self.debug: print('Clearing buffer:', resp)
             while b'' != resp:
                 time.sleep(self.delay*10)
                 resp = self.conn.read_very_eager()
+                if self.logger: self.logger.info(f'Rx: {resp}')
                 if self.debug: print('Clearing buffer:', resp)
         except:
             self.conn.reset_input_buffer()
     
     # Define Method to Read All Data to Next Relay Prompt
     def _read_to_prompt( self, prompt_str=commands.PROMPT ):
-        response = self.conn.read_until( commands.PROMPT )
+        # Telnetlib Supports a Timeout
+        if isinstance(self.conn, telnetlib.Telnet):
+            response = self.conn.read_until( commands.PROMPT,
+                                             timeout=self.timeout )
+        # PySerial Does not Support Timeout
+        else:
+            response = self.conn.read_until( commands.PROMPT )
+        if self.logger: self.logger.info(f'Rx: {response}')
         if self.debug: print(response)
         return response
     
     # Define Method to Read All Data After a Command (and to next relay prompt)
     def _read_command_response( self, command, prompt_str=commands.PROMPT ):
-        if isinstance(command,bytes):
+        if isinstance(command, bytes):
             command = command.replace(b'\n',b'')
             command = command.replace(b'\r',b'')
-        elif isinstance(command,str):
+        elif isinstance(command, str):
             command = command.replace('\n','')
             command = command.replace('\r','')
         response = b''
-        while response.find(command) == -1:
+        i = 0
+        while (response.find(command) == -1) and (i < 10):
+            sz = len(response) # Capture Previous Size
             response += self._read_to_prompt( prompt_str=prompt_str )
+            i = 0 if len(response) != sz else i + 1
         return response
     
     # Define Method to Read Until a "Clean" Prompt is Viewed
@@ -208,6 +230,7 @@ class SelClient():
     # Define Method to Attempt Reading Everything (only for telnetlib)
     def _read_everything( self ):
         response = self.conn.read_very_eager()
+        if self.logger: self.logger.info(f'Rx: {response}')
         if self.debug: print(response)
         return response
     
@@ -257,6 +280,7 @@ class SelClient():
         """
         self.conn.write( commands.QUIT )
         self._read_to_prompt( commands.LEVEL_0 )
+        self._read_clean_prompt()
     
     # Define Method to Access Level 1
     def access_level_1(self, level_1_pass=commands.PASS_ACC, **kwargs):
@@ -639,10 +663,13 @@ class SelClient():
 
 
 if __name__ == '__main__':
+    import logging
+    logging.basicConfig(filename='traffic.log', level=logging.DEBUG)
+    logger = logging.getLogger(__name__)
     print('Establishing Connection...')
     with telnetlib.Telnet('192.168.254.10', 23) as tn:
         print('Initializing Client...')
-        poller = SelClient( tn, verbose=True)# , debug=True )
+        poller = SelClient( tn, logger=logger, verbose=True)# , debug=True )
         print( poller.fastOpDef )
         poller.send_remote_bit_fast_op('RB1','pulse')
         d = None
@@ -652,6 +679,7 @@ if __name__ == '__main__':
                 print(name, value)
             time.sleep(1)
         poller.send_remote_bit_fast_op('RB1','pulse')
+        print(tn.read_all())
         
 
 # END

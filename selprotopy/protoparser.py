@@ -416,7 +416,7 @@ def RelayDefinitionBlock( data, verbose=False ):
             ind += 2
         # Return Resultant Structure
         return struct
-    except:
+    except IndexError as err:
         raise ValueError("Invalid data string response")
 
 # Define Relay Definition Block Parser
@@ -573,7 +573,7 @@ def FastMeterConfigurationBlock( data, byteorder='big', signed=True, verbose=Fal
             print("Digital Channel Offset:",struct['digitaloffset'])
         # Return the Generated Structure
         return struct
-    except:
+    except IndexError as err:
         raise ValueError("Invalid data string response")
 
 # Define Function to Parse a Fast Operate Configuration Block
@@ -650,7 +650,7 @@ def FastOpConfigurationBlock( data, byteorder='big', signed=True, verbose=False 
             print("Pulse Command Supported:",struct['pulsesupported'])
         # Return Structure
         return struct
-    except:
+    except IndexError as err:
         raise ValueError("Invalid data string response")
 ###################################################################################
 
@@ -766,7 +766,7 @@ def FastMeterBlock( data, definition, dna_def, byteorder='big', signed=True,
         struct['digitals'].pop('*')
         # Return the Resultant Structure
         return struct
-    except:
+    except IndexError as err:
         raise ValueError("Invalid data string response")
 ###################################################################################
 
