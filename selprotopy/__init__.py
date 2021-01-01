@@ -156,8 +156,9 @@ class SelClient():
         connected = False
         # Iteratively attempt to see relay's response
         for _ in range(self.check):
-            self.conn.write( commands.CR )
+            self.conn.write( commands.CR + commands.CR + commands.CR )
             response = self.conn.read_until( commands.CR )
+            if self.debug: print(response)
             if commands.LEVEL_0 in response:
                 # Relay Responded
                 connected = True
@@ -667,9 +668,9 @@ if __name__ == '__main__':
     logging.basicConfig(filename='traffic.log', level=logging.DEBUG)
     logger = logging.getLogger(__name__)
     print('Establishing Connection...')
-    with telnetlib.Telnet('192.168.254.10', 23) as tn:
+    with telnetlib.Telnet('192.168.254.10', 2323) as tn:
         print('Initializing Client...')
-        poller = SelClient( tn, logger=logger, verbose=True)# , debug=True )
+        poller = SelClient( tn, logger=logger, verbose=True , debug=True )
         print( poller.fastOpDef )
         poller.send_remote_bit_fast_op('RB1','pulse')
         d = None
