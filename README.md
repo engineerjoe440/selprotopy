@@ -1,5 +1,10 @@
-# sel-proto-py <img src="https://raw.githubusercontent.com/engineerjoe440/sel-proto-py/master/logo/selprotopy.png" width="250" alt="logo" align="right">
+# SELProtoPy <img src="https://raw.githubusercontent.com/engineerjoe440/selprotopy/master/logo/selprotopy.png" width="250" alt="logo" align="right">
 Schweitzer Engineering Laboratories (SEL) Protocol Bindings in Python
+
+[![](https://img.shields.io/pypi/v/electricpy.svg?color=blue&logo=pypi&logoColor=white)](https://pypi.org/project/electricpy/)
+[![](https://pepy.tech/badge/electricpy)](https://pepy.tech/project/electricpy)
+[![](https://img.shields.io/github/stars/engineerjoe440/electricpy?logo=github)](https://github.com/engineerjoe440/electricpy/)
+[![](https://img.shields.io/pypi/l/electricpy.svg?color=blue)](https://github.com/engineerjoe440/electricpy/blob/master/LICENSE.txt)
 
 ***This project is still in early stages, much is still to come.***
 
@@ -18,7 +23,7 @@ detail about the protocol's implementation.
 
 ### Contact Info:
 For issues found in the source code itself, please feel free to open an
-[issue](https://github.com/engineerjoe440/sel-proto-py/issues), but for general inquiries
+[issue](https://github.com/engineerjoe440/selprotopy/issues), but for general inquiries
 and other contact, feel free to address Joe Stanley.
 
 - [joe_stanley@selinc.com](mailto:joe_stanley@selinc.com)

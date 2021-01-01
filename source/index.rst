@@ -46,13 +46,13 @@ Contact Info:
 ~~~~~~~~~~~~~
 
 For issues found in the source code itself, please feel free to open an
-`issue <https://github.com/engineerjoe440/sel-proto-py/issues>`_, but for general inquiries
+`issue <https://github.com/engineerjoe440/selprotopy/issues>`_, but for general inquiries
 and other contact, feel free to address `Joe Stanley <mailto:joe_stanley@selinc.com>`_.
 
 
 Source Repository and Package Release (PyPI):
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- GitHub: https://github.com/engineerjoe440/sel-proto-py
+- GitHub: https://github.com/engineerjoe440/selprotopy
 - PyPI: https://pypi.org/project/selprotopy/
 
