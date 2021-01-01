@@ -25,7 +25,7 @@ from selprotopy import telnetlib_support
 
 # Describe Package for External Interpretation
 _name_ = "selprotopy"
-_version_ = "0.0"
+_version_ = "0.1"
 __version__ = _version_  # Alias the Version String
 
 # `telnetlib` Discards Null Characters, but SEL Protocol Requires them

@@ -24,7 +24,7 @@ setuptools.setup(
     description="Schweitzer Engineering Laboratories (SEL) Protocol Bindings in Python",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/engineerjoe440/sel-proto-py",
+    url="https://github.com/engineerjoe440/selprotopy",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
@@ -32,8 +32,8 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     project_urls={
-        "Source Repository": "https://github.com/engineerjoe440/sel-proto-py",
-        "Bug Tracker": "https://github.com/engineerjoe440/sel-proto-py/issues",
-        "Documentation": "https://engineerjoe440.github.io/sel-proto-py/",
+        "Source Repository": "https://github.com/engineerjoe440/selprotopy",
+        "Bug Tracker": "https://github.com/engineerjoe440/selprotopy/issues",
+        "Documentation": "https://engineerjoe440.github.io/selprotopy/",
         }
 )
