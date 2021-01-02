@@ -21,6 +21,26 @@ control of SEL protective relays. SEL provided a very supportive
 [application guide](https://selinc.com/api/download/5026/?lang=en) which provides great
 detail about the protocol's implementation.
 
+## Installation:
+
+**From PyPI as a Python Package**
+
+Just go ahead and issue: `pip install selprotopy`
+
+**From Source on Github**
+
+To install `selprotopy` from GitHub:
+
+1. Download the repository as a zipped package.
+2. Unzip the repository.
+3. Open a terminal (command-prompt) and navigate to the new folder that's been unzipped.
+(*Hint:* Use `cd <the-path-to-the-folder-you-unzipped-in>/selprotopy`)
+4. Use `pip` or `python` to install with the following commands, respectively:
+    - `$> pip install .`
+    - `$> python setup.py install`
+5. Verify that it's been installed by opening a Python instance and importing:
+    `>>> import selprotopy` If no errors arise, the package has been installed.
+
 ## Contributing:
 
 Want to get involved? We'd love to have your help!
