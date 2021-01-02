@@ -21,6 +21,16 @@ control of SEL protective relays. SEL provided a very supportive
 [application guide](https://selinc.com/api/download/5026/?lang=en) which provides great
 detail about the protocol's implementation.
 
+## Contributing:
+
+Want to get involved? We'd love to have your help!
+
+Please help us by identifying any issues that you come across. If you find an error,
+bug, or just have questions, jump over to the
+[issue](https://github.com/engineerjoe440/selprotopy/issues) page.
+
+If you want to add features, or contribute yourself, feel free to open a pull-request.
+
 ### Contact Info:
 For issues found in the source code itself, please feel free to open an
 [issue](https://github.com/engineerjoe440/selprotopy/issues), but for general inquiries
