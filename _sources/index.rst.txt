@@ -24,6 +24,30 @@ detail about the protocol's implementation.
    selprotopy
 
 
+Installation
+~~~~~~~~~~~~
+
+**From PyPI**
+
+Just go ahead and issue: `pip install selprotopy`
+
+**From Source on Github**
+
+To install `selprotopy` from GitHub:
+
+#. Download the repository as a zipped package.
+#. Unzip the repository.
+#. Open a terminal (command-prompt) and navigate to the new folder that's been unzipped.
+   (*Hint:* Use `cd <the-path-to-the-folder-you-unzipped-in>/selprotopy`)
+#. Use `pip` or `python` to install with the following commands, respectively:
+    
+    - `$> pip install .`
+    - `$> python setup.py install`
+
+#. Verify that it's been installed by opening a Python instance and importing:
+    `>>> import selprotopy` If no errors arise, the package has been installed.
+
+
 Dependencies
 ------------
 
