@@ -680,7 +680,6 @@ if __name__ == '__main__':
                 print(name, value)
             time.sleep(1)
         poller.send_remote_bit_fast_op('RB1','pulse')
-        print(tn.read_all())
         
 
 # END

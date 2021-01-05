@@ -70,7 +70,11 @@ def _validate_checksum( bytArr ):
     # Assume Valid Message, and Find the Length of the Data
     dataLen = bytArr[2]  # Third Byte, Message Length
     # Collect the Checksum from the Data
-    checksum_byte = bytArr[dataLen - 1]  # Extract checksum byte
+    try:
+        checksum_byte = bytArr[dataLen - 1]  # Extract checksum byte
+    except:
+        # TODO: add more useful exception to indicate comm error
+        raise ValueError(f'Length of byte array extracted ({dataLen}) appears invalid.')
     data = bytArr[:dataLen - 1]  # Don't include last byte
     if checksum_byte != eval_checksum(data, constrain=True):
         raise ValueError("Invalid Checksum Found for Data Stream.")
