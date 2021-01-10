@@ -7,14 +7,17 @@ Supports:
   - SEL Fast Operate
 """
 
+
 # Define Various Custom Exception Types
 class CommError(Exception):
     """Base Class for Communications Errors"""
     pass
 
+
 class ParseError(CommError):
     """Base Class for Parsing Errors"""
     pass
+
 
 class ProtoError(Exception):
     """Base Class for Protocol Errors"""
@@ -29,11 +32,13 @@ class MalformedByteArray(CommError):
     communications caused by a communications failure."""
     pass
 
+
 # Define Custom Exception for Invalid Checksum
 class ChecksumFail(CommError):
     """Checksum validation has failed for the captured message, likely due to
     communications failure."""
     pass
+
 
 # Define Custom Exception to Indicate Connection Verification Failure
 class ConnVerificationFail(CommError):
@@ -42,11 +47,13 @@ class ConnVerificationFail(CommError):
 
 ###############################################################################
 
+
 # Define Custom Exception for SEL Protocol Message Response Extraction
 class MissingA5Head(ParseError):
     """Parsing of returned binary SEL Protocol message failed due to lack of
     required A5[C1] heading."""
     pass
+
 
 # Define Custom Exception for SEL Protocol DNA/Digitals Count Mismatch
 class DnaDigitalsMisMatch(ParseError):
@@ -56,11 +63,13 @@ class DnaDigitalsMisMatch(ParseError):
 
 ###############################################################################
 
+
 # Define Custom Exception for Invalid Command Type
 class InvalidConmmandType(ProtoError):
     """Invalid command type provided for Fast Operate, must be member of:
     ['SET', 'CLEAR', 'PULSE', 'OPEN', 'CLOSE']."""
     pass
+
 
 # Define Custom Exception for Invalid Control Type
 class InvalidControlType(ProtoError):
