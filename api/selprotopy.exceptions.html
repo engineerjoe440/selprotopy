@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>selprotopy.common.int_to_bool_list &#8212; selprotopy</title>
+    <title>selprotopy.exceptions &#8212; selprotopy</title>
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     
@@ -17,8 +17,8 @@
     <link rel="shortcut icon" href="../_static/selprotopy_bare.png"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="&lt;no title&gt;" href="../exceptions.html" />
-    <link rel="prev" title="selprotopy.common.ieee4bytefps" href="selprotopy.common.ieee4bytefps.html" /> 
+    <link rel="next" title="&lt;no title&gt;" href="../commands.html" />
+    <link rel="prev" title="&lt;no title&gt;" href="../exceptions.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -30,16 +30,15 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../exceptions.html" title="&lt;no title&gt;"
+          <a href="../commands.html" title="&lt;no title&gt;"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="selprotopy.common.ieee4bytefps.html" title="selprotopy.common.ieee4bytefps"
+          <a href="../exceptions.html" title="&lt;no title&gt;"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">selprotopy</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../selprotopy.html" >API Reference</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="../common.html" >&lt;no title&gt;</a> &#187;</li>
-          <li class="nav-item nav-item-3"><a href="selprotopy.common.html" accesskey="U">selprotopy.common</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">selprotopy.common.int_to_bool_list</a></li> 
+          <li class="nav-item nav-item-2"><a href="../exceptions.html" accesskey="U">&lt;no title&gt;</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">selprotopy.exceptions</a></li> 
       </ul>
     </div>  
 
@@ -48,40 +47,18 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="selprotopy-common-int-to-bool-list">
-<h1>selprotopy.common.int_to_bool_list<a class="headerlink" href="#selprotopy-common-int-to-bool-list" title="Permalink to this headline">¶</a></h1>
-<dl class="py function">
-<dt id="selprotopy.common.int_to_bool_list">
-<code class="sig-prename descclassname">selprotopy.common.</code><code class="sig-name descname">int_to_bool_list</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">number</span></em>, <em class="sig-param"><span class="n">byte_like</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">reverse</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#selprotopy.common.int_to_bool_list" title="Permalink to this definition">¶</a></dt>
-<dd><p><cite>int_to_bool_list</cite></p>
-<p>This function converts an integer to a list of boolean values,
-where the most significant value is stored in the highest point
-of the list. That is, a binary number: 8 would be represented as
-[False, False, False, True]</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>number</strong> (<em>int</em>) – Integer to be converted to list of boolean values
-according to binary representation.</p></li>
-<li><p><strong>byte_like</strong> (<em>bool</em><em>, </em><em>optional</em>) – Control to verify that the integer is broken into a
-list of booleans that could be composed into a byte
-string object (i.e. length of list is divisible by 8),
-defaults to False.</p></li>
-<li><p><strong>reverse</strong> (<em>bool</em><em>, </em><em>optional</em>) – Control to reverse the order of the binary/boolean
-points.</p></li>
+  <div class="section" id="selprotopy-exceptions">
+<h1>selprotopy.exceptions<a class="headerlink" href="#selprotopy-exceptions" title="Permalink to this headline">¶</a></h1>
+<p class="rubric">Description</p>
+<span class="target" id="module-selprotopy.exceptions"></span><p>selprotopy: A Protocol Binding Suite for the SEL Protocol Suite.</p>
+<dl class="simple">
+<dt>Supports:</dt><dd><ul class="simple">
+<li><p>SEL Fast Meter</p></li>
+<li><p>SEL Fast Message</p></li>
+<li><p>SEL Fast Operate</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>bin_list</strong> – List of boolean values cast from the binary
-representation of the integer passed to the
-function.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>list of bool</p>
-</dd>
 </dl>
-</dd></dl>
-
 </div>
 
 
@@ -95,15 +72,15 @@ function.</p>
               <img class="logo" src="../_static/selprotopy_wht_text.png" alt="Logo"/>
             </a></p>
   <h4>Previous topic</h4>
-  <p class="topless"><a href="selprotopy.common.ieee4bytefps.html"
-                        title="previous chapter">selprotopy.common.ieee4bytefps</a></p>
-  <h4>Next topic</h4>
   <p class="topless"><a href="../exceptions.html"
+                        title="previous chapter">&lt;no title&gt;</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../commands.html"
                         title="next chapter">&lt;no title&gt;</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../_sources/api/selprotopy.common.int_to_bool_list.rst.txt"
+      <li><a href="../_sources/api/selprotopy.exceptions.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -131,16 +108,15 @@ function.</p>
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../exceptions.html" title="&lt;no title&gt;"
+          <a href="../commands.html" title="&lt;no title&gt;"
              >next</a> |</li>
         <li class="right" >
-          <a href="selprotopy.common.ieee4bytefps.html" title="selprotopy.common.ieee4bytefps"
+          <a href="../exceptions.html" title="&lt;no title&gt;"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">selprotopy</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../selprotopy.html" >API Reference</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="../common.html" >&lt;no title&gt;</a> &#187;</li>
-          <li class="nav-item nav-item-3"><a href="selprotopy.common.html" >selprotopy.common</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">selprotopy.common.int_to_bool_list</a></li> 
+          <li class="nav-item nav-item-2"><a href="../exceptions.html" >&lt;no title&gt;</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">selprotopy.exceptions</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

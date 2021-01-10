@@ -12,6 +12,7 @@ Sub-Modules and Other Package API References
    :maxdepth: 1
    
    common
+   exceptions
    commands
    protoparser
    telnetlib_support

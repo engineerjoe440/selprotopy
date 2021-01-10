@@ -1,0 +1,11 @@
+﻿selprotopy.exceptions
+=====================
+
+.. rubric:: Description
+
+.. automodule:: selprotopy.exceptions
+
+.. currentmodule:: selprotopy.exceptions
+
+
+
