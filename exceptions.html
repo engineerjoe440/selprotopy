@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>&lt;no title&gt; &#8212; selprotopy</title>
+    <title>Base Exceptions &#8212; selprotopy</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     
@@ -17,7 +17,7 @@
     <link rel="shortcut icon" href="_static/selprotopy_bare.png"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="selprotopy.exceptions" href="api/selprotopy.exceptions.html" />
+    <link rel="next" title="&lt;no title&gt;" href="commands.html" />
     <link rel="prev" title="selprotopy.common.int_to_bool_list" href="api/selprotopy.common.int_to_bool_list.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -30,14 +30,14 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="api/selprotopy.exceptions.html" title="selprotopy.exceptions"
+          <a href="commands.html" title="&lt;no title&gt;"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="api/selprotopy.common.int_to_bool_list.html" title="selprotopy.common.int_to_bool_list"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">selprotopy</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="selprotopy.html" accesskey="U">API Reference</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">&lt;no title&gt;</a></li> 
+        <li class="nav-item nav-item-this"><a href="">Base Exceptions</a></li> 
       </ul>
     </div>  
 
@@ -46,18 +46,84 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <p class="rubric" id="selprotopy-exceptions-py">Modules</p>
-<table class="longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="api/selprotopy.exceptions.html#module-selprotopy.exceptions" title="selprotopy.exceptions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">selprotopy.exceptions</span></code></a></p></td>
-<td><p>selprotopy: A Protocol Binding Suite for the SEL Protocol Suite.</p></td>
-</tr>
-</tbody>
-</table>
+  <div class="section" id="base-exceptions">
+<span id="selprotopy-exceptions-py"></span><h1>Base Exceptions<a class="headerlink" href="#base-exceptions" title="Permalink to this headline">¶</a></h1>
+<dl class="py exception">
+<dt id="selprotopy.exceptions.CommError">
+<em class="property">exception </em><code class="sig-prename descclassname">selprotopy.exceptions.</code><code class="sig-name descname">CommError</code><a class="headerlink" href="#selprotopy.exceptions.CommError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base Class for Communications Errors</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="selprotopy.exceptions.ParseError">
+<em class="property">exception </em><code class="sig-prename descclassname">selprotopy.exceptions.</code><code class="sig-name descname">ParseError</code><a class="headerlink" href="#selprotopy.exceptions.ParseError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base Class for Parsing Errors</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="selprotopy.exceptions.ProtoError">
+<em class="property">exception </em><code class="sig-prename descclassname">selprotopy.exceptions.</code><code class="sig-name descname">ProtoError</code><a class="headerlink" href="#selprotopy.exceptions.ProtoError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base Class for Protocol Errors</p>
+</dd></dl>
+
+</div>
+<div class="section" id="communications-exceptions">
+<h1>Communications Exceptions<a class="headerlink" href="#communications-exceptions" title="Permalink to this headline">¶</a></h1>
+<dl class="py exception">
+<dt id="selprotopy.exceptions.MalformedByteArray">
+<em class="property">exception </em><code class="sig-prename descclassname">selprotopy.exceptions.</code><code class="sig-name descname">MalformedByteArray</code><a class="headerlink" href="#selprotopy.exceptions.MalformedByteArray" title="Permalink to this definition">¶</a></dt>
+<dd><p>Byte array does not appear in expected format, likely due to truncated
+communications caused by a communications failure.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="selprotopy.exceptions.ChecksumFail">
+<em class="property">exception </em><code class="sig-prename descclassname">selprotopy.exceptions.</code><code class="sig-name descname">ChecksumFail</code><a class="headerlink" href="#selprotopy.exceptions.ChecksumFail" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checksum validation has failed for the captured message, likely due to
+communications failure.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="selprotopy.exceptions.ConnVerificationFail">
+<em class="property">exception </em><code class="sig-prename descclassname">selprotopy.exceptions.</code><code class="sig-name descname">ConnVerificationFail</code><a class="headerlink" href="#selprotopy.exceptions.ConnVerificationFail" title="Permalink to this definition">¶</a></dt>
+<dd><p>Communications could not be verified.</p>
+</dd></dl>
+
+<div class="section" id="parse-errors">
+<h2>Parse Errors<a class="headerlink" href="#parse-errors" title="Permalink to this headline">¶</a></h2>
+<dl class="py exception">
+<dt id="selprotopy.exceptions.MissingA5Head">
+<em class="property">exception </em><code class="sig-prename descclassname">selprotopy.exceptions.</code><code class="sig-name descname">MissingA5Head</code><a class="headerlink" href="#selprotopy.exceptions.MissingA5Head" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parsing of returned binary SEL Protocol message failed due to lack of
+required A5[C1] heading.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="selprotopy.exceptions.DnaDigitalsMisMatch">
+<em class="property">exception </em><code class="sig-prename descclassname">selprotopy.exceptions.</code><code class="sig-name descname">DnaDigitalsMisMatch</code><a class="headerlink" href="#selprotopy.exceptions.DnaDigitalsMisMatch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dereferencing of digitals in response does not match the relay’s DNA
+definition, may be caused by a communications error, or failed parse.</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="protocol-exceptions">
+<h1>Protocol Exceptions<a class="headerlink" href="#protocol-exceptions" title="Permalink to this headline">¶</a></h1>
+<dl class="py exception">
+<dt id="selprotopy.exceptions.InvalidConmmandType">
+<em class="property">exception </em><code class="sig-prename descclassname">selprotopy.exceptions.</code><code class="sig-name descname">InvalidConmmandType</code><a class="headerlink" href="#selprotopy.exceptions.InvalidConmmandType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Invalid command type provided for Fast Operate, must be member of:
+[‘SET’, ‘CLEAR’, ‘PULSE’, ‘OPEN’, ‘CLOSE’].</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="selprotopy.exceptions.InvalidControlType">
+<em class="property">exception </em><code class="sig-prename descclassname">selprotopy.exceptions.</code><code class="sig-name descname">InvalidControlType</code><a class="headerlink" href="#selprotopy.exceptions.InvalidControlType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Invalid control type provided for Fast Operate, must be member of:
+[‘REMOTE_BIT’, ‘BREAKER_BIT’].</p>
+</dd></dl>
+
+</div>
 
 
             <div class="clearer"></div>
@@ -69,12 +135,22 @@
             <p class="logo"><a href="index.html">
               <img class="logo" src="_static/selprotopy_wht_text.png" alt="Logo"/>
             </a></p>
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Base Exceptions</a></li>
+<li><a class="reference internal" href="#communications-exceptions">Communications Exceptions</a><ul>
+<li><a class="reference internal" href="#parse-errors">Parse Errors</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#protocol-exceptions">Protocol Exceptions</a></li>
+</ul>
+
   <h4>Previous topic</h4>
   <p class="topless"><a href="api/selprotopy.common.int_to_bool_list.html"
                         title="previous chapter">selprotopy.common.int_to_bool_list</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="api/selprotopy.exceptions.html"
-                        title="next chapter">selprotopy.exceptions</a></p>
+  <p class="topless"><a href="commands.html"
+                        title="next chapter">&lt;no title&gt;</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -106,14 +182,14 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="api/selprotopy.exceptions.html" title="selprotopy.exceptions"
+          <a href="commands.html" title="&lt;no title&gt;"
              >next</a> |</li>
         <li class="right" >
           <a href="api/selprotopy.common.int_to_bool_list.html" title="selprotopy.common.int_to_bool_list"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">selprotopy</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="selprotopy.html" >API Reference</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">&lt;no title&gt;</a></li> 
+        <li class="nav-item nav-item-this"><a href="">Base Exceptions</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

@@ -226,19 +226,11 @@ relay)</p>
 <tr class="row-even"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.quit" title="selprotopy.SelClient.quit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">quit</span></code></a>()</p></td>
 <td><p><cite>quit</cite> Method</p></td>
 </tr>
-</tbody>
-</table>
-<table class="docutils align-default">
-<colgroup>
-<col style="width: 74%" />
-<col style="width: 26%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><strong>send_breaker_bit_fast_op</strong></p></td>
-<td></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.send_breaker_bit_fast_op" title="selprotopy.SelClient.send_breaker_bit_fast_op"><code class="xref py py-obj docutils literal notranslate"><span class="pre">send_breaker_bit_fast_op</span></code></a>(control_point[, …])</p></td>
+<td><p>Send a Fast Operate Breaker Bit Control</p></td>
 </tr>
-<tr class="row-even"><td><p><strong>send_remote_bit_fast_op</strong></p></td>
-<td></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.send_remote_bit_fast_op" title="selprotopy.SelClient.send_remote_bit_fast_op"><code class="xref py py-obj docutils literal notranslate"><span class="pre">send_remote_bit_fast_op</span></code></a>(control_point[, command])</p></td>
+<td><p>Send a Fast Operate Remote Bit Control</p></td>
 </tr>
 </tbody>
 </table>
@@ -280,10 +272,10 @@ relay)</p>
 <td><p><cite>quit</cite> Method</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.send_breaker_bit_fast_op" title="selprotopy.SelClient.send_breaker_bit_fast_op"><code class="xref py py-obj docutils literal notranslate"><span class="pre">send_breaker_bit_fast_op</span></code></a>(control_point[, …])</p></td>
-<td><p></p></td>
+<td><p>Send a Fast Operate Breaker Bit Control</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.send_remote_bit_fast_op" title="selprotopy.SelClient.send_remote_bit_fast_op"><code class="xref py py-obj docutils literal notranslate"><span class="pre">send_remote_bit_fast_op</span></code></a>(control_point[, command])</p></td>
-<td><p></p></td>
+<td><p>Send a Fast Operate Remote Bit Control</p></td>
 </tr>
 </tbody>
 </table>
@@ -585,12 +577,56 @@ actively connected relay.</p>
 <dl class="py method">
 <dt id="selprotopy.SelClient.send_breaker_bit_fast_op">
 <code class="sig-name descname">send_breaker_bit_fast_op</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">control_point</span></em>, <em class="sig-param"><span class="n">command</span><span class="o">=</span><span class="default_value">'trip'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#selprotopy.SelClient.send_breaker_bit_fast_op" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Send a Fast Operate Breaker Bit Control</p>
+<p>Send a breaker bit using the Fast Operate protocol by describing
+the control point and the control type.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.send_remote_bit_fast_op" title="selprotopy.SelClient.send_remote_bit_fast_op"><code class="xref py py-obj docutils literal notranslate"><span class="pre">send_remote_bit_fast_op</span></code></a></dt><dd><p>Send Remote Bit Control</p>
+</dd>
+</dl>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>control_point</strong> (<em>str</em>) – Particular Remote Bit point which should be
+controlled, should be of format ‘RBxx’ where
+‘xx’ represents the remote bit number.</p></li>
+<li><p><strong>command</strong> (<em>str</em><em>, </em><em>optional</em>) – Command type which will be sent, must be of:
+[‘SET’, ‘CLEAR’, ‘PULSE’, ‘OPEN’, ‘CLOSE’].
+Defaults to ‘trip’</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="selprotopy.SelClient.send_remote_bit_fast_op">
 <code class="sig-name descname">send_remote_bit_fast_op</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">control_point</span></em>, <em class="sig-param"><span class="n">command</span><span class="o">=</span><span class="default_value">'pulse'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#selprotopy.SelClient.send_remote_bit_fast_op" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Send a Fast Operate Remote Bit Control</p>
+<p>Send a remote bit using the Fast Operate protocol by describing
+the control point and the control type.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.send_breaker_bit_fast_op" title="selprotopy.SelClient.send_breaker_bit_fast_op"><code class="xref py py-obj docutils literal notranslate"><span class="pre">send_breaker_bit_fast_op</span></code></a></dt><dd><p>Send Breaker Bit Control</p>
+</dd>
+</dl>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>control_point</strong> (<em>str</em>) – Particular Remote Bit point which should be
+controlled, should be of format ‘RBxx’ where
+‘xx’ represents the remote bit number.</p></li>
+<li><p><strong>command</strong> (<em>str</em><em>, </em><em>optional</em>) – Command type which will be sent, must be of:
+[‘SET’, ‘CLEAR’, ‘PULSE’, ‘OPEN’, ‘CLOSE’].
+Defaults to ‘pulse’</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
