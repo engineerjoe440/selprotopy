@@ -109,8 +109,8 @@ def prepare_fastop_command(control_type, control_point, command,
     if isinstance(control_point, str):
         control_point = int(re.findall(r'(\d+)',control_point)[0])
     # Verify the Command Type
-    if command.lower() not in ['set','clear','pulse','open','close']:
-        # TODO: Raise more descriptive error
+    if command.lower() not in ['set', 'clear', 'pulse', 'open', 'close']:
+        # Indicate invalid command type
         raise ValueError("Invalid command type")
     # Set up Breaker or Remote Control
     if control_type.lower() == 'remote_bit':
@@ -118,8 +118,8 @@ def prepare_fastop_command(control_type, control_point, command,
     elif control_type.lower() == 'breaker_bit':
         command_string = FAST_OP_BREAKER_BIT
     else:
-        # TODO: Raise more descriptive error
-        raise ValueError("Invalid control type described.")
+        # Indicate invalid control type
+        raise InvalidControlType("Invalid control type described.")
     command_string += bytes([6]) # Length (in bytes)
     try:
         control = fastop_def['remotebitconfig'][control_point-1][command]

@@ -16,6 +16,7 @@ import binascii
 # Local Imports
 from selprotopy import commands
 from selprotopy.common import int_to_bool_list, ieee4bytefps, eval_checksum
+from selprotopy.exceptions import *
 
 # Define Clean Prompt Characters for RegEx
 RE_CLEAN_PROMPT_CHARS = re.compile(r'^[^\x02\x03\=\r\n\> ]*$')
@@ -73,11 +74,11 @@ def _validate_checksum( bytArr ):
     try:
         checksum_byte = bytArr[dataLen - 1]  # Extract checksum byte
     except:
-        # TODO: add more useful exception to indicate comm error
-        raise ValueError(f'Length of byte array extracted ({dataLen}) appears invalid.')
+        # Indicate Malformed Byte Array
+        raise MalformedByteArray(f'Length of byte array extracted ({dataLen}) appears invalid.')
     data = bytArr[:dataLen - 1]  # Don't include last byte
     if checksum_byte != eval_checksum(data, constrain=True):
-        raise ValueError("Invalid Checksum Found for Data Stream.")
+        raise ChecksumFail("Invalid Checksum Found for Data Stream.")
 
 # Define Simple Function to Cast Byte Array and Clean Ordering
 def _cast_bytearray( data, debug=True ):
@@ -85,10 +86,10 @@ def _cast_bytearray( data, debug=True ):
     offset = data.find(b'\xa5')
     # Determine Invalid Criteria
     if offset == -1:
-        # TODO: Make more useful error
+        # Indicate that response is missing 'A5' binary heading
         if debug:
             print("Debug Cast Data:", data )
-        raise ValueError("Invalid response request.")
+        raise MissingA5Head("Invalid response request; missing 'A5' binary heading.")
     bytArr = bytearray(data)[offset:]
     _validate_checksum( bytArr=bytArr )
     return bytArr
@@ -160,8 +161,8 @@ def RelayIdBlock( data, encoding='', byteorder='big', signed=True, verbose=False
                                         byteorder=byteorder,
                                         signed=signed )
             if checksum != calc_checksum:
-                # TODO Raise more Useful Error
-                raise ValueError(f"Invalid Checksum Found for {id_key}")
+                # Indicate Checksum Failure
+                raise ChecksumFail(f"Invalid Checksum Found for {id_key}")
             # Store the Results
             results[id_key] = key_result
         except KeyError:
@@ -236,8 +237,8 @@ def RelayDnaBlock( data, encoding='', byteorder='big', signed=True, verbose=Fals
                                         signed=signed )
                 # Indicate Failed Checksum Validation
                 if calc_checksum != checksum:
-                    # TODO Raise more Useful Error
-                    raise ValueError(f"Invalid Checksum Found for {line}")
+                    # Indicate Checksum Failure
+                    raise ChecksumFail(f"Invalid Checksum Found for {line}")
                 binaries.append( row )
             except:
                 if verbose: print(f"Couldn't parse line: {line}")
@@ -756,8 +757,8 @@ def FastMeterBlock( data, definition, dna_def, byteorder='big', signed=True,
         for target_row_index in range(definition['numdigitalbank']):
             # Verify Length of Points
             if definition['numdigitalbank'] != len(dna_def):
-                # TODO - Create more useful exception!
-                raise ValueError('Number of digital banks does not match DNA definition.')
+                # Indicate that number of digitals in definition does not match DNA
+                raise DnaDigitalsMisMatch('Number of digital banks does not match DNA definition.')
             # Grab the Applicable Names for this Target Row (byte)
             point_names = dna_def[target_row_index][:8] # grab first 8 entries
             # Grab the list of binary statuses from the target row info

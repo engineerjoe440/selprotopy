@@ -143,7 +143,7 @@ class SelClient():
         # Verify Connection by Searching for Prompt
         if verbose: print('Verifying Connection...')
         if not self._verify_connection():
-            raise ValueError("Could not verify connection.")  # TODO: Custom exception
+            raise ConnVerificationFail("Could not verify connection.")
         if verbose: print('Connection Verified.')
         self.quit()
         if autoconfig_now:
