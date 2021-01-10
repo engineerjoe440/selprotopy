@@ -668,20 +668,65 @@ class SelClient():
     # Define Method to Send Fast Operate Command for Breaker Bit
     def send_breaker_bit_fast_op(self, control_point, command='trip'):
         """
+        Send a Fast Operate Breaker Bit Control
 
+        Send a breaker bit using the Fast Operate protocol by describing
+        the control point and the control type.
+
+        See Also
+        --------
+        send_remote_bit_fast_op         : Send Remote Bit Control
+
+        Parameters
+        ----------
+        control_point:  str
+                        Particular Remote Bit point which should be
+                        controlled, should be of format 'RBxx' where
+                        'xx' represents the remote bit number.
+        command:        str, optional
+                        Command type which will be sent, must be of:
+                        ['SET', 'CLEAR', 'PULSE', 'OPEN', 'CLOSE'].
+                        Defaults to 'trip'
         """
+        # Write the Command
+        command_str = commands.prepare_fastop_command(
+            control_type='breaker_bit', control_point=control_point,
+            command=command, fastop_def=self.fastOpDef
+        )
+        if self.verbose:
+            print(command_str)
+        self.conn.write( command_str )
 
     # Define Method to Send Fast Operate Command for Remote Bit
     def send_remote_bit_fast_op(self, control_point, command='pulse'):
         """
+        Send a Fast Operate Remote Bit Control
 
+        Send a remote bit using the Fast Operate protocol by describing
+        the control point and the control type.
+
+        See Also
+        --------
+        send_breaker_bit_fast_op        : Send Breaker Bit Control
+
+        Parameters
+        ----------
+        control_point:  str
+                        Particular Remote Bit point which should be
+                        controlled, should be of format 'RBxx' where
+                        'xx' represents the remote bit number.
+        command:        str, optional
+                        Command type which will be sent, must be of:
+                        ['SET', 'CLEAR', 'PULSE', 'OPEN', 'CLOSE'].
+                        Defaults to 'pulse'
         """
         # Write the Command
         command_str = commands.prepare_fastop_command(
             control_type='remote_bit', control_point=control_point,
             command=command, fastop_def=self.fastOpDef
         )
-        print(command_str)
+        if self.verbose:
+            print(command_str)
         self.conn.write( command_str )
 
 
