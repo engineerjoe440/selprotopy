@@ -73,8 +73,8 @@ exclude_patterns = []
 #
 html_theme = 'classic'
 html_title = 'selprotopy'
-html_logo  = '../logo/selprotopy_wht_text.png'
-html_favicon = '../logo/selprotopy_bare.png'
+html_logo  = '../logo/selprotopy.png'
+html_favicon = '../logo/relay.png'
 html_theme_options = {
     'rightsidebar':     'false',
     'stickysidebar':    'false',
