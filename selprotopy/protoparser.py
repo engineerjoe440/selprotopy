@@ -102,7 +102,10 @@ def CleanPrompt( data, encoding='utf-8' ):
     """
     if encoding:
         # Decode Bytes
-        data = data.decode(encoding)
+        try:
+            data = data.decode(encoding)
+        except UnicodeDecodeError:
+            pass
     match = re.search(RE_CLEAN_PROMPT_CHARS, data)
     if match == None:
         return True
