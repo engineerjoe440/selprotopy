@@ -5,6 +5,7 @@ Schweitzer Engineering Laboratories (SEL) Protocol Bindings in Python
 [![](https://pepy.tech/badge/selprotopy)](https://pepy.tech/project/selprotopy)
 [![](https://img.shields.io/github/stars/engineerjoe440/selprotopy?logo=github)](https://github.com/engineerjoe440/selprotopy/)
 [![](https://img.shields.io/pypi/l/selprotopy.svg?color=blue)](https://github.com/engineerjoe440/selprotopy/blob/master/LICENSE.txt)
+[![Build Status](http://jenkins.stanleysolutionsnw.com/buildStatus/icon?job=AgentTest)](http://jenkins.stanleysolutionsnw.com/job/AgentTest/)
 
 ***This project is still in early stages, much is still to come.***
 
