@@ -1,11 +1,11 @@
 # SELProtoPy <img src="https://raw.githubusercontent.com/engineerjoe440/selprotopy/master/logo/selprotopy.png" width="250" alt="logo" align="right">
 Schweitzer Engineering Laboratories (SEL) Protocol Bindings in Python
 
-[![](https://img.shields.io/pypi/v/selprotopy.svg?color=blue&logo=pypi&logoColor=white)](https://pypi.org/project/selprotopy/)
-[![](https://pepy.tech/badge/selprotopy)](https://pepy.tech/project/selprotopy)
-[![](https://img.shields.io/github/stars/engineerjoe440/selprotopy?logo=github)](https://github.com/engineerjoe440/selprotopy/)
-[![](https://img.shields.io/pypi/l/selprotopy.svg?color=blue)](https://github.com/engineerjoe440/selprotopy/blob/master/LICENSE.txt)
-[![Build Status](http://jenkins.stanleysolutionsnw.com/buildStatus/icon?job=AgentTest)](http://jenkins.stanleysolutionsnw.com/job/AgentTest/)
+[![PyPI Version](https://img.shields.io/pypi/v/selprotopy.svg?color=blue&logo=pypi&logoColor=white)](https://pypi.org/project/selprotopy/)
+[![Downloads](https://pepy.tech/badge/selprotopy)](https://pepy.tech/project/selprotopy)
+[![Stars](https://img.shields.io/github/stars/engineerjoe440/selprotopy?logo=github)](https://github.com/engineerjoe440/selprotopy/)
+[![License](https://img.shields.io/pypi/l/selprotopy.svg?color=blue)](https://github.com/engineerjoe440/selprotopy/blob/master/LICENSE.txt)
+[![Build Status](http://jenkins.stanleysolutionsnw.com/buildStatus/icon?job=SELProtoPy-CI)](http://jenkins.stanleysolutionsnw.com/job/SELProtoPy-CI/)
 
 ***This project is still in early stages, much is still to come.***
 
