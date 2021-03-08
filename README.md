@@ -17,10 +17,10 @@ which are proprietary protocols designed by
 protective electric relays, and other intelligent electronic devices.
 
 # :warning: Caution:
-**This project, although binding SEL Protocol, is not sponsored, tested, or vetted in any
+***This project, although binding SEL Protocol, is not sponsored, tested, or vetted in any
 way by Schweitzer Engineering Laboratories (SEL). This project is authored and maintained
 as an open-source project. Testing is performed on a very small set of hardware running
-in the author's basement. In short, this project has no association with SEL.**
+in the author's basement. In short, this project has no association with SEL.***
 
 ## Protocol Documentation:
 SEL Protocol was introduced in the early 1990s to support various communications and
@@ -62,8 +62,13 @@ bug, or just have questions, jump over to the
 If you want to add features, or contribute yourself, feel free to open a pull-request.
 
 ### Contact Info:
+As mentioned in the [caution](https://github.com/engineerjoe440/selprotopy#warning-caution)
+above, this project is not associated with Schweitzer Engineering Laboratories (SEL) in any
+way, and as such, all contacts for questions, support, or other items should be directed to
+the resources listed here.
+
 For issues found in the source code itself, please feel free to open an
 [issue](https://github.com/engineerjoe440/selprotopy/issues), but for general inquiries
-and other contact, feel free to address Joe Stanley.
+and other contact, feel free to address Joe Stanley, the project maintainer.
 
 - [engineerjoe440@yahoo.com](mailto:engineerjoe440@yahoo.com)
