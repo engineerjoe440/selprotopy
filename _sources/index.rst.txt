@@ -10,6 +10,12 @@ which are proprietary protocols designed by
 `Schweitzer Engineering Laboratories <https://selinc.com/>`_ for use primarily with
 protective electric relays, and other intelligent electronic devices.
 
+.. warning::
+   ***This project, although binding SEL Protocol, is not sponsored, tested, or vetted in any
+   way by Schweitzer Engineering Laboratories (SEL). This project is authored and maintained
+   as an open-source project. Testing is performed on a very small set of hardware running
+   in the author's basement. In short, this project has no association with SEL.***
+
 Protocol Documentation:
 -----------------------
 
@@ -68,6 +74,10 @@ linked below.
 
 Contact Info:
 ~~~~~~~~~~~~~
+As mentioned in the [caution](https://engineerjoe440.github.io/selprotopy/#warning-caution)
+above, this project is not associated with Schweitzer Engineering Laboratories (SEL) in any
+way, and as such, all contacts for questions, support, or other items should be directed to
+the resources listed here.
 
 For issues found in the source code itself, please feel free to open an
 `issue <https://github.com/engineerjoe440/selprotopy/issues>`_, but for general inquiries
