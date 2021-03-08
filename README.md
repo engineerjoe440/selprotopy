@@ -16,11 +16,20 @@ which are proprietary protocols designed by
 [Schweitzer Engineering Laboratories](https://selinc.com/) for use primarily with
 protective electric relays, and other intelligent electronic devices.
 
+# :warning: Caution:
+**This project, although binding SEL Protocol, is not sponsored, tested, or vetted in any
+way by Schweitzer Engineering Laboratories (SEL). This project is authored and maintained
+as an open-source project. Testing is performed on a very small set of hardware running
+in the author's basement. In short, this project has no association with SEL.**
+
 ## Protocol Documentation:
 SEL Protocol was introduced in the early 1990s to support various communications and
 control of SEL protective relays. SEL provided a very supportive
 [application guide](https://selinc.com/api/download/5026/?lang=en) which provides great
-detail about the protocol's implementation.
+detail about the protocol's implementation. This application guide is a great resource
+and thoroughly documents the core framework of SEL Protocol. This guide is the basis of
+the bindings provided here. The guide can be accessed with a free account on the SEL
+website: [](https://selinc.com/)
 
 ## Installation:
 
