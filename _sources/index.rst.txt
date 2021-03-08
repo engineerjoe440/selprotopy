@@ -71,7 +71,7 @@ Contact Info:
 
 For issues found in the source code itself, please feel free to open an
 `issue <https://github.com/engineerjoe440/selprotopy/issues>`_, but for general inquiries
-and other contact, feel free to address `Joe Stanley <mailto:joe_stanley@selinc.com>`_.
+and other contact, feel free to address `Joe Stanley <mailto:engineerjoe440@yahoo.com>`_.
 
 
 Source Repository and Package Release (PyPI):
