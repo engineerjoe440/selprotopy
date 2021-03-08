@@ -22,6 +22,11 @@ way by Schweitzer Engineering Laboratories (SEL). This project is authored and m
 as an open-source project. Testing is performed on a very small set of hardware running
 in the author's basement. In short, this project has no association with SEL.***
 
+*Since this project is not rigorously tested across all SEL devices or in a wide variety
+of use-cases, any time this project is used, it should first be thoroughly tested. This
+project is not intended to serve protection-class systems in any capacity. It should
+primarily be used for research, exploration, and other learning objectives.*
+
 ## Protocol Documentation:
 SEL Protocol was introduced in the early 1990s to support various communications and
 control of SEL protective relays. SEL provided a very supportive
