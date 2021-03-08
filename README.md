@@ -57,4 +57,4 @@ For issues found in the source code itself, please feel free to open an
 [issue](https://github.com/engineerjoe440/selprotopy/issues), but for general inquiries
 and other contact, feel free to address Joe Stanley.
 
-- [joe_stanley@selinc.com](mailto:joe_stanley@selinc.com)
+- [engineerjoe440@yahoo.com](mailto:engineerjoe440@yahoo.com)
