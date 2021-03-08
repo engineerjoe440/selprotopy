@@ -67,10 +67,11 @@ bug, or just have questions, jump over to the
 If you want to add features, or contribute yourself, feel free to open a pull-request.
 
 ### Contact Info:
-As mentioned in the [caution](https://github.com/engineerjoe440/selprotopy#warning-caution)
-above, this project is not associated with Schweitzer Engineering Laboratories (SEL) in any
-way, and as such, all contacts for questions, support, or other items should be directed to
-the resources listed here.
+:information_source: *As mentioned in the
+[caution](https://github.com/engineerjoe440/selprotopy#warning-caution) above, this
+project is not associated with Schweitzer Engineering Laboratories (SEL) in any
+way, and as such, all contacts for questions, support, or other items should be
+directed to the resources listed here.*
 
 For issues found in the source code itself, please feel free to open an
 [issue](https://github.com/engineerjoe440/selprotopy/issues), but for general inquiries
