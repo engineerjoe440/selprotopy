@@ -30,6 +30,13 @@ detail about the protocol's implementation.
    selprotopy
 
 
+.. warning::
+   *Since this project is not rigorously tested across all SEL devices or in a wide variety
+   of use-cases, any time this project is used, it should first be thoroughly tested. This
+   project is not intended to serve protection-class systems in any capacity. It should
+   primarily be used for research, exploration, and other learning objectives.*
+
+
 Installation
 ~~~~~~~~~~~~
 
