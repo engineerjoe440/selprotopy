@@ -4,12 +4,13 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>Base Exceptions &#8212; selprotopy</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css" />
     
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
@@ -46,84 +47,84 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="base-exceptions">
+  <section id="base-exceptions">
 <span id="selprotopy-exceptions-py"></span><h1>Base Exceptions<a class="headerlink" href="#base-exceptions" title="Permalink to this headline">¶</a></h1>
 <dl class="py exception">
-<dt id="selprotopy.exceptions.CommError">
-<em class="property"><span class="pre">exception</span> </em><code class="sig-prename descclassname"><span class="pre">selprotopy.exceptions.</span></code><code class="sig-name descname"><span class="pre">CommError</span></code><a class="headerlink" href="#selprotopy.exceptions.CommError" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="selprotopy.exceptions.CommError">
+<em class="property"><span class="pre">exception</span> </em><span class="sig-prename descclassname"><span class="pre">selprotopy.exceptions.</span></span><span class="sig-name descname"><span class="pre">CommError</span></span><a class="headerlink" href="#selprotopy.exceptions.CommError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Base Class for Communications Errors</p>
 </dd></dl>
 
 <dl class="py exception">
-<dt id="selprotopy.exceptions.ParseError">
-<em class="property"><span class="pre">exception</span> </em><code class="sig-prename descclassname"><span class="pre">selprotopy.exceptions.</span></code><code class="sig-name descname"><span class="pre">ParseError</span></code><a class="headerlink" href="#selprotopy.exceptions.ParseError" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="selprotopy.exceptions.ParseError">
+<em class="property"><span class="pre">exception</span> </em><span class="sig-prename descclassname"><span class="pre">selprotopy.exceptions.</span></span><span class="sig-name descname"><span class="pre">ParseError</span></span><a class="headerlink" href="#selprotopy.exceptions.ParseError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Base Class for Parsing Errors</p>
 </dd></dl>
 
 <dl class="py exception">
-<dt id="selprotopy.exceptions.ProtoError">
-<em class="property"><span class="pre">exception</span> </em><code class="sig-prename descclassname"><span class="pre">selprotopy.exceptions.</span></code><code class="sig-name descname"><span class="pre">ProtoError</span></code><a class="headerlink" href="#selprotopy.exceptions.ProtoError" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="selprotopy.exceptions.ProtoError">
+<em class="property"><span class="pre">exception</span> </em><span class="sig-prename descclassname"><span class="pre">selprotopy.exceptions.</span></span><span class="sig-name descname"><span class="pre">ProtoError</span></span><a class="headerlink" href="#selprotopy.exceptions.ProtoError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Base Class for Protocol Errors</p>
 </dd></dl>
 
-</div>
-<div class="section" id="communications-exceptions">
+</section>
+<section id="communications-exceptions">
 <h1>Communications Exceptions<a class="headerlink" href="#communications-exceptions" title="Permalink to this headline">¶</a></h1>
 <dl class="py exception">
-<dt id="selprotopy.exceptions.MalformedByteArray">
-<em class="property"><span class="pre">exception</span> </em><code class="sig-prename descclassname"><span class="pre">selprotopy.exceptions.</span></code><code class="sig-name descname"><span class="pre">MalformedByteArray</span></code><a class="headerlink" href="#selprotopy.exceptions.MalformedByteArray" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="selprotopy.exceptions.MalformedByteArray">
+<em class="property"><span class="pre">exception</span> </em><span class="sig-prename descclassname"><span class="pre">selprotopy.exceptions.</span></span><span class="sig-name descname"><span class="pre">MalformedByteArray</span></span><a class="headerlink" href="#selprotopy.exceptions.MalformedByteArray" title="Permalink to this definition">¶</a></dt>
 <dd><p>Byte array does not appear in expected format, likely due to truncated
 communications caused by a communications failure.</p>
 </dd></dl>
 
 <dl class="py exception">
-<dt id="selprotopy.exceptions.ChecksumFail">
-<em class="property"><span class="pre">exception</span> </em><code class="sig-prename descclassname"><span class="pre">selprotopy.exceptions.</span></code><code class="sig-name descname"><span class="pre">ChecksumFail</span></code><a class="headerlink" href="#selprotopy.exceptions.ChecksumFail" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="selprotopy.exceptions.ChecksumFail">
+<em class="property"><span class="pre">exception</span> </em><span class="sig-prename descclassname"><span class="pre">selprotopy.exceptions.</span></span><span class="sig-name descname"><span class="pre">ChecksumFail</span></span><a class="headerlink" href="#selprotopy.exceptions.ChecksumFail" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checksum validation has failed for the captured message, likely due to
 communications failure.</p>
 </dd></dl>
 
 <dl class="py exception">
-<dt id="selprotopy.exceptions.ConnVerificationFail">
-<em class="property"><span class="pre">exception</span> </em><code class="sig-prename descclassname"><span class="pre">selprotopy.exceptions.</span></code><code class="sig-name descname"><span class="pre">ConnVerificationFail</span></code><a class="headerlink" href="#selprotopy.exceptions.ConnVerificationFail" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="selprotopy.exceptions.ConnVerificationFail">
+<em class="property"><span class="pre">exception</span> </em><span class="sig-prename descclassname"><span class="pre">selprotopy.exceptions.</span></span><span class="sig-name descname"><span class="pre">ConnVerificationFail</span></span><a class="headerlink" href="#selprotopy.exceptions.ConnVerificationFail" title="Permalink to this definition">¶</a></dt>
 <dd><p>Communications could not be verified.</p>
 </dd></dl>
 
-<div class="section" id="parse-errors">
+<section id="parse-errors">
 <h2>Parse Errors<a class="headerlink" href="#parse-errors" title="Permalink to this headline">¶</a></h2>
 <dl class="py exception">
-<dt id="selprotopy.exceptions.MissingA5Head">
-<em class="property"><span class="pre">exception</span> </em><code class="sig-prename descclassname"><span class="pre">selprotopy.exceptions.</span></code><code class="sig-name descname"><span class="pre">MissingA5Head</span></code><a class="headerlink" href="#selprotopy.exceptions.MissingA5Head" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="selprotopy.exceptions.MissingA5Head">
+<em class="property"><span class="pre">exception</span> </em><span class="sig-prename descclassname"><span class="pre">selprotopy.exceptions.</span></span><span class="sig-name descname"><span class="pre">MissingA5Head</span></span><a class="headerlink" href="#selprotopy.exceptions.MissingA5Head" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parsing of returned binary SEL Protocol message failed due to lack of
 required A5[C1] heading.</p>
 </dd></dl>
 
 <dl class="py exception">
-<dt id="selprotopy.exceptions.DnaDigitalsMisMatch">
-<em class="property"><span class="pre">exception</span> </em><code class="sig-prename descclassname"><span class="pre">selprotopy.exceptions.</span></code><code class="sig-name descname"><span class="pre">DnaDigitalsMisMatch</span></code><a class="headerlink" href="#selprotopy.exceptions.DnaDigitalsMisMatch" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="selprotopy.exceptions.DnaDigitalsMisMatch">
+<em class="property"><span class="pre">exception</span> </em><span class="sig-prename descclassname"><span class="pre">selprotopy.exceptions.</span></span><span class="sig-name descname"><span class="pre">DnaDigitalsMisMatch</span></span><a class="headerlink" href="#selprotopy.exceptions.DnaDigitalsMisMatch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dereferencing of digitals in response does not match the relay’s DNA
 definition, may be caused by a communications error, or failed parse.</p>
 </dd></dl>
 
-</div>
-</div>
-<div class="section" id="protocol-exceptions">
+</section>
+</section>
+<section id="protocol-exceptions">
 <h1>Protocol Exceptions<a class="headerlink" href="#protocol-exceptions" title="Permalink to this headline">¶</a></h1>
 <dl class="py exception">
-<dt id="selprotopy.exceptions.InvalidConmmandType">
-<em class="property"><span class="pre">exception</span> </em><code class="sig-prename descclassname"><span class="pre">selprotopy.exceptions.</span></code><code class="sig-name descname"><span class="pre">InvalidConmmandType</span></code><a class="headerlink" href="#selprotopy.exceptions.InvalidConmmandType" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="selprotopy.exceptions.InvalidConmmandType">
+<em class="property"><span class="pre">exception</span> </em><span class="sig-prename descclassname"><span class="pre">selprotopy.exceptions.</span></span><span class="sig-name descname"><span class="pre">InvalidConmmandType</span></span><a class="headerlink" href="#selprotopy.exceptions.InvalidConmmandType" title="Permalink to this definition">¶</a></dt>
 <dd><p>Invalid command type provided for Fast Operate, must be member of:
 [‘SET’, ‘CLEAR’, ‘PULSE’, ‘OPEN’, ‘CLOSE’].</p>
 </dd></dl>
 
 <dl class="py exception">
-<dt id="selprotopy.exceptions.InvalidControlType">
-<em class="property"><span class="pre">exception</span> </em><code class="sig-prename descclassname"><span class="pre">selprotopy.exceptions.</span></code><code class="sig-name descname"><span class="pre">InvalidControlType</span></code><a class="headerlink" href="#selprotopy.exceptions.InvalidControlType" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="selprotopy.exceptions.InvalidControlType">
+<em class="property"><span class="pre">exception</span> </em><span class="sig-prename descclassname"><span class="pre">selprotopy.exceptions.</span></span><span class="sig-name descname"><span class="pre">InvalidControlType</span></span><a class="headerlink" href="#selprotopy.exceptions.InvalidControlType" title="Permalink to this definition">¶</a></dt>
 <dd><p>Invalid control type provided for Fast Operate, must be member of:
 [‘REMOTE_BIT’, ‘BREAKER_BIT’].</p>
 </dd></dl>
 
-</div>
+</section>
 
 
             <div class="clearer"></div>
@@ -194,7 +195,7 @@ definition, may be caused by a communications error, or failed parse.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2020, Joe Stanley.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.2.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.2.
     </div>
   </body>
 </html>
