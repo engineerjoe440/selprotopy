@@ -44,7 +44,7 @@
 <dt class="sig sig-object py" id="selprotopy.SelClient">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">selprotopy.</span></span><span class="sig-name descname"><span class="pre">SelClient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connApi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">autoconfig_now</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validConnChecks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interdelay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.025</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#selprotopy.SelClient" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p><cite>SelClient</cite> Class</p>
+<p><cite>SelClient</cite> Class for Polling an SEL Relay/IED.</p>
 <p>The basic polling class intended to interact with an SEL relay which has
 already been connected to by way of a Telnet or Serial connection using one
 of the following Python libraries:</p>
@@ -198,40 +198,40 @@ relay)</p>
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.access_level" title="selprotopy.SelClient.access_level"><code class="xref py py-obj docutils literal notranslate"><span class="pre">access_level</span></code></a>()</p></td>
-<td><p><cite>access_level</cite></p></td>
+<td><p>Identify Current Access Level.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.access_level_1" title="selprotopy.SelClient.access_level_1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">access_level_1</span></code></a>([level_1_pass])</p></td>
-<td><p><cite>access_level_1</cite> Method</p></td>
+<td><p>Go to Access Level 1.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.access_level_2" title="selprotopy.SelClient.access_level_2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">access_level_2</span></code></a>([level_2_pass])</p></td>
-<td><p><cite>access_level_2</cite> Method</p></td>
+<td><p>Go To Access Level 2.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig" title="selprotopy.SelClient.autoconfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig</span></code></a>([verbose])</p></td>
-<td><p><cite>autoconfig</cite> Method</p></td>
+<td><p>Autoconfigure SELClient Instance.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig_fastmeter" title="selprotopy.SelClient.autoconfig_fastmeter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_fastmeter</span></code></a>([verbose])</p></td>
-<td><p><cite>autoconfig_fastmeter</cite> Method</p></td>
+<td><p>Autoconfigure Fast Meter for SEL Client.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig_fastmeter_demand" title="selprotopy.SelClient.autoconfig_fastmeter_demand"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_fastmeter_demand</span></code></a>([verbose])</p></td>
-<td><p><cite>autoconfig_fastmeter_demand</cite> Method</p></td>
+<td><p>Autoconfigure Fast Meter Demand for SEL Client.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig_fastmeter_peakdemand" title="selprotopy.SelClient.autoconfig_fastmeter_peakdemand"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_fastmeter_peakdemand</span></code></a>([verbose])</p></td>
-<td><p><cite>autoconfig_fastmeter_peakdemand</cite> Method</p></td>
+<td><p>Autoconfigure Fast Meter Peak Demand for SEL Client.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig_fastoperate" title="selprotopy.SelClient.autoconfig_fastoperate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_fastoperate</span></code></a>([verbose])</p></td>
-<td><p><cite>autoconfig_fastoperate</cite> Method</p></td>
+<td><p>Autoconfigure Fast Operate for SEL Client.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.poll_fast_meter" title="selprotopy.SelClient.poll_fast_meter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">poll_fast_meter</span></code></a>([minAccLevel, verbose])</p></td>
-<td><p><cite>poll_fast_meter</cite> Method</p></td>
+<td><p>Poll Fast Meter Data from SEL Relay/IED.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.quit" title="selprotopy.SelClient.quit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">quit</span></code></a>()</p></td>
-<td><p><cite>quit</cite> Method</p></td>
+<td><p>Quit Method.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.send_breaker_bit_fast_op" title="selprotopy.SelClient.send_breaker_bit_fast_op"><code class="xref py py-obj docutils literal notranslate"><span class="pre">send_breaker_bit_fast_op</span></code></a>(control_point[, …])</p></td>
-<td><p>Send a Fast Operate Breaker Bit Control</p></td>
+<td><p>Send a Fast Operate Breaker Bit Control.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.send_remote_bit_fast_op" title="selprotopy.SelClient.send_remote_bit_fast_op"><code class="xref py py-obj docutils literal notranslate"><span class="pre">send_remote_bit_fast_op</span></code></a>(control_point[, command])</p></td>
-<td><p>Send a Fast Operate Remote Bit Control</p></td>
+<td><p>Send a Fast Operate Remote Bit Control.</p></td>
 </tr>
 </tbody>
 </table>
@@ -243,40 +243,40 @@ relay)</p>
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.access_level" title="selprotopy.SelClient.access_level"><code class="xref py py-obj docutils literal notranslate"><span class="pre">access_level</span></code></a>()</p></td>
-<td><p><cite>access_level</cite></p></td>
+<td><p>Identify Current Access Level.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.access_level_1" title="selprotopy.SelClient.access_level_1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">access_level_1</span></code></a>([level_1_pass])</p></td>
-<td><p><cite>access_level_1</cite> Method</p></td>
+<td><p>Go to Access Level 1.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.access_level_2" title="selprotopy.SelClient.access_level_2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">access_level_2</span></code></a>([level_2_pass])</p></td>
-<td><p><cite>access_level_2</cite> Method</p></td>
+<td><p>Go To Access Level 2.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig" title="selprotopy.SelClient.autoconfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig</span></code></a>([verbose])</p></td>
-<td><p><cite>autoconfig</cite> Method</p></td>
+<td><p>Autoconfigure SELClient Instance.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig_fastmeter" title="selprotopy.SelClient.autoconfig_fastmeter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_fastmeter</span></code></a>([verbose])</p></td>
-<td><p><cite>autoconfig_fastmeter</cite> Method</p></td>
+<td><p>Autoconfigure Fast Meter for SEL Client.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig_fastmeter_demand" title="selprotopy.SelClient.autoconfig_fastmeter_demand"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_fastmeter_demand</span></code></a>([verbose])</p></td>
-<td><p><cite>autoconfig_fastmeter_demand</cite> Method</p></td>
+<td><p>Autoconfigure Fast Meter Demand for SEL Client.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig_fastmeter_peakdemand" title="selprotopy.SelClient.autoconfig_fastmeter_peakdemand"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_fastmeter_peakdemand</span></code></a>([verbose])</p></td>
-<td><p><cite>autoconfig_fastmeter_peakdemand</cite> Method</p></td>
+<td><p>Autoconfigure Fast Meter Peak Demand for SEL Client.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig_fastoperate" title="selprotopy.SelClient.autoconfig_fastoperate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_fastoperate</span></code></a>([verbose])</p></td>
-<td><p><cite>autoconfig_fastoperate</cite> Method</p></td>
+<td><p>Autoconfigure Fast Operate for SEL Client.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.poll_fast_meter" title="selprotopy.SelClient.poll_fast_meter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">poll_fast_meter</span></code></a>([minAccLevel, verbose])</p></td>
-<td><p><cite>poll_fast_meter</cite> Method</p></td>
+<td><p>Poll Fast Meter Data from SEL Relay/IED.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.quit" title="selprotopy.SelClient.quit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">quit</span></code></a>()</p></td>
-<td><p><cite>quit</cite> Method</p></td>
+<td><p>Quit Method.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.send_breaker_bit_fast_op" title="selprotopy.SelClient.send_breaker_bit_fast_op"><code class="xref py py-obj docutils literal notranslate"><span class="pre">send_breaker_bit_fast_op</span></code></a>(control_point[, …])</p></td>
-<td><p>Send a Fast Operate Breaker Bit Control</p></td>
+<td><p>Send a Fast Operate Breaker Bit Control.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.send_remote_bit_fast_op" title="selprotopy.SelClient.send_remote_bit_fast_op"><code class="xref py py-obj docutils literal notranslate"><span class="pre">send_remote_bit_fast_op</span></code></a>(control_point[, command])</p></td>
-<td><p>Send a Fast Operate Remote Bit Control</p></td>
+<td><p>Send a Fast Operate Remote Bit Control.</p></td>
 </tr>
 </tbody>
 </table>
@@ -284,7 +284,7 @@ relay)</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="selprotopy.SelClient.access_level">
 <span class="sig-name descname"><span class="pre">access_level</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#selprotopy.SelClient.access_level" title="Permalink to this definition">¶</a></dt>
-<dd><p><cite>access_level</cite></p>
+<dd><p>Identify Current Access Level.</p>
 <p>Simple method to identify what the current access level
 is for the connected relay. Provides an integer and
 string.</p>
@@ -302,7 +302,7 @@ string.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="selprotopy.SelClient.access_level_1">
 <span class="sig-name descname"><span class="pre">access_level_1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level_1_pass</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">b'OTTER'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#selprotopy.SelClient.access_level_1" title="Permalink to this definition">¶</a></dt>
-<dd><p><cite>access_level_1</cite> Method</p>
+<dd><p>Go to Access Level 1.</p>
 <p>Used to elevate connection privileges with the connected
 relay to ACC with the appropriate password specified. If
 called when current access level is greater than ACC, this
@@ -334,7 +334,7 @@ from level 0 (i.e. logging in).</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="selprotopy.SelClient.access_level_2">
 <span class="sig-name descname"><span class="pre">access_level_2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level_2_pass</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">b'TAIL'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#selprotopy.SelClient.access_level_2" title="Permalink to this definition">¶</a></dt>
-<dd><p><cite>access_level_2</cite> Method</p>
+<dd><p>Go To Access Level 2.</p>
 <p>Used to elevate connection privileges with the connected
 relay to 2AC with the appropriate password specified. If
 called when current access level is greater than 2AC, this
@@ -366,7 +366,7 @@ from level 1 (i.e. logging in).</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="selprotopy.SelClient.autoconfig">
 <span class="sig-name descname"><span class="pre">autoconfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#selprotopy.SelClient.autoconfig" title="Permalink to this definition">¶</a></dt>
-<dd><p><cite>autoconfig</cite> Method</p>
+<dd><p>Autoconfigure SELClient Instance.</p>
 <p>Method to operate the standard auto-configuration process
 with a connected relay to identify the system parameters of
 the relay. This includes:</p>
@@ -419,7 +419,7 @@ Automatic Configuration</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="selprotopy.SelClient.autoconfig_fastmeter">
 <span class="sig-name descname"><span class="pre">autoconfig_fastmeter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#selprotopy.SelClient.autoconfig_fastmeter" title="Permalink to this definition">¶</a></dt>
-<dd><p><cite>autoconfig_fastmeter</cite> Method</p>
+<dd><p>Autoconfigure Fast Meter for SEL Client.</p>
 <p>Method to operate the standard auto-configuration process
 with a connected relay to identify the standard fast meter
 parameters of the relay.</p>
@@ -448,7 +448,7 @@ Defaults to False</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="selprotopy.SelClient.autoconfig_fastmeter_demand">
 <span class="sig-name descname"><span class="pre">autoconfig_fastmeter_demand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#selprotopy.SelClient.autoconfig_fastmeter_demand" title="Permalink to this definition">¶</a></dt>
-<dd><p><cite>autoconfig_fastmeter_demand</cite> Method</p>
+<dd><p>Autoconfigure Fast Meter Demand for SEL Client.</p>
 <p>Method to operate the standard auto-configuration process
 with a connected relay to identify the fast meter demand
 parameters of the relay.</p>
@@ -477,7 +477,7 @@ Defaults to False</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="selprotopy.SelClient.autoconfig_fastmeter_peakdemand">
 <span class="sig-name descname"><span class="pre">autoconfig_fastmeter_peakdemand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#selprotopy.SelClient.autoconfig_fastmeter_peakdemand" title="Permalink to this definition">¶</a></dt>
-<dd><p><cite>autoconfig_fastmeter_peakdemand</cite> Method</p>
+<dd><p>Autoconfigure Fast Meter Peak Demand for SEL Client.</p>
 <p>Method to operate the standard auto-configuration process
 with a connected relay to identify the fast meter peak demand
 parameters of the relay.</p>
@@ -506,7 +506,7 @@ Defaults to False</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="selprotopy.SelClient.autoconfig_fastoperate">
 <span class="sig-name descname"><span class="pre">autoconfig_fastoperate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#selprotopy.SelClient.autoconfig_fastoperate" title="Permalink to this definition">¶</a></dt>
-<dd><p><cite>autoconfig_fastoperate</cite> Method</p>
+<dd><p>Autoconfigure Fast Operate for SEL Client.</p>
 <p>Method to operate the standard auto-configuration process
 with a connected relay to identify the fast operate parameters
 of the relay.</p>
@@ -535,7 +535,7 @@ Defaults to False</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="selprotopy.SelClient.poll_fast_meter">
 <span class="sig-name descname"><span class="pre">poll_fast_meter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">minAccLevel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#selprotopy.SelClient.poll_fast_meter" title="Permalink to this definition">¶</a></dt>
-<dd><p><cite>poll_fast_meter</cite> Method</p>
+<dd><p>Poll Fast Meter Data from SEL Relay/IED.</p>
 <p>Method to poll the connected relay with the configured protocol
 settings (use <cite>autoconfig</cite> method to configure protocol settings).</p>
 <div class="admonition seealso">
@@ -561,7 +561,7 @@ Defaults to False</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="selprotopy.SelClient.quit">
 <span class="sig-name descname"><span class="pre">quit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#selprotopy.SelClient.quit" title="Permalink to this definition">¶</a></dt>
-<dd><p><cite>quit</cite> Method</p>
+<dd><p>Quit Method.</p>
 <p>Simple method to send the QUIT command to an
 actively connected relay.</p>
 <div class="admonition seealso">
@@ -578,7 +578,7 @@ actively connected relay.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="selprotopy.SelClient.send_breaker_bit_fast_op">
 <span class="sig-name descname"><span class="pre">send_breaker_bit_fast_op</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">control_point</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">command</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'trip'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#selprotopy.SelClient.send_breaker_bit_fast_op" title="Permalink to this definition">¶</a></dt>
-<dd><p>Send a Fast Operate Breaker Bit Control</p>
+<dd><p>Send a Fast Operate Breaker Bit Control.</p>
 <p>Send a breaker bit using the Fast Operate protocol by describing
 the control point and the control type.</p>
 <div class="admonition seealso">
@@ -605,7 +605,7 @@ Defaults to ‘trip’</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="selprotopy.SelClient.send_remote_bit_fast_op">
 <span class="sig-name descname"><span class="pre">send_remote_bit_fast_op</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">control_point</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">command</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pulse'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#selprotopy.SelClient.send_remote_bit_fast_op" title="Permalink to this definition">¶</a></dt>
-<dd><p>Send a Fast Operate Remote Bit Control</p>
+<dd><p>Send a Fast Operate Remote Bit Control.</p>
 <p>Send a remote bit using the Fast Operate protocol by describing
 the control point and the control type.</p>
 <div class="admonition seealso">
