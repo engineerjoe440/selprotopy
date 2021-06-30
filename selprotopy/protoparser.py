@@ -9,9 +9,6 @@ Supports:
 
 # Import Requirements
 import re
-import math
-import struct
-import binascii
 
 # Local Imports
 from selprotopy import commands
@@ -68,7 +65,7 @@ ANALOG_TYPE_FORMATTERS = {
 
 # Define Simple Function to Validate Checksum for Byte Array
 def _validate_checksum( bytArr ):
-    """ Use the last byte in a byte array as checksum to verify preceding bytes. """
+    """Use last byte in a byte array as checksum to verify preceding bytes."""
     # Assume Valid Message, and Find the Length of the Data
     dataLen = bytArr[2]  # Third Byte, Message Length
     # Collect the Checksum from the Data
@@ -76,14 +73,16 @@ def _validate_checksum( bytArr ):
         checksum_byte = bytArr[dataLen - 1]  # Extract checksum byte
     except:
         # Indicate Malformed Byte Array
-        raise MalformedByteArray(f'Length of byte array extracted ({dataLen}) appears invalid.')
+        raise MalformedByteArray(
+            f'Length of byte array extracted ({dataLen}) appears invalid.'
+        )
     data = bytArr[:dataLen - 1]  # Don't include last byte
     if checksum_byte != eval_checksum(data, constrain=True):
         raise ChecksumFail("Invalid Checksum Found for Data Stream.")
 
-# Define Simple Function to Cast Byte Array and Clean Ordering
+# Simple Function to Cast Byte Array and Clean Ordering
 def _cast_bytearray( data, debug=True ):
-    """ Cast the data to a byte-array. """
+    """Cast the data to a byte-array."""
     offset = data.find(b'\xa5')
     # Determine Invalid Criteria
     if offset == -1:
@@ -99,8 +98,7 @@ def _cast_bytearray( data, debug=True ):
 ###################################################################################
 # Define Clear Prompt Interpreter
 def CleanPrompt( data, encoding='utf-8' ):
-    """
-    """
+    """Repeatedly use Carriage-Returns to Clear the Prompt for new Commands."""
     if encoding:
         # Decode Bytes
         try:
@@ -116,7 +114,7 @@ def CleanPrompt( data, encoding='utf-8' ):
 # Define Relay ID Block Parser
 def RelayIdBlock( data, encoding='', byteorder='big', signed=True, verbose=False ):
     """
-    `RelayIdBlock`
+    Parse Relay ID Block.
     
     Parser for a relay ID/Firmware ID block to describe the relay's
     firmware version, part number, and configuration.
@@ -182,7 +180,7 @@ def RelayIdBlock( data, encoding='', byteorder='big', signed=True, verbose=False
 # Define Relay DNA Block Parser
 def RelayDnaBlock( data, encoding='', byteorder='big', signed=True, verbose=False ):
     """
-    `RelayDnaBlock`
+    Parse Relay DNA Response Block.
     
     Parser for a relay digital names block to describe the configured
     digital names for a relay.
@@ -251,7 +249,7 @@ def RelayDnaBlock( data, encoding='', byteorder='big', signed=True, verbose=Fals
 # Define Relay Status Bit Name Parser
 def RelayBnaBlock( data, encoding='', verbose=False ):
     """
-    `RelayBnaBlock`
+    Parse Relay BNA Response Block.
     
     Parser for a relay bit names block to describe the configured
     bit names for a relay.
@@ -304,11 +302,10 @@ def RelayBnaBlock( data, encoding='', verbose=False ):
 # Define Relay Definition Block Parser
 def RelayDefinitionBlock( data, verbose=False ):
     """
-    `RelayDefinitionBlock`
+    Parse Relay Definition Block.
     
-    Parser for a relay definition block to describe
-    the relay's available functional message, control,
-    and event blocks
+    Parser for a relay definition block to describe the relay's available
+    functional message, control, and event blocks.
     
     Parameters
     ----------
@@ -431,7 +428,7 @@ def RelayDefinitionBlock( data, verbose=False ):
 # Define Relay Definition Block Parser
 def FastMeterConfigurationBlock( data, byteorder='big', signed=True, verbose=False ):
     """
-    `FastMeterConfigurationBlock`
+    Parse Relay Fast Meter Configuration Block.
     
     Parser for a relay's fast meter block to describe
     the relay's available functional message, control,
@@ -590,7 +587,7 @@ def FastMeterConfigurationBlock( data, byteorder='big', signed=True, verbose=Fal
 # Define Function to Parse a Fast Operate Configuration Block
 def FastOpConfigurationBlock( data, byteorder='big', signed=True, verbose=False ):
     """
-    `FastOpConfigurationBlock`
+    Parse Fast Operate Configuration Block.
     
     Parser for a fast operate configuration block to describe
     the relay's available fast operate options.
@@ -670,7 +667,7 @@ def FastOpConfigurationBlock( data, byteorder='big', signed=True, verbose=False 
 def FastMeterBlock( data, definition, dna_def, byteorder='big', signed=True,
         verbose=False ):
     """
-    `FastMeterBlock`
+    Parse Fast Meter Response Block.
     
     Parser for a relay's fast meter block for the various analog
     and digital points.

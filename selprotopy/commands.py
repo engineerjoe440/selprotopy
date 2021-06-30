@@ -65,7 +65,7 @@ PASS_PROMPT = b"Password:"
 # Define Simple Function to Evaluate Request String for Numbered Event Record
 def event_record_request(event_number):
     """
-    `event_record_request`
+    Evaluate Byte-String to Form Event Record Request.
     
     A simple function to evaluate the request byte-string
     to request a numbered event (zero-based) from the relay's

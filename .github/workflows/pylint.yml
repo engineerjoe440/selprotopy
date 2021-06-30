@@ -25,4 +25,4 @@ jobs:
         python3 -c "import selprotopy; print('selprotopy.__file__')"
     - name: Test NumpyDoc Style
       run: |
-        pylint ./selprotopy
+        pylint ./selprotopy -E

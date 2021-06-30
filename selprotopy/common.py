@@ -15,7 +15,7 @@ import struct
 # Define Simple Function to Cast Binary Integer to List of Bools
 def int_to_bool_list( number, byte_like=False, reverse=False ):
     """
-    `int_to_bool_list`
+    Convert Integer to List of Booleans.
     
     This function converts an integer to a list of boolean values,
     where the most significant value is stored in the highest point
@@ -58,7 +58,7 @@ def int_to_bool_list( number, byte_like=False, reverse=False ):
 # Define Simple Function to Cast Binary Representation of IEEE 4-Byte FPS
 def ieee4bytefps( binary_bytes, total_digits=7 ):
     """
-    `ieee4bytefps`
+    Convert 4-Bytes to IEEE Floating Point Value.
 
     This function accepts a bytestring of 4 bytes and evaluates the
     IEEE Floating-Point value represented by the bytestring.
@@ -89,7 +89,7 @@ def ieee4bytefps( binary_bytes, total_digits=7 ):
 # Define Function to Evaluate Checksum
 def eval_checksum( data, constrain=False ):
     """
-    `eval_checksum`
+    Evaluate Checksum from Data Row.
 
     This function accepts a byte-string, and calculates the checksum
     of the bytes provided.

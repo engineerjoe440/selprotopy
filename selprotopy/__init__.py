@@ -36,7 +36,7 @@ telnetlib.Telnet.process_rawq = telnetlib_support.process_rawq
 # Define Simple Polling Client
 class SelClient():
     """
-    `SelClient` Class
+    `SelClient` Class for Polling an SEL Relay/IED.
 
     The basic polling class intended to interact with an SEL relay which has
     already been connected to by way of a Telnet or Serial connection using one
@@ -103,7 +103,7 @@ class SelClient():
     def __init__( self, connApi, autoconfig_now=True, validConnChecks=5,
                   interdelay=0.025, logger=None, verbose=False,
                   debug=False, **kwargs ):
-        """ Initialization Method - Returns False if Connection Fails """
+        """Prepare SELClient - Returns False if Connection Fails."""
         # Initialize Inputs
         self.conn = connApi
         self.verbose = verbose
@@ -239,7 +239,7 @@ class SelClient():
     # Define Method to Identify Current Access Level
     def access_level(self):
         """
-        `access_level`
+        Identify Current Access Level.
 
         Simple method to identify what the current access level
         is for the connected relay. Provides an integer and
@@ -270,7 +270,7 @@ class SelClient():
     # Define Method to Return to Access Level 0
     def quit(self):
         """
-        `quit` Method
+        Quit Method.
 
         Simple method to send the QUIT command to an
         actively connected relay.
@@ -287,7 +287,7 @@ class SelClient():
     # Define Method to Access Level 1
     def access_level_1(self, level_1_pass=commands.PASS_ACC, **kwargs):
         """
-        `access_level_1` Method
+        Go to Access Level 1.
 
         Used to elevate connection privileges with the connected
         relay to ACC with the appropriate password specified. If
@@ -313,7 +313,7 @@ class SelClient():
         """
         # Identify Current Access Level
         time.sleep( self.delay )
-        level, name = self.access_level()
+        level, _ = self.access_level()
         if self.debug: print("Logging in to ACC")
         self.conn.write( commands.GO_ACC )
         # Provide Password
@@ -332,7 +332,7 @@ class SelClient():
     # Define Method to Access Level 2
     def access_level_2(self, level_2_pass=commands.PASS_2AC, **kwargs):
         """
-        `access_level_2` Method
+        Go To Access Level 2.
 
         Used to elevate connection privileges with the connected
         relay to 2AC with the appropriate password specified. If
@@ -357,7 +357,7 @@ class SelClient():
                             Indicator of whether the login failed.
         """
         # Identify Current Access Level
-        level, name = self.access_level()
+        level, _ = self.access_level()
         # Provide Password
         if level == 0:
             if not self.access_level_1( **kwargs ):
@@ -379,7 +379,7 @@ class SelClient():
     # Define Method to Perform Auto-Configuration Process
     def autoconfig( self, verbose=False, **kwargs ):
         """
-        `autoconfig` Method
+        Autoconfigure SELClient Instance.
 
         Method to operate the standard auto-configuration process
         with a connected relay to identify the system parameters of
@@ -503,7 +503,7 @@ class SelClient():
     # Define Method to Run the Fast Meter Configuration
     def autoconfig_fastmeter(self, verbose=False):
         """
-        `autoconfig_fastmeter` Method
+        Autoconfigure Fast Meter for SEL Client.
 
         Method to operate the standard auto-configuration process
         with a connected relay to identify the standard fast meter
@@ -533,7 +533,7 @@ class SelClient():
     # Define Method to Run the Fast Meter Demand Configuration
     def autoconfig_fastmeter_demand(self, verbose=False):
         """
-        `autoconfig_fastmeter_demand` Method
+        Autoconfigure Fast Meter Demand for SEL Client.
 
         Method to operate the standard auto-configuration process
         with a connected relay to identify the fast meter demand
@@ -563,7 +563,7 @@ class SelClient():
     # Define Method to Run the Fast Meter Peak Demand Configuration
     def autoconfig_fastmeter_peakdemand(self, verbose=False):
         """
-        `autoconfig_fastmeter_peakdemand` Method
+        Autoconfigure Fast Meter Peak Demand for SEL Client.
 
         Method to operate the standard auto-configuration process
         with a connected relay to identify the fast meter peak demand
@@ -593,7 +593,7 @@ class SelClient():
     # Define Method to Run the Fast Operate Configuration
     def autoconfig_fastoperate(self, verbose=False):
         """
-        `autoconfig_fastoperate` Method
+        Autoconfigure Fast Operate for SEL Client.
 
         Method to operate the standard auto-configuration process
         with a connected relay to identify the fast operate parameters
@@ -623,7 +623,7 @@ class SelClient():
     # Define Method to Perform Fast Meter Polling
     def poll_fast_meter(self, minAccLevel=0, verbose=False, **kwargs):
         """
-        `poll_fast_meter` Method
+        Poll Fast Meter Data from SEL Relay/IED.
 
         Method to poll the connected relay with the configured protocol
         settings (use `autoconfig` method to configure protocol settings).
@@ -668,7 +668,7 @@ class SelClient():
     # Define Method to Send Fast Operate Command for Breaker Bit
     def send_breaker_bit_fast_op(self, control_point, command='trip'):
         """
-        Send a Fast Operate Breaker Bit Control
+        Send a Fast Operate Breaker Bit Control.
 
         Send a breaker bit using the Fast Operate protocol by describing
         the control point and the control type.
@@ -700,7 +700,7 @@ class SelClient():
     # Define Method to Send Fast Operate Command for Remote Bit
     def send_remote_bit_fast_op(self, control_point, command='pulse'):
         """
-        Send a Fast Operate Remote Bit Control
+        Send a Fast Operate Remote Bit Control.
 
         Send a remote bit using the Fast Operate protocol by describing
         the control point and the control type.
