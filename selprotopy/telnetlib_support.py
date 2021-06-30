@@ -5,11 +5,17 @@ Supports:
   - SEL Fast Meter
   - SEL Fast Message
   - SEL Fast Operate
+
+To use `telnetlib_support`, without importing `selprotopy` directly, use:
+
+```
+telnetlib.Telnet.process_rawq = process_rawq
+```
 """
 
 # Telnetlib Support: Don't eat the Null Characters, They're Important!
 import telnetlib
-from telnetlib import IAC, DO, DONT, WILL, WONT, SE, NOOPT
+from telnetlib import IAC, DO, DONT, WILL, WONT, SE, NOOPT, SB
 
 def process_rawq(self):
         """Transfer from raw queue to cooked queue.
@@ -85,6 +91,5 @@ def process_rawq(self):
         self.sbdataq = self.sbdataq + buf[1]
 
 
-#telnetlib.Telnet.process_rawq = process_rawq
 
 # END

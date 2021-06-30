@@ -11,6 +11,7 @@ import re
 
 # Local Imports
 from selprotopy.common import eval_checksum
+from selprotopy.exceptions import InvalidControlType
 
 # Define Various Binary Requests
 RELAY_DEFENITION        = bytes.fromhex('A5C0') # The relay definition block.

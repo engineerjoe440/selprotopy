@@ -16,7 +16,8 @@ import binascii
 # Local Imports
 from selprotopy import commands
 from selprotopy.common import int_to_bool_list, ieee4bytefps, eval_checksum
-from selprotopy.exceptions import *
+from selprotopy.exceptions import MalformedByteArray, ChecksumFail
+from selprotopy.exceptions import MissingA5Head, DnaDigitalsMisMatch
 
 # Define Clean Prompt Characters for RegEx
 RE_CLEAN_PROMPT_CHARS = re.compile(r'^[^\x02\x03\=\r\n\> ]*$')
@@ -424,7 +425,7 @@ def RelayDefinitionBlock( data, verbose=False ):
             ind += 2
         # Return Resultant Structure
         return struct
-    except IndexError as err:
+    except IndexError:
         raise ValueError("Invalid data string response")
 
 # Define Relay Definition Block Parser
@@ -513,8 +514,10 @@ def FastMeterConfigurationBlock( data, byteorder='big', signed=True, verbose=Fal
             # iConDP:   Delta Connected, Positive Sequence
             # iConDN:   Delta Connected, Negative Sequence
             val = bytArr[ind]
-            [rot, vConDP, vConDN, iConDP, iConDN, na, na, na] = int_to_bool_list( val,
-                byte_like=True)
+            [rot, vConDP, vConDN, iConDP, iConDN, _, _, _] = int_to_bool_list(
+                val,
+                byte_like=True
+            )
             # Evaluate Rotation
             dict['line'] = val
             dict['rotation'] = 'ACB' if rot else 'ABC'
@@ -581,7 +584,7 @@ def FastMeterConfigurationBlock( data, byteorder='big', signed=True, verbose=Fal
             print("Digital Channel Offset:",struct['digitaloffset'])
         # Return the Generated Structure
         return struct
-    except IndexError as err:
+    except IndexError:
         raise ValueError("Invalid data string response")
 
 # Define Function to Parse a Fast Operate Configuration Block
@@ -626,7 +629,7 @@ def FastOpConfigurationBlock( data, byteorder='big', signed=True, verbose=False 
                                                   byteorder=byteorder,
                                                   signed=signed )
         struct['pulsesupported']= bytArr[6]
-        reservedpoint           = bytArr[7]
+        _                       = bytArr[7]  # reservedpoint
         # Iterate Over Breaker Bits
         ind = 8
         struct['breakerconfig'] = []
@@ -658,7 +661,7 @@ def FastOpConfigurationBlock( data, byteorder='big', signed=True, verbose=False 
             print("Pulse Command Supported:",struct['pulsesupported'])
         # Return Structure
         return struct
-    except IndexError as err:
+    except IndexError:
         raise ValueError("Invalid data string response")
 ###################################################################################
 
@@ -774,7 +777,7 @@ def FastMeterBlock( data, definition, dna_def, byteorder='big', signed=True,
         struct['digitals'].pop('*')
         # Return the Resultant Structure
         return struct
-    except IndexError as err:
+    except IndexError:
         raise ValueError("Invalid data string response")
 ###################################################################################
 

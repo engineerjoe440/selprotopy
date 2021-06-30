@@ -11,7 +11,7 @@ Author(s):
 
 Homepage: https://github.com/engineerjoe440/sel-proto-py
 
-SEL Protocol Application Guide: https://selinc.com/api/download/5026/?lang=en
+SEL Protocol Application Guide: https://selinc.com/api/download/5026/
 """
 
 # Standard Imports
