@@ -9,6 +9,7 @@ Supports:
 
 # Import Requirements
 import re
+from typing import Any, AnyStr
 
 # Local Imports
 from selprotopy import commands
@@ -64,7 +65,7 @@ ANALOG_TYPE_FORMATTERS = {
 
 
 # Define Simple Function to Validate Checksum for Byte Array
-def _validate_checksum( bytArr ):
+def _validate_checksum(bytArr: bytearray):
     """Use last byte in a byte array as checksum to verify preceding bytes."""
     # Assume Valid Message, and Find the Length of the Data
     dataLen = bytArr[2]  # Third Byte, Message Length
@@ -81,7 +82,7 @@ def _validate_checksum( bytArr ):
         raise ChecksumFail("Invalid Checksum Found for Data Stream.")
 
 # Simple Function to Cast Byte Array and Clean Ordering
-def _cast_bytearray( data, debug=True ):
+def _cast_bytearray(data: AnyStr, debug: bool = True):
     """Cast the data to a byte-array."""
     offset = data.find(b'\xa5')
     # Determine Invalid Criteria
@@ -97,7 +98,7 @@ def _cast_bytearray( data, debug=True ):
 
 ###################################################################################
 # Define Clear Prompt Interpreter
-def CleanPrompt( data, encoding='utf-8' ):
+def CleanPrompt(data: AnyStr, encoding: str = 'utf-8' ):
     """Repeatedly use Carriage-Returns to Clear the Prompt for new Commands."""
     if encoding:
         # Decode Bytes
@@ -112,7 +113,8 @@ def CleanPrompt( data, encoding='utf-8' ):
         return False
 ###################################################################################
 # Define Relay ID Block Parser
-def RelayIdBlock( data, encoding='', byteorder='big', signed=True, verbose=False ):
+def RelayIdBlock(data: AnyStr, encoding: str = '', byteorder: str = 'big',
+                 signed: bool = True, verbose: bool = False):
     """
     Parse Relay ID Block.
     
@@ -178,7 +180,8 @@ def RelayIdBlock( data, encoding='', byteorder='big', signed=True, verbose=False
     return results
 
 # Define Relay DNA Block Parser
-def RelayDnaBlock( data, encoding='', byteorder='big', signed=True, verbose=False ):
+def RelayDnaBlock(data: AnyStr, encoding: str = '', byteorder: str = 'big',
+                  signed: bool = True, verbose: bool = False):
     """
     Parse Relay DNA Response Block.
     
@@ -247,7 +250,7 @@ def RelayDnaBlock( data, encoding='', byteorder='big', signed=True, verbose=Fals
     return binaries
 
 # Define Relay Status Bit Name Parser
-def RelayBnaBlock( data, encoding='', verbose=False ):
+def RelayBnaBlock(data: AnyStr, encoding: str = '', verbose: bool = False):
     """
     Parse Relay BNA Response Block.
     
@@ -300,7 +303,7 @@ def RelayBnaBlock( data, encoding='', verbose=False ):
 
 ###################################################################################
 # Define Relay Definition Block Parser
-def RelayDefinitionBlock( data, verbose=False ):
+def RelayDefinitionBlock(data: AnyStr, verbose: bool = False):
     """
     Parse Relay Definition Block.
     
@@ -426,7 +429,8 @@ def RelayDefinitionBlock( data, verbose=False ):
         raise ValueError("Invalid data string response")
 
 # Define Relay Definition Block Parser
-def FastMeterConfigurationBlock( data, byteorder='big', signed=True, verbose=False ):
+def FastMeterConfigurationBlock(data: AnyStr, byteorder: str = 'big',
+                                signed: bool = True, verbose: bool = False):
     """
     Parse Relay Fast Meter Configuration Block.
     
@@ -550,7 +554,9 @@ def FastMeterConfigurationBlock( data, byteorder='big', signed=True, verbose=Fal
             elif val == 5:
                 dict['typedesc'] = 'standard-power with two sets of currents'
             else:
-                dict['typedesc'] = '2-1/2 element Δ power with two sets of currents'
+                dict['typedesc'] = (
+                    '2-1/2 element Δ power with two sets of currents'
+                )
             # Determine Skew Correction offset, Rs offset, and Xs offset
             dict['skewoffset'] = bytes(bytArr[ind:ind+2])
             dict['rsoffset'] = bytes(bytArr[ind+2:ind+4])
@@ -585,7 +591,8 @@ def FastMeterConfigurationBlock( data, byteorder='big', signed=True, verbose=Fal
         raise ValueError("Invalid data string response")
 
 # Define Function to Parse a Fast Operate Configuration Block
-def FastOpConfigurationBlock( data, byteorder='big', signed=True, verbose=False ):
+def FastOpConfigurationBlock(data: AnyStr, byteorder: str = 'big',
+                             signed: bool = True, verbose: bool = False):
     """
     Parse Fast Operate Configuration Block.
     
@@ -660,12 +667,13 @@ def FastOpConfigurationBlock( data, byteorder='big', signed=True, verbose=False 
         return struct
     except IndexError:
         raise ValueError("Invalid data string response")
-###################################################################################
+################################################################################
 
-###################################################################################
+################################################################################
 # Define Function to Parse a Fast Meter Response Given the Configuration
-def FastMeterBlock( data, definition, dna_def, byteorder='big', signed=True,
-        verbose=False ):
+def FastMeterBlock(data: AnyStr, definition: dict, dna_def: list[list[str]],
+                   byteorder: str = 'big', signed: str = True,
+                   verbose: bool = False ):
     """
     Parse Fast Meter Response Block.
     
@@ -760,8 +768,10 @@ def FastMeterBlock( data, definition, dna_def, byteorder='big', signed=True,
         for target_row_index in range(definition['numdigitalbank']):
             # Verify Length of Points
             if definition['numdigitalbank'] != len(dna_def):
-                # Indicate that number of digitals in definition does not match DNA
-                raise DnaDigitalsMisMatch('Number of digital banks does not match DNA definition.')
+                # Indicate number of digitals in definition does not match DNA
+                raise DnaDigitalsMisMatch(
+                    'Number of digital banks does not match DNA definition.'
+                )
             # Grab the Applicable Names for this Target Row (byte)
             point_names = dna_def[target_row_index][:8] # grab first 8 entries
             # Grab the list of binary statuses from the target row info
@@ -776,7 +786,7 @@ def FastMeterBlock( data, definition, dna_def, byteorder='big', signed=True,
         return struct
     except IndexError:
         raise ValueError("Invalid data string response")
-###################################################################################
+################################################################################
 
 
 

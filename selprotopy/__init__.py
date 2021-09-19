@@ -17,6 +17,7 @@ SEL Protocol Application Guide: https://selinc.com/api/download/5026/
 # Standard Imports
 import time
 import telnetlib
+import logging
 
 # Local Imports
 from selprotopy import exceptions
@@ -100,23 +101,29 @@ class SelClient():
                 relay)
     """
 
-    def __init__( self, connApi, autoconfig_now=True, validConnChecks=5,
-                  interdelay=0.025, logger=None, verbose=False,
-                  debug=False, **kwargs ):
-        """Prepare SELClient - Returns False if Connection Fails."""
+    def __init__(self, connApi, autoconfig_now: bool = True, 
+                 logger: logging.Logger = None, verbose: bool = False,
+                 debug: bool = False, **kwargs):
+        """Prepare SELClient."""
         # Initialize Inputs
         self.conn = connApi
         self.verbose = verbose
-        self.check = validConnChecks
-        self.delay = interdelay
         self.logger = logger
         self.debug = debug
 
-        # Initialize Timout if Applicable
-        if 'timeout' in kwargs.keys():
+        # Initialize Class Options
+        self.timeout = 60
+        self.__num_con_check__ = 5
+        self.__inter_cmd_delay__ = 0.025
+
+        # Initialize Additional Options that May be Made Available
+        kwarg_keys = kwargs.keys()
+        if 'timeout' in kwarg_keys:
             self.timeout = kwargs['timeout']
-        else:
-            self.timeout = 60
+        if 'conn_check' in kwarg_keys:
+            self.__num_con_check__ = kwargs['conn_check']
+        if 'cmd_delay' in kwarg_keys:
+            self.__inter_cmd_delay__ = kwargs['cmd_delay']
 
         # Define Basic Parameter Defaults
         self.fid     = ''
@@ -152,11 +159,11 @@ class SelClient():
             self.autoconfig(verbose=verbose)
 
     # Define Connectivity Check Method
-    def _verify_connection( self ):
+    def _verify_connection(self):
         # Set Default Indication
         connected = False
         # Iteratively attempt to see relay's response
-        for _ in range(self.check):
+        for _ in range(self.__num_con_check__):
             self.conn.write( commands.CR + commands.CR + commands.CR )
             response = self.conn.read_until( commands.CR )
             if self.debug: print(response)
@@ -165,18 +172,18 @@ class SelClient():
                 connected = True
                 break
             else:
-                time.sleep( self.delay )
+                time.sleep( self.__inter_cmd_delay__ )
         # Return Status
         return connected
 
     # Define Method to "Clear" the Buffer
-    def _clear_input_buffer( self ):
+    def _clear_input_buffer(self):
         try:
             resp = self.conn.read_very_eager()
             if self.logger: self.logger.info(f'Rx: {resp}')
             if self.debug: print('Clearing buffer:', resp)
             while b'' != resp:
-                time.sleep(self.delay * 10)
+                time.sleep(self.__inter_cmd_delay__ * 10)
                 resp = self.conn.read_very_eager()
                 if self.logger: self.logger.info(f'Rx: {resp}')
                 if self.debug: print('Clearing buffer:', resp)
@@ -184,7 +191,7 @@ class SelClient():
             self.conn.reset_input_buffer()
 
     # Define Method to Read All Data to Next Relay Prompt
-    def _read_to_prompt( self, prompt_str=commands.PROMPT ):
+    def _read_to_prompt(self, prompt_str=commands.PROMPT):
         # Telnetlib Supports a Timeout
         if isinstance(self.conn, telnetlib.Telnet):
             response = self.conn.read_until( commands.PROMPT,
@@ -197,7 +204,7 @@ class SelClient():
         return response
 
     # Define Method to Read All Data After a Command (and to next relay prompt)
-    def _read_command_response( self, command, prompt_str=commands.PROMPT ):
+    def _read_command_response(self, command, prompt_str=commands.PROMPT):
         if isinstance(command, bytes):
             command = command.replace(b'\n', b'')
             command = command.replace(b'\r', b'')
@@ -213,7 +220,7 @@ class SelClient():
         return response
 
     # Define Method to Read Until a "Clean" Prompt is Viewed
-    def _read_clean_prompt( self ):
+    def _read_clean_prompt(self):
         count = 0
         response = b''
         while count < 3:
@@ -225,12 +232,12 @@ class SelClient():
                 count += 1
             else:
                 count = 0
-            time.sleep(self.delay)
+            time.sleep(self.__inter_cmd_delay__)
         self._clear_input_buffer()  # Empty anything left in the buffer
-        time.sleep(self.delay)
+        time.sleep(self.__inter_cmd_delay__)
 
     # Define Method to Attempt Reading Everything (only for telnetlib)
-    def _read_everything( self ):
+    def _read_everything(self):
         response = self.conn.read_very_eager()
         if self.logger: self.logger.info(f'Rx: {response}')
         if self.debug: print(response)
@@ -285,7 +292,7 @@ class SelClient():
         self._read_clean_prompt()
 
     # Define Method to Access Level 1
-    def access_level_1(self, level_1_pass=commands.PASS_ACC, **kwargs):
+    def access_level_1(self, level_1_pass: str = commands.PASS_ACC, **kwargs):
         """
         Go to Access Level 1.
 
@@ -312,15 +319,15 @@ class SelClient():
                             Indicator of whether the login failed.
         """
         # Identify Current Access Level
-        time.sleep( self.delay )
+        time.sleep(self.__inter_cmd_delay__)
         level, _ = self.access_level()
         if self.debug: print("Logging in to ACC")
         self.conn.write( commands.GO_ACC )
         # Provide Password
         if level == 0:
-            time.sleep( int(self.delay * 3) )
+            time.sleep( int(self.__inter_cmd_delay__ * 3) )
             self.conn.write( level_1_pass + commands.CR )
-            time.sleep( self.delay )
+            time.sleep( self.__inter_cmd_delay__ )
         resp = self._read_to_prompt( commands.LEVEL_0 )
         if b'Invalid' in resp:
             if self.debug: print("Log-In Failed")
@@ -330,7 +337,7 @@ class SelClient():
             return True
 
     # Define Method to Access Level 2
-    def access_level_2(self, level_2_pass=commands.PASS_2AC, **kwargs):
+    def access_level_2(self, level_2_pass: str = commands.PASS_2AC, **kwargs):
         """
         Go To Access Level 2.
 
@@ -365,9 +372,9 @@ class SelClient():
         if self.debug: print("Logging in to 2AC")
         self.conn.write( commands.GO_2AC )
         if level in [0, 1]:
-            time.sleep( int(self.delay * 3) )
+            time.sleep( int(self.__inter_cmd_delay__ * 3) )
             self.conn.write( level_2_pass + commands.CR )
-            time.sleep( self.delay )
+            time.sleep( self.__inter_cmd_delay__ )
         resp = self._read_to_prompt( commands.LEVEL_0 )
         if b'Invalid' in resp:
             if self.debug: print("Log-In Failed")
@@ -377,7 +384,7 @@ class SelClient():
             return True
 
     # Define Method to Perform Auto-Configuration Process
-    def autoconfig( self, verbose=False, **kwargs ):
+    def autoconfig( self, verbose: bool = False, **kwargs ):
         """
         Autoconfigure SELClient Instance.
 
@@ -501,7 +508,7 @@ class SelClient():
         return self.fid
 
     # Define Method to Run the Fast Meter Configuration
-    def autoconfig_fastmeter(self, verbose=False):
+    def autoconfig_fastmeter(self, verbose: bool = False):
         """
         Autoconfigure Fast Meter for SEL Client.
 
@@ -531,7 +538,7 @@ class SelClient():
         )
 
     # Define Method to Run the Fast Meter Demand Configuration
-    def autoconfig_fastmeter_demand(self, verbose=False):
+    def autoconfig_fastmeter_demand(self, verbose: bool = False):
         """
         Autoconfigure Fast Meter Demand for SEL Client.
 
@@ -561,7 +568,7 @@ class SelClient():
         )
 
     # Define Method to Run the Fast Meter Peak Demand Configuration
-    def autoconfig_fastmeter_peakdemand(self, verbose=False):
+    def autoconfig_fastmeter_peakdemand(self, verbose: bool = False):
         """
         Autoconfigure Fast Meter Peak Demand for SEL Client.
 
@@ -591,7 +598,7 @@ class SelClient():
         )
 
     # Define Method to Run the Fast Operate Configuration
-    def autoconfig_fastoperate(self, verbose=False):
+    def autoconfig_fastoperate(self, verbose: bool = False):
         """
         Autoconfigure Fast Operate for SEL Client.
 
@@ -621,7 +628,8 @@ class SelClient():
         )
 
     # Define Method to Perform Fast Meter Polling
-    def poll_fast_meter(self, minAccLevel=0, verbose=False, **kwargs):
+    def poll_fast_meter(self, minAccLevel: bool = 0, verbose: bool = False,
+                        **kwargs):
         """
         Poll Fast Meter Data from SEL Relay/IED.
 
@@ -666,7 +674,8 @@ class SelClient():
         return response
 
     # Define Method to Send Fast Operate Command for Breaker Bit
-    def send_breaker_bit_fast_op(self, control_point, command='trip'):
+    def send_breaker_bit_fast_op(self, control_point: str,
+                                 command: str = 'trip'):
         """
         Send a Fast Operate Breaker Bit Control.
 
@@ -698,7 +707,8 @@ class SelClient():
         self.conn.write( command_str )
 
     # Define Method to Send Fast Operate Command for Remote Bit
-    def send_remote_bit_fast_op(self, control_point, command='pulse'):
+    def send_remote_bit_fast_op(self, control_point: str,
+                                command: str = 'pulse'):
         """
         Send a Fast Operate Remote Bit Control.
 

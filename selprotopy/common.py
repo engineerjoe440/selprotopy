@@ -10,10 +10,12 @@ Supports:
 # Import Requirements
 import math
 import struct
+from typing import AnyStr
 
 
 # Define Simple Function to Cast Binary Integer to List of Bools
-def int_to_bool_list( number, byte_like=False, reverse=False ):
+def int_to_bool_list(number: int, byte_like: bool = False,
+                     reverse: bool = False):
     """
     Convert Integer to List of Booleans.
     
@@ -56,7 +58,7 @@ def int_to_bool_list( number, byte_like=False, reverse=False ):
     return bin_list
 
 # Define Simple Function to Cast Binary Representation of IEEE 4-Byte FPS
-def ieee4bytefps( binary_bytes, total_digits=7 ):
+def ieee4bytefps(binary_bytes: bytes, total_digits: int = 7):
     """
     Convert 4-Bytes to IEEE Floating Point Value.
 
@@ -87,7 +89,7 @@ def ieee4bytefps( binary_bytes, total_digits=7 ):
                                 digits=total_digits )
 
 # Define Function to Evaluate Checksum
-def eval_checksum( data, constrain=False ):
+def eval_checksum(data: AnyStr, constrain: bool = False ):
     """
     Evaluate Checksum from Data Row.
 

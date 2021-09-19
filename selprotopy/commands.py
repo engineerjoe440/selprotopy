@@ -63,7 +63,7 @@ PASS_PROMPT = b"Password:"
 
 ###################################################################################
 # Define Simple Function to Evaluate Request String for Numbered Event Record
-def event_record_request(event_number):
+def event_record_request(event_number: int):
     """
     Evaluate Byte-String to Form Event Record Request.
     
@@ -98,13 +98,25 @@ def event_record_request(event_number):
         raise ValueError("Event number may not be greater than 64.")
 ###################################################################################
 # Define Function to Prepare Fast Operate Command
-def prepare_fastop_command(control_type, control_point, command,
-                            fastop_def):
+def prepare_fastop_command(control_type: str, control_point: str, command: str,
+                           fastop_def: dict):
     """
     Prepare a fast operate command for a relay.
 
     Prepare the binary message required to set/clear/pulse/open/close
     the respective control point using fast operate.
+
+    Parameters
+    ----------
+    control_type:   ['remote_bit', 'breaker_bit']
+                    Option for whether the control should be for a remote bit or
+                    a breaker bit.
+    control_point:  str
+                    The specific point which should be controlled.
+    command:        ['set', 'clear', 'pulse', 'open', 'close']
+                    Control option which should be sent to the device.
+    fastop_def:     dict
+                    The FastOp definition dictionary to be used.
     """
     # Prepare the Point Number
     if isinstance(control_point, str):
