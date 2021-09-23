@@ -9,7 +9,7 @@ Supports:
 
 # Import Requirements
 import re
-from typing import Any, AnyStr
+from typing import AnyStr, List
 
 # Local Imports
 from selprotopy import commands
@@ -671,7 +671,7 @@ def FastOpConfigurationBlock(data: AnyStr, byteorder: str = 'big',
 
 ################################################################################
 # Define Function to Parse a Fast Meter Response Given the Configuration
-def FastMeterBlock(data: AnyStr, definition: dict, dna_def: list[list[str]],
+def FastMeterBlock(data: AnyStr, definition: dict, dna_def: List[List[str]],
                    byteorder: str = 'big', signed: str = True,
                    verbose: bool = False ):
     """
