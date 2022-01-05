@@ -31,6 +31,7 @@ SelClient
       ~SelClient.autoconfig_fastmeter_demand
       ~SelClient.autoconfig_fastmeter_peakdemand
       ~SelClient.autoconfig_fastoperate
+      ~SelClient.autoconfig_relay_definition
       ~SelClient.poll_fast_meter
       ~SelClient.quit
       ~SelClient.send_breaker_bit_fast_op
@@ -57,6 +58,7 @@ SelClient
    .. automethod:: autoconfig_fastmeter_demand
    .. automethod:: autoconfig_fastmeter_peakdemand
    .. automethod:: autoconfig_fastoperate
+   .. automethod:: autoconfig_relay_definition
    .. automethod:: poll_fast_meter
    .. automethod:: quit
    .. automethod:: send_breaker_bit_fast_op
