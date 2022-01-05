@@ -61,7 +61,7 @@ PROMPT = CR + LEVEL_0
 PASS_PROMPT = b"Password:"
 
 
-###################################################################################
+################################################################################
 # Define Simple Function to Evaluate Request String for Numbered Event Record
 def event_record_request(event_number: int):
     """
@@ -96,7 +96,8 @@ def event_record_request(event_number: int):
         return request
     else:
         raise ValueError("Event number may not be greater than 64.")
-###################################################################################
+
+################################################################################
 # Define Function to Prepare Fast Operate Command
 def prepare_fastop_command(control_type: str, control_point: str, command: str,
                            fastop_def: dict):

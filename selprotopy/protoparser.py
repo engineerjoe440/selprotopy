@@ -72,11 +72,11 @@ def _validate_checksum(bytArr: bytearray):
     # Collect the Checksum from the Data
     try:
         checksum_byte = bytArr[dataLen - 1]  # Extract checksum byte
-    except:
+    except Exception as err:
         # Indicate Malformed Byte Array
         raise MalformedByteArray(
             f'Length of byte array extracted ({dataLen}) appears invalid.'
-        )
+        ) from err
     data = bytArr[:dataLen - 1]  # Don't include last byte
     if checksum_byte != eval_checksum(data, constrain=True):
         raise ChecksumFail("Invalid Checksum Found for Data Stream.")
@@ -90,13 +90,15 @@ def _cast_bytearray(data: AnyStr, debug: bool = True):
         # Indicate that response is missing 'A5' binary heading
         if debug:
             print("Debug Cast Data:", data )
-        raise MissingA5Head("Invalid response request; missing 'A5' binary heading.")
+        raise MissingA5Head(
+            "Invalid response request; missing 'A5' binary heading."
+        )
     bytArr = bytearray(data)[offset:]
     _validate_checksum( bytArr=bytArr )
     return bytArr
 
 
-###################################################################################
+################################################################################
 # Define Clear Prompt Interpreter
 def CleanPrompt(data: AnyStr, encoding: str = 'utf-8' ):
     """Repeatedly use Carriage-Returns to Clear the Prompt for new Commands."""
@@ -107,11 +109,9 @@ def CleanPrompt(data: AnyStr, encoding: str = 'utf-8' ):
         except UnicodeDecodeError:
             pass
     match = re.search(RE_CLEAN_PROMPT_CHARS, data)
-    if match == None:
-        return True
-    else:
-        return False
-###################################################################################
+    return (match == None)
+
+################################################################################
 # Define Relay ID Block Parser
 def RelayIdBlock(data: AnyStr, encoding: str = '', byteorder: str = 'big',
                  signed: bool = True, verbose: bool = False):
@@ -174,7 +174,7 @@ def RelayIdBlock(data: AnyStr, encoding: str = '', byteorder: str = 'big',
             results[id_key] = ''
             if verbose:
                 print(f'Unable to determine {id_key} parameter from relay ID.')
-        except:
+        except Exception:
             print(idstring, re.findall(re_param, idstring))
     # Return Parsed ID Components
     return results
@@ -245,7 +245,7 @@ def RelayDnaBlock(data: AnyStr, encoding: str = '', byteorder: str = 'big',
                     # Indicate Checksum Failure
                     raise ChecksumFail(f"Invalid Checksum Found for {line}")
                 binaries.append( row )
-            except:
+            except Exception:
                 if verbose: print(f"Couldn't parse line: {line}")
     return binaries
 
@@ -293,15 +293,15 @@ def RelayBnaBlock(data: AnyStr, encoding: str = '', verbose: bool = False):
                 names = entries[0:8]
                 names.append( [entries[8]] )
                 bitnames.append( names )
-            except:
+            except Exception:
                 if verbose: print(f"Couldn't parse line: {line}")
         else:
             break
         return bitnames
-###################################################################################
+################################################################################
 
 
-###################################################################################
+################################################################################
 # Define Relay Definition Block Parser
 def RelayDefinitionBlock(data: AnyStr, verbose: bool = False):
     """
@@ -347,10 +347,10 @@ def RelayDefinitionBlock(data: AnyStr, verbose: bool = False):
         # Iterate over the Fast Meter Commands
         ind = 6
         for _ in range(struct['fmmessagesup']):
-            dict = {}
-            dict['configcommand'] = bytes(bytArr[ind:ind+2])
-            dict['command'] = bytes(bytArr[ind+2:ind+4])
-            struct['fmcommandinfo'].append(dict)
+            data_dict = {}
+            data_dict['configcommand'] = bytes(bytArr[ind:ind+2])
+            data_dict['command'] = bytes(bytArr[ind+2:ind+4])
+            struct['fmcommandinfo'].append(data_dict)
             ind += 4
         struct['fmtype'] = bytArr[ind]
         if verbose:
@@ -359,10 +359,10 @@ def RelayDefinitionBlock(data: AnyStr, verbose: bool = False):
         ind += 1
         # Iterate Over the Status Flag Commands
         for _ in range(struct['statusflagssup']):
-            dict = {}
-            dict['statusbit'] = bytes(bytArr[ind:ind+2])
-            dict['affectedcommand'] = bytes(bytArr[ind+2:ind+8])
-            struct['statusflaginfo'].append(dict)
+            data_dict = {}
+            data_dict['statusbit'] = bytes(bytArr[ind:ind+2])
+            data_dict['affectedcommand'] = bytes(bytArr[ind+2:ind+8])
+            struct['statusflaginfo'].append(data_dict)
             ind += 8
         if verbose:
             print("Status Flag Information")
@@ -425,8 +425,8 @@ def RelayDefinitionBlock(data: AnyStr, verbose: bool = False):
             ind += 2
         # Return Resultant Structure
         return struct
-    except IndexError:
-        raise ValueError("Invalid data string response")
+    except IndexError as err:
+        raise ValueError("Invalid data string response") from err
 
 # Define Relay Definition Block Parser
 def FastMeterConfigurationBlock(data: AnyStr, byteorder: str = 'big',
@@ -488,26 +488,28 @@ def FastMeterConfigurationBlock(data: AnyStr, byteorder: str = 'big',
         ind = 16
         struct['analogchannels'] = []
         for _ in range(struct['numanalogins']):
-            dict = {}
+            data_dict = {}
             bytstr = bytes(bytArr[ind:ind+6])
-            dict['name'] = ''
+            data_dict['name'] = ''
             for byte in bytstr:
                 char = chr(byte)
                 if byte != 0:
-                    dict['name']    += char
+                    data_dict['name']    += char
             ind += 6
-            dict['channeltype'] = bytArr[ind]
-            dict['factortype']  = bytArr[ind+1]
-            dict['scaleoffset'] = int.from_bytes( bytArr[ind:ind+2],
-                                                  byteorder=byteorder,
-                                                  signed=signed )
+            data_dict['channeltype'] = bytArr[ind]
+            data_dict['factortype']  = bytArr[ind+1]
+            data_dict['scaleoffset'] = int.from_bytes(
+                bytArr[ind:ind+2],
+                byteorder=byteorder,
+                signed=signed
+            )
             ind += 4
             # Append the Analog Channel Description:
-            struct['analogchannels'].append( dict )
+            struct['analogchannels'].append( data_dict )
         # Iteratively Interpret the Calculation Blocks
         struct['calcblocks'] = []
         for _ in range(struct['numcalcblocks']):
-            dict = {}
+            data_dict = {}
             # Determine the Line Configuration
             # rot:      Rotation
             # vConDP:   Delta Connected, Positive Sequence
@@ -520,57 +522,58 @@ def FastMeterConfigurationBlock(data: AnyStr, byteorder: str = 'big',
                 byte_like=True
             )
             # Evaluate Rotation
-            dict['line'] = val
-            dict['rotation'] = 'ACB' if rot else 'ABC'
+            data_dict['line'] = val
+            data_dict['rotation'] = 'ACB' if rot else 'ABC'
             # Evaluate Voltage Connection
             if vConDN:
-                dict['voltage'] = 'AC-BA-CB'
+                data_dict['voltage'] = 'AC-BA-CB'
             elif vConDP:
-                dict['voltage'] = 'AB-BC-CA'
+                data_dict['voltage'] = 'AB-BC-CA'
             else:
-                dict['voltage'] = 'Y'
+                data_dict['voltage'] = 'Y'
             # Evaluate Current Connection
             if iConDN:
-                dict['current'] = 'AC-BA-CB'
+                data_dict['current'] = 'AC-BA-CB'
             elif iConDP:
-                dict['current'] = 'AB-BC-CA'
+                data_dict['current'] = 'AB-BC-CA'
             else:
-                dict['current'] = 'Y'
+                data_dict['current'] = 'Y'
             ind += 1
             # Determine the Calculation Type
             val = bytArr[ind]
-            dict['type'] = val
+            data_dict['type'] = val
             ind += 1
             if val == 0:
-                dict['typedesc'] = 'standard-power'
+                data_dict['typedesc'] = 'standard-power'
             elif val == 1:
-                dict['typedesc'] = '2-1/2 element Δ power'
+                data_dict['typedesc'] = '2-1/2 element Δ power'
             elif val == 2:
-                dict['typedesc'] = 'voltages only'
+                data_dict['typedesc'] = 'voltages only'
             elif val == 3:
-                dict['typedesc'] = 'currents only'
+                data_dict['typedesc'] = 'currents only'
             elif val == 4:
-                dict['typedesc'] = 'single-phase IA and VA only'
+                data_dict['typedesc'] = 'single-phase IA and VA only'
             elif val == 5:
-                dict['typedesc'] = 'standard-power with two sets of currents'
+                data_dict['typedesc'] = \
+                    'standard-power with two sets of currents'
             else:
-                dict['typedesc'] = (
+                data_dict['typedesc'] = (
                     '2-1/2 element Δ power with two sets of currents'
                 )
             # Determine Skew Correction offset, Rs offset, and Xs offset
-            dict['skewoffset'] = bytes(bytArr[ind:ind+2])
-            dict['rsoffset'] = bytes(bytArr[ind+2:ind+4])
-            dict['xsoffset'] = bytes(bytArr[ind+4:ind+6])
+            data_dict['skewoffset'] = bytes(bytArr[ind:ind+2])
+            data_dict['rsoffset'] = bytes(bytArr[ind+2:ind+4])
+            data_dict['xsoffset'] = bytes(bytArr[ind+4:ind+6])
             # Determine Current Indicies
             ind += 1
-            dict['iaindex'] = bytArr[ind+0]
-            dict['ibindex'] = bytArr[ind+1]
-            dict['icindex'] = bytArr[ind+2]
-            dict['vaindex'] = bytArr[ind+3]
-            dict['vbindex'] = bytArr[ind+4]
-            dict['vcindex'] = bytArr[ind+5]
+            data_dict['iaindex'] = bytArr[ind+0]
+            data_dict['ibindex'] = bytArr[ind+1]
+            data_dict['icindex'] = bytArr[ind+2]
+            data_dict['vaindex'] = bytArr[ind+3]
+            data_dict['vbindex'] = bytArr[ind+4]
+            data_dict['vcindex'] = bytArr[ind+5]
             # Store Dictionary
-            struct['calcblocks'].append(dict)
+            struct['calcblocks'].append(data_dict)
         if verbose:
             print("Generic Fast Meter Configuration Block Information")
             print("Command:", struct['command'])
@@ -587,8 +590,8 @@ def FastMeterConfigurationBlock(data: AnyStr, byteorder: str = 'big',
             print("Digital Channel Offset:",struct['digitaloffset'])
         # Return the Generated Structure
         return struct
-    except IndexError:
-        raise ValueError("Invalid data string response")
+    except IndexError as err:
+        raise ValueError("Invalid data string response") from err
 
 # Define Function to Parse a Fast Operate Configuration Block
 def FastOpConfigurationBlock(data: AnyStr, byteorder: str = 'big',
@@ -665,8 +668,8 @@ def FastOpConfigurationBlock(data: AnyStr, byteorder: str = 'big',
             print("Pulse Command Supported:",struct['pulsesupported'])
         # Return Structure
         return struct
-    except IndexError:
-        raise ValueError("Invalid data string response")
+    except IndexError as err:
+        raise ValueError("Invalid data string response") from err
 ################################################################################
 
 ################################################################################

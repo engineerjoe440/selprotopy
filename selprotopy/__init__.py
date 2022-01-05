@@ -101,9 +101,8 @@ class SelClient():
                 relay)
     """
 
-    def __init__(self, connApi, autoconfig_now: bool = True, 
-                 logger: logging.Logger = None, verbose: bool = False,
-                 debug: bool = False, **kwargs):
+    def __init__(self, connApi, logger: logging.Logger = None,
+                 verbose: bool = False, debug: bool = False, **kwargs):
         """Prepare SELClient."""
         # Initialize Inputs
         self.conn = connApi
@@ -133,6 +132,12 @@ class SelClient():
         self.partno  = ''
         self.config  = ''
 
+        # Define Parameters to Indicate Whether Specific Commands are Supported
+        self.fast_meter_supported = False
+        self.fast_meter_demand_supported = False
+        self.fast_meter_peak_demand_supported = False
+        self.fast_operate_supported = False
+
         # Define the Various Command Defaults
         self.fmconfigcommand1   = commands.FM_CONFIG_BLOCK
         self.fmcommand1         = commands.FM_DEMAND_CONFIG_BLOCK
@@ -154,7 +159,7 @@ class SelClient():
             raise exceptions.ConnVerificationFail("Verification Failed.")
         if verbose: print('Connection Verified.')
         self.quit()
-        if autoconfig_now:
+        if 'autoconfig' in kwargs.keys():
             # Run Auto-Configuration
             self.autoconfig(verbose=verbose)
 
@@ -194,13 +199,14 @@ class SelClient():
     def _read_to_prompt(self, prompt_str=commands.PROMPT):
         # Telnetlib Supports a Timeout
         if isinstance(self.conn, telnetlib.Telnet):
-            response = self.conn.read_until( commands.PROMPT,
-                                             timeout=self.timeout )
+            response = self.conn.read_until(prompt_str, timeout=self.timeout)
         # PySerial Does not Support Timeout
         else:
-            response = self.conn.read_until( commands.PROMPT )
-        if self.logger: self.logger.info(f'Rx: {response}')
-        if self.debug: print(response)
+            response = self.conn.read_until(prompt_str)
+        if self.logger:
+            self.logger.debug(f'Rx: {response}')
+        if self.debug:
+            print(response)
         return response
 
     # Define Method to Read All Data After a Command (and to next relay prompt)
@@ -384,7 +390,7 @@ class SelClient():
             return True
 
     # Define Method to Perform Auto-Configuration Process
-    def autoconfig( self, verbose: bool = False, **kwargs ):
+    def autoconfig( self, attempts: int = 0, verbose: bool = False, **kwargs ):
         """
         Autoconfigure SELClient Instance.
 
@@ -416,9 +422,15 @@ class SelClient():
         autoconfig_fastmeter_peakdemand : Auto Configuration for Fast Meter
                                             Peak Demand
         autoconfig_fastoperate          : Auto Configuration for Fast Operate
+        autoconfig_relay_definition     : Auto Configuration for Relay
+                                            Definition Block
 
         Parameters
         ----------
+        attempts:       int, optional
+                        Number of autoconfiguration attempts, setting to `0`
+                        will allow for repeated autoconfiguration until all
+                        stages succeed. Defaults to 0
         verbose:        bool, optional
                         Control to dictate whether verbose printing operations
                         should be used (often for debugging and learning
@@ -430,13 +442,87 @@ class SelClient():
                         Relay's Configured FID as Confirmation of Successful
                         Automatic Configuration
         """
-        self.quit()
+        # Manage Repeating Attempts
+        attempts = int(attempts)
+        count = 0
+        while (count < attempts) or (attempts == 0):
+            count += 1
+            self.quit()
+            # Determine Command Strings and Relay Information
+            self.autoconfig_relay_definition( verbose=self.debug, **kwargs )
+            if self.fast_meter_supported:
+                self.autoconfig_fastmeter( verbose=self.debug )
+            if self.fast_meter_demand_supported:
+                self.autoconfig_fastmeter_demand( verbose=self.debug )
+            if self.fast_meter_peak_demand_supported:
+                self.autoconfig_fastmeter_peakdemand( verbose=self.debug )
+            if self.fast_operate_supported:
+                self.autoconfig_fastoperate( verbose=self.debug )
+            # Determine if Level 0, and Escalate Accordingly
+            if self.access_level()[0] == 0:
+                # Access Level 1 Required to Request DNA
+                self.access_level_1( **kwargs )
+            # Request Relay ENA Block
+            # TODO
+            # Request Relay DNA Block
+            self._read_clean_prompt()
+            if verbose: print("Reading Relay DNA Block...")
+            self.conn.write( commands.DNA )
+            self.dnaDef = protoparser.RelayDnaBlock(
+                self._read_command_response(commands.DNA),
+                encoding='utf-8',
+                verbose=self.debug
+            )
+            # Request Relay BNA Block
+            # TODO
+            # Request Relay ID Block
+            if verbose: print("Reading Relay ID Block...")
+            self.conn.write( commands.ID )
+            id_block = protoparser.RelayIdBlock(
+                self._read_command_response(commands.ID),
+                encoding='utf-8',
+                verbose=self.debug
+            )
+            # Store Relay Information
+            self.fid    = id_block['FID']
+            self.bfid   = id_block['BFID']
+            self.cid    = id_block['CID']
+            self.devid  = id_block['DEVID']
+            self.partno = id_block['PARTNO']
+            self.config = id_block['CONFIG']
+            # Return the Relay's FID
+            return self.fid
+
+    # Define Method to Pack the Config Messages
+    def autoconfig_relay_definition(self, verbose: bool = False):
+        """
+        Autoconfigure SEL Client for Relay Definition Block.
+
+        Method to operate the standard auto-configuration process
+        with a connected relay to identify the standard messages required to
+        interact with the device and poll specific datasets.
+
+        See Also
+        --------
+        autoconfig                      : Relay Auto Configuration
+        autoconfig_fastmeter_demand     : Auto Config for Fast Meter Demand
+        autoconfig_fastmeter_peakdemand : Auto Config for Fast Meter Pk Demand
+        autoconfig_fastoperate          : Auto Config for Fast Operate
+
+        Parameters
+        ----------
+        verbose:        bool, optional
+                        Control to dictate whether verbose printing operations
+                        should be used (often for debugging purposes).
+                        Defaults to False
+        """
         # Request Relay Definition
         if verbose: print("Reading Relay Definition Block...")
+        verbose = verbose or self.debug
         self.conn.write( commands.RELAY_DEFENITION + commands.CR )
         definition = protoparser.RelayDefinitionBlock(
             self._read_command_response(commands.RELAY_DEFENITION),
-            verbose=self.debug
+            verbose=verbose
         )
         # Load the Relay Definition Information and Request the Meter Blocks
         if definition['fmmessagesup'] >= 1:
@@ -446,7 +532,7 @@ class SelClient():
                 definition['fmcommandinfo'][0]['configcommand']
             self.fmcommand1         = \
                 definition['fmcommandinfo'][0]['command']
-            self.autoconfig_fastmeter( verbose=self.debug )
+            self.fast_meter_supported = True
         if definition['fmmessagesup'] >= 2:
             if verbose:
                 print("Reading Fast Meter Demand Definition Block...")
@@ -454,7 +540,7 @@ class SelClient():
                 definition['fmcommandinfo'][1]['configcommand']
             self.fmcommand2         = \
                 definition['fmcommandinfo'][1]['command']
-            self.autoconfig_fastmeter_demand( verbose=self.debug )
+            self.fast_meter_demand_supported = True
         if definition['fmmessagesup'] >= 3:
             if verbose:
                 print("Reading Fast Meter Peak Demand Definition Block...")
@@ -462,50 +548,19 @@ class SelClient():
                 definition['fmcommandinfo'][2]['configcommand']
             self.fmcommand3         = \
                 definition['fmcommandinfo'][2]['command']
-            self.autoconfig_fastmeter_peakdemand( verbose=self.debug )
+            self.fast_meter_peak_demand_supported = True
+        # Interpret the Fast Operate Information if Present
         if definition['fopcommandinfo'] != '':
             if verbose:
                 print("Reading Fast Operate Definition Block...")
             self.fopcommandinfo     = definition['fopcommandinfo']
-            self.autoconfig_fastoperate( verbose=self.debug )
+            self.fast_operate_supported = True
+        # Interpret the Fast Message Information if Present
         if definition['fmsgcommandinfo'] != '':
             if verbose:
                 print("Reading Fast Message Definition Block...")
             self.fmsgcommandinfo    = definition['fmsgcommandinfo']
-        # Determine if Level 0, and Escalate Accordingly
-        if self.access_level()[0] == 0:
-            # Access Level 1 Required to Request DNA
-            self.access_level_1( **kwargs )
-        # Request Relay ENA Block
-        # TODO
-        # Request Relay DNA Block
-        self._read_clean_prompt()
-        if verbose: print("Reading Relay DNA Block...")
-        self.conn.write( commands.DNA )
-        self.dnaDef = protoparser.RelayDnaBlock(
-            self._read_command_response(commands.DNA),
-            encoding='utf-8',
-            verbose=self.debug
-        )
-        # Request Relay BNA Block
-        # TODO
-        # Request Relay ID Block
-        if verbose: print("Reading Relay ID Block...")
-        self.conn.write( commands.ID )
-        id_block = protoparser.RelayIdBlock(
-            self._read_command_response(commands.ID),
-            encoding='utf-8',
-            verbose=self.debug
-        )
-        # Store Relay Information
-        self.fid    = id_block['FID']
-        self.bfid   = id_block['BFID']
-        self.cid    = id_block['CID']
-        self.devid  = id_block['DEVID']
-        self.partno = id_block['PARTNO']
-        self.config = id_block['CONFIG']
-        # Return the Relay's FID
-        return self.fid
+
 
     # Define Method to Run the Fast Meter Configuration
     def autoconfig_fastmeter(self, verbose: bool = False):
@@ -534,7 +589,8 @@ class SelClient():
         self._read_clean_prompt()
         self.conn.write( self.fmconfigcommand1 + commands.CR )
         self.fastMeterDef = protoparser.FastMeterConfigurationBlock(
-            self._read_to_prompt(), verbose=verbose
+            self._read_to_prompt(),
+            verbose=verbose,
         )
 
     # Define Method to Run the Fast Meter Demand Configuration
@@ -564,7 +620,8 @@ class SelClient():
         self._read_clean_prompt()
         self.conn.write( self.fmconfigcommand2 + commands.CR )
         self.fastDemandDef = protoparser.FastMeterConfigurationBlock(
-            self._read_to_prompt(), verbose=verbose
+            self._read_to_prompt(),
+            verbose=verbose,
         )
 
     # Define Method to Run the Fast Meter Peak Demand Configuration
@@ -594,7 +651,8 @@ class SelClient():
         self._read_clean_prompt()
         self.conn.write( self.fmconfigcommand3 + commands.CR )
         self.fastPkDemandDef = protoparser.FastMeterConfigurationBlock(
-            self._read_to_prompt(), verbose=verbose
+            self._read_to_prompt(),
+            verbose=verbose,
         )
 
     # Define Method to Run the Fast Operate Configuration
@@ -624,7 +682,8 @@ class SelClient():
         self._read_clean_prompt()
         self.conn.write( self.fopcommandinfo + commands.CR )
         self.fastOpDef = protoparser.FastOpConfigurationBlock(
-            self._read_to_prompt(), verbose=verbose
+            self._read_to_prompt(),
+            verbose=verbose,
         )
 
     # Define Method to Perform Fast Meter Polling
@@ -668,7 +727,7 @@ class SelClient():
             ),
             self.fastMeterDef,
             self.dnaDef,
-            verbose=verbose
+            verbose=verbose,
         )
         # Return the Response
         return response
@@ -742,14 +801,13 @@ class SelClient():
 
 # Define Builtin Test Mechanism
 if __name__ == '__main__':
-    import logging
     logging.basicConfig(filename='traffic.log', level=logging.DEBUG)
-    logger = logging.getLogger(__name__)
+    logger_obj = logging.getLogger(__name__)
     print('Establishing Connection...')
     with telnetlib.Telnet('192.168.254.10', 2323) as tn:
         print('Initializing Client...')
-        poller = SelClient( tn, logger=logger, verbose=True, debug=True )
-        print( poller.fastOpDef )
+        poller = SelClient( tn, logger=logger_obj, verbose=True, debug=True )
+        poller.autoconfig(verbose=True)
         poller.send_remote_bit_fast_op('RB1', 'pulse')
         d = None
         for _ in range(10):
