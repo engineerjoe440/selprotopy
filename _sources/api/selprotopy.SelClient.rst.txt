@@ -14,6 +14,14 @@ SelClient
 
    
    
+
+   .. rubric:: Attributes Summary
+
+   .. autosummary::
+   
+      ~SelClient.logger
+
+   
    
 
    
@@ -41,6 +49,13 @@ SelClient
    
 
    
+   
+
+   .. rubric:: Attributes Documentation
+
+   
+   .. autoattribute:: logger
+
    
    
 

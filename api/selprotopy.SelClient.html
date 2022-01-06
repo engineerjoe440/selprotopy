@@ -190,6 +190,13 @@ relay)</p>
 </dl>
 </dd></dl>
 
+<dl class="field-list simple">
+<dt class="field-odd">Attributes</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>logger</strong></dt><dd></dd>
+</dl>
+</dd>
+</dl>
 <p class="rubric">Methods</p>
 <table class="longtable docutils align-default">
 <colgroup>
@@ -209,32 +216,52 @@ relay)</p>
 <tr class="row-even"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig" title="selprotopy.SelClient.autoconfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig</span></code></a>([attempts, verbose])</p></td>
 <td><p>Autoconfigure SELClient Instance.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig_fastmeter" title="selprotopy.SelClient.autoconfig_fastmeter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_fastmeter</span></code></a>([verbose])</p></td>
-<td><p>Autoconfigure Fast Meter for SEL Client.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig_fastmeter_demand" title="selprotopy.SelClient.autoconfig_fastmeter_demand"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_fastmeter_demand</span></code></a>([verbose])</p></td>
-<td><p>Autoconfigure Fast Meter Demand for SEL Client.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig_fastmeter_peakdemand" title="selprotopy.SelClient.autoconfig_fastmeter_peakdemand"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_fastmeter_peakdemand</span></code></a>([verbose])</p></td>
-<td><p>Autoconfigure Fast Meter Peak Demand for SEL Client.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig_fastoperate" title="selprotopy.SelClient.autoconfig_fastoperate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_fastoperate</span></code></a>([verbose])</p></td>
-<td><p>Autoconfigure Fast Operate for SEL Client.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig_relay_definition" title="selprotopy.SelClient.autoconfig_relay_definition"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_relay_definition</span></code></a>([verbose])</p></td>
-<td><p>Autoconfigure SEL Client for Relay Definition Block.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.poll_fast_meter" title="selprotopy.SelClient.poll_fast_meter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">poll_fast_meter</span></code></a>([minAccLevel, verbose])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.poll_fast_meter" title="selprotopy.SelClient.poll_fast_meter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">poll_fast_meter</span></code></a>([minAccLevel, verbose])</p></td>
 <td><p>Poll Fast Meter Data from SEL Relay/IED.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.quit" title="selprotopy.SelClient.quit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">quit</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.quit" title="selprotopy.SelClient.quit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">quit</span></code></a>()</p></td>
 <td><p>Quit Method.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.send_breaker_bit_fast_op" title="selprotopy.SelClient.send_breaker_bit_fast_op"><code class="xref py py-obj docutils literal notranslate"><span class="pre">send_breaker_bit_fast_op</span></code></a>(control_point[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.send_breaker_bit_fast_op" title="selprotopy.SelClient.send_breaker_bit_fast_op"><code class="xref py py-obj docutils literal notranslate"><span class="pre">send_breaker_bit_fast_op</span></code></a>(control_point[, ...])</p></td>
 <td><p>Send a Fast Operate Breaker Bit Control.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.send_remote_bit_fast_op" title="selprotopy.SelClient.send_remote_bit_fast_op"><code class="xref py py-obj docutils literal notranslate"><span class="pre">send_remote_bit_fast_op</span></code></a>(control_point[, command])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.send_remote_bit_fast_op" title="selprotopy.SelClient.send_remote_bit_fast_op"><code class="xref py py-obj docutils literal notranslate"><span class="pre">send_remote_bit_fast_op</span></code></a>(control_point[, command])</p></td>
 <td><p>Send a Fast Operate Remote Bit Control.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 78%" />
+<col style="width: 22%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><strong>autoconfig_fastmeter</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><strong>autoconfig_fastmeter_demand</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><strong>autoconfig_fastmeter_peakdemand</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><strong>autoconfig_fastoperate</strong></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><strong>autoconfig_relay_definition</strong></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes Summary</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#selprotopy.SelClient.logger" title="selprotopy.SelClient.logger"><code class="xref py py-obj docutils literal notranslate"><span class="pre">logger</span></code></a></p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -257,20 +284,20 @@ relay)</p>
 <tr class="row-even"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig" title="selprotopy.SelClient.autoconfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig</span></code></a>([attempts, verbose])</p></td>
 <td><p>Autoconfigure SELClient Instance.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig_fastmeter" title="selprotopy.SelClient.autoconfig_fastmeter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_fastmeter</span></code></a>([verbose])</p></td>
-<td><p>Autoconfigure Fast Meter for SEL Client.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#selprotopy.SelClient.autoconfig_fastmeter" title="selprotopy.SelClient.autoconfig_fastmeter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_fastmeter</span></code></a>(*args, **kwargs)</p></td>
+<td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig_fastmeter_demand" title="selprotopy.SelClient.autoconfig_fastmeter_demand"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_fastmeter_demand</span></code></a>([verbose])</p></td>
-<td><p>Autoconfigure Fast Meter Demand for SEL Client.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#selprotopy.SelClient.autoconfig_fastmeter_demand" title="selprotopy.SelClient.autoconfig_fastmeter_demand"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_fastmeter_demand</span></code></a>(*args, **kwargs)</p></td>
+<td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig_fastmeter_peakdemand" title="selprotopy.SelClient.autoconfig_fastmeter_peakdemand"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_fastmeter_peakdemand</span></code></a>([verbose])</p></td>
-<td><p>Autoconfigure Fast Meter Peak Demand for SEL Client.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#selprotopy.SelClient.autoconfig_fastmeter_peakdemand" title="selprotopy.SelClient.autoconfig_fastmeter_peakdemand"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_fastmeter_peakdemand</span></code></a>(*args, **kwargs)</p></td>
+<td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig_fastoperate" title="selprotopy.SelClient.autoconfig_fastoperate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_fastoperate</span></code></a>([verbose])</p></td>
-<td><p>Autoconfigure Fast Operate for SEL Client.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#selprotopy.SelClient.autoconfig_fastoperate" title="selprotopy.SelClient.autoconfig_fastoperate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_fastoperate</span></code></a>(*args, **kwargs)</p></td>
+<td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig_relay_definition" title="selprotopy.SelClient.autoconfig_relay_definition"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_relay_definition</span></code></a>([verbose])</p></td>
-<td><p>Autoconfigure SEL Client for Relay Definition Block.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#selprotopy.SelClient.autoconfig_relay_definition" title="selprotopy.SelClient.autoconfig_relay_definition"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_relay_definition</span></code></a>(*args, **kwargs)</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.poll_fast_meter" title="selprotopy.SelClient.poll_fast_meter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">poll_fast_meter</span></code></a>([minAccLevel, verbose])</p></td>
 <td><p>Poll Fast Meter Data from SEL Relay/IED.</p></td>
@@ -286,6 +313,12 @@ relay)</p>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Attributes Documentation</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="selprotopy.SelClient.logger">
+<span class="sig-name descname"><span class="pre">logger</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#selprotopy.SelClient.logger" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <p class="rubric">Methods Documentation</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="selprotopy.SelClient.access_level">
@@ -396,15 +429,15 @@ meter blocks by way of separate method calls.</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <dl class="simple">
-<dt><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig_fastmeter" title="selprotopy.SelClient.autoconfig_fastmeter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_fastmeter</span></code></a></dt><dd><p>Auto Configuration for Fast Meter</p>
+<dt><a class="reference internal" href="#selprotopy.SelClient.autoconfig_fastmeter" title="selprotopy.SelClient.autoconfig_fastmeter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_fastmeter</span></code></a></dt><dd><p>Auto Configuration for Fast Meter</p>
 </dd>
-<dt><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig_fastmeter_demand" title="selprotopy.SelClient.autoconfig_fastmeter_demand"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_fastmeter_demand</span></code></a></dt><dd><p>Auto Configuration for Fast Meter Demand</p>
+<dt><a class="reference internal" href="#selprotopy.SelClient.autoconfig_fastmeter_demand" title="selprotopy.SelClient.autoconfig_fastmeter_demand"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_fastmeter_demand</span></code></a></dt><dd><p>Auto Configuration for Fast Meter Demand</p>
 </dd>
-<dt><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig_fastmeter_peakdemand" title="selprotopy.SelClient.autoconfig_fastmeter_peakdemand"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_fastmeter_peakdemand</span></code></a></dt><dd><p>Auto Configuration for Fast Meter Peak Demand</p>
+<dt><a class="reference internal" href="#selprotopy.SelClient.autoconfig_fastmeter_peakdemand" title="selprotopy.SelClient.autoconfig_fastmeter_peakdemand"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_fastmeter_peakdemand</span></code></a></dt><dd><p>Auto Configuration for Fast Meter Peak Demand</p>
 </dd>
-<dt><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig_fastoperate" title="selprotopy.SelClient.autoconfig_fastoperate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_fastoperate</span></code></a></dt><dd><p>Auto Configuration for Fast Operate</p>
+<dt><a class="reference internal" href="#selprotopy.SelClient.autoconfig_fastoperate" title="selprotopy.SelClient.autoconfig_fastoperate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_fastoperate</span></code></a></dt><dd><p>Auto Configuration for Fast Operate</p>
 </dd>
-<dt><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig_relay_definition" title="selprotopy.SelClient.autoconfig_relay_definition"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_relay_definition</span></code></a></dt><dd><p>Auto Configuration for Relay Definition Block</p>
+<dt><a class="reference internal" href="#selprotopy.SelClient.autoconfig_relay_definition" title="selprotopy.SelClient.autoconfig_relay_definition"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_relay_definition</span></code></a></dt><dd><p>Auto Configuration for Relay Definition Block</p>
 </dd>
 </dl>
 </div>
@@ -424,148 +457,28 @@ purposes). Defaults to False</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="selprotopy.SelClient.autoconfig_fastmeter">
-<span class="sig-name descname"><span class="pre">autoconfig_fastmeter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#selprotopy.SelClient.autoconfig_fastmeter" title="Permalink to this definition">¶</a></dt>
-<dd><p>Autoconfigure Fast Meter for SEL Client.</p>
-<p>Method to operate the standard auto-configuration process
-with a connected relay to identify the standard fast meter
-parameters of the relay.</p>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<dl class="simple">
-<dt><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig" title="selprotopy.SelClient.autoconfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig</span></code></a></dt><dd><p>Relay Auto Configuration</p>
-</dd>
-<dt><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig_fastmeter_demand" title="selprotopy.SelClient.autoconfig_fastmeter_demand"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_fastmeter_demand</span></code></a></dt><dd><p>Auto Config for Fast Meter Demand</p>
-</dd>
-<dt><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig_fastmeter_peakdemand" title="selprotopy.SelClient.autoconfig_fastmeter_peakdemand"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_fastmeter_peakdemand</span></code></a></dt><dd><p>Auto Config for Fast Meter Pk Demand</p>
-</dd>
-<dt><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig_fastoperate" title="selprotopy.SelClient.autoconfig_fastoperate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_fastoperate</span></code></a></dt><dd><p>Auto Config for Fast Operate</p>
-</dd>
-</dl>
-</div>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – Control to dictate whether verbose printing operations
-should be used (often for debugging purposes).
-Defaults to False</p>
-</dd>
-</dl>
-</dd></dl>
+<span class="sig-name descname"><span class="pre">autoconfig_fastmeter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#selprotopy.SelClient.autoconfig_fastmeter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="selprotopy.SelClient.autoconfig_fastmeter_demand">
-<span class="sig-name descname"><span class="pre">autoconfig_fastmeter_demand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#selprotopy.SelClient.autoconfig_fastmeter_demand" title="Permalink to this definition">¶</a></dt>
-<dd><p>Autoconfigure Fast Meter Demand for SEL Client.</p>
-<p>Method to operate the standard auto-configuration process
-with a connected relay to identify the fast meter demand
-parameters of the relay.</p>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<dl class="simple">
-<dt><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig" title="selprotopy.SelClient.autoconfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig</span></code></a></dt><dd><p>Relay Auto Configuration</p>
-</dd>
-<dt><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig_fastmeter" title="selprotopy.SelClient.autoconfig_fastmeter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_fastmeter</span></code></a></dt><dd><p>Auto Config for Fast Meter</p>
-</dd>
-<dt><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig_fastmeter_peakdemand" title="selprotopy.SelClient.autoconfig_fastmeter_peakdemand"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_fastmeter_peakdemand</span></code></a></dt><dd><p>Auto Config for Fast Meter Pk Demand</p>
-</dd>
-<dt><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig_fastoperate" title="selprotopy.SelClient.autoconfig_fastoperate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_fastoperate</span></code></a></dt><dd><p>Auto Config for Fast Operate</p>
-</dd>
-</dl>
-</div>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – Control to dictate whether verbose printing operations
-should be used (often for debugging purposes).
-Defaults to False</p>
-</dd>
-</dl>
-</dd></dl>
+<span class="sig-name descname"><span class="pre">autoconfig_fastmeter_demand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#selprotopy.SelClient.autoconfig_fastmeter_demand" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="selprotopy.SelClient.autoconfig_fastmeter_peakdemand">
-<span class="sig-name descname"><span class="pre">autoconfig_fastmeter_peakdemand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#selprotopy.SelClient.autoconfig_fastmeter_peakdemand" title="Permalink to this definition">¶</a></dt>
-<dd><p>Autoconfigure Fast Meter Peak Demand for SEL Client.</p>
-<p>Method to operate the standard auto-configuration process
-with a connected relay to identify the fast meter peak demand
-parameters of the relay.</p>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<dl class="simple">
-<dt><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig" title="selprotopy.SelClient.autoconfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig</span></code></a></dt><dd><p>Relay Auto Configuration</p>
-</dd>
-<dt><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig_fastmeter" title="selprotopy.SelClient.autoconfig_fastmeter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_fastmeter</span></code></a></dt><dd><p>Auto Config for Fast Meter</p>
-</dd>
-<dt><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig_fastmeter_demand" title="selprotopy.SelClient.autoconfig_fastmeter_demand"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_fastmeter_demand</span></code></a></dt><dd><p>Auto Config for Fast Meter Demand</p>
-</dd>
-<dt><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig_fastoperate" title="selprotopy.SelClient.autoconfig_fastoperate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_fastoperate</span></code></a></dt><dd><p>Auto Config for Fast Operate</p>
-</dd>
-</dl>
-</div>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – Control to dictate whether verbose printing operations
-should be used (often for debugging purposes).
-Defaults to False</p>
-</dd>
-</dl>
-</dd></dl>
+<span class="sig-name descname"><span class="pre">autoconfig_fastmeter_peakdemand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#selprotopy.SelClient.autoconfig_fastmeter_peakdemand" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="selprotopy.SelClient.autoconfig_fastoperate">
-<span class="sig-name descname"><span class="pre">autoconfig_fastoperate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#selprotopy.SelClient.autoconfig_fastoperate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Autoconfigure Fast Operate for SEL Client.</p>
-<p>Method to operate the standard auto-configuration process
-with a connected relay to identify the fast operate parameters
-of the relay.</p>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<dl class="simple">
-<dt><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig" title="selprotopy.SelClient.autoconfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig</span></code></a></dt><dd><p>Relay Auto Configuration</p>
-</dd>
-<dt><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig_fastmeter" title="selprotopy.SelClient.autoconfig_fastmeter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_fastmeter</span></code></a></dt><dd><p>Auto Config for Fast Meter</p>
-</dd>
-<dt><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig_fastmeter_demand" title="selprotopy.SelClient.autoconfig_fastmeter_demand"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_fastmeter_demand</span></code></a></dt><dd><p>Auto Config for Fast Meter Demand</p>
-</dd>
-<dt><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig_fastmeter_peakdemand" title="selprotopy.SelClient.autoconfig_fastmeter_peakdemand"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_fastmeter_peakdemand</span></code></a></dt><dd><p>Auto Config for Fast Meter Pk Demand</p>
-</dd>
-</dl>
-</div>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – Control to dictate whether verbose printing operations
-should be used (often for debugging purposes).
-Defaults to False</p>
-</dd>
-</dl>
-</dd></dl>
+<span class="sig-name descname"><span class="pre">autoconfig_fastoperate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#selprotopy.SelClient.autoconfig_fastoperate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="selprotopy.SelClient.autoconfig_relay_definition">
-<span class="sig-name descname"><span class="pre">autoconfig_relay_definition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#selprotopy.SelClient.autoconfig_relay_definition" title="Permalink to this definition">¶</a></dt>
-<dd><p>Autoconfigure SEL Client for Relay Definition Block.</p>
-<p>Method to operate the standard auto-configuration process
-with a connected relay to identify the standard messages required to
-interact with the device and poll specific datasets.</p>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<dl class="simple">
-<dt><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig" title="selprotopy.SelClient.autoconfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig</span></code></a></dt><dd><p>Relay Auto Configuration</p>
-</dd>
-<dt><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig_fastmeter_demand" title="selprotopy.SelClient.autoconfig_fastmeter_demand"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_fastmeter_demand</span></code></a></dt><dd><p>Auto Config for Fast Meter Demand</p>
-</dd>
-<dt><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig_fastmeter_peakdemand" title="selprotopy.SelClient.autoconfig_fastmeter_peakdemand"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_fastmeter_peakdemand</span></code></a></dt><dd><p>Auto Config for Fast Meter Pk Demand</p>
-</dd>
-<dt><a class="reference internal" href="../selprotopy.html#selprotopy.SelClient.autoconfig_fastoperate" title="selprotopy.SelClient.autoconfig_fastoperate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">autoconfig_fastoperate</span></code></a></dt><dd><p>Auto Config for Fast Operate</p>
-</dd>
-</dl>
-</div>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – Control to dictate whether verbose printing operations
-should be used (often for debugging purposes).
-Defaults to False</p>
-</dd>
-</dl>
-</dd></dl>
+<span class="sig-name descname"><span class="pre">autoconfig_relay_definition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#selprotopy.SelClient.autoconfig_relay_definition" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="selprotopy.SelClient.poll_fast_meter">
