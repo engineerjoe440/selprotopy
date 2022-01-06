@@ -11,13 +11,13 @@ Supports:
 # Define Various Custom Exception Types
 class CommError(Exception):
     """Base Class for Communications Errors."""
-    
+
     pass
 
 
 class ParseError(CommError):
     """Base Class for Parsing Errors."""
-    
+
     pass
 
 
@@ -45,7 +45,7 @@ class MalformedByteArray(CommError):
 class ChecksumFail(CommError):
     """
     Checksum Comparison Failure.
-    
+
     Checksum validation has failed for the captured message, likely due to
     communications failure.
     """
@@ -66,7 +66,7 @@ class ConnVerificationFail(CommError):
 class MissingA5Head(ParseError):
     """
     Response Message Missing A5 Byte Heading.
-    
+
     Parsing of returned binary SEL Protocol message failed due to lack of
     required A5[C1] heading.
     """
@@ -78,11 +78,11 @@ class MissingA5Head(ParseError):
 class DnaDigitalsMisMatch(ParseError):
     """
     DNA Digital Sequence Doesn't Match Definition.
-    
+
     Dereferencing of digitals in response does not match the relay's DNA
     definition, may be caused by a communications error, or failed parse.
     """
-    
+
     pass
 
 ###############################################################################
@@ -92,11 +92,11 @@ class DnaDigitalsMisMatch(ParseError):
 class InvalidCommandType(ProtoError):
     """
     Invalid CommandType.
-    
+
     Invalid command type provided for Fast Operate, must be member of:
     ['SET', 'CLEAR', 'PULSE', 'OPEN', 'CLOSE'].
     """
-    
+
     pass
 
 
@@ -104,11 +104,21 @@ class InvalidCommandType(ProtoError):
 class InvalidControlType(ProtoError):
     """
     Invalid Control Type.
-    
+
     Invalid control type provided for Fast Operate, must be member of:
     ['REMOTE_BIT', 'BREAKER_BIT'].
     """
-    
+
+    pass
+
+# Define Generic Autoconfiguration Failure Exception
+class AutoConfigurationFailure(CommError):
+    """
+    Automatic Configuration Failure
+
+    Failed to complete the autoconfig process with the connected relay.
+    """
+
     pass
 
 

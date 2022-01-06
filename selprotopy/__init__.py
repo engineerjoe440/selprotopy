@@ -20,10 +20,7 @@ import telnetlib
 import logging
 
 # Local Imports
-from selprotopy import exceptions
-from selprotopy import commands
-from selprotopy import protoparser
-from selprotopy import telnetlib_support
+from selprotopy import exceptions, commands, protoparser, telnetlib_support
 
 # Describe Package for External Interpretation
 _name_ = "selprotopy"
@@ -161,7 +158,10 @@ class SelClient():
         self.quit()
         if 'autoconfig' in kwargs.keys():
             # Run Auto-Configuration
-            self.autoconfig(verbose=verbose)
+            if not isinstance(kwargs['autoconfig'], bool):
+                self.autoconfig(verbose=verbose)
+            elif bool(kwargs['autoconfig']):
+                self.autoconfig(verbose=verbose)
 
     # Define Connectivity Check Method
     def _verify_connection(self):
@@ -435,63 +435,71 @@ class SelClient():
                         Control to dictate whether verbose printing operations
                         should be used (often for debugging and learning
                         purposes). Defaults to False
-
-        Returns
-        -------
-        fid:            str
-                        Relay's Configured FID as Confirmation of Successful
-                        Automatic Configuration
         """
         # Manage Repeating Attempts
         attempts = int(attempts)
         count = 0
+        autoconfig_fail = True
         while (count < attempts) or (attempts == 0):
-            count += 1
-            self.quit()
-            # Determine Command Strings and Relay Information
-            self.autoconfig_relay_definition( verbose=self.debug, **kwargs )
-            if self.fast_meter_supported:
-                self.autoconfig_fastmeter( verbose=self.debug )
-            if self.fast_meter_demand_supported:
-                self.autoconfig_fastmeter_demand( verbose=self.debug )
-            if self.fast_meter_peak_demand_supported:
-                self.autoconfig_fastmeter_peakdemand( verbose=self.debug )
-            if self.fast_operate_supported:
-                self.autoconfig_fastoperate( verbose=self.debug )
-            # Determine if Level 0, and Escalate Accordingly
-            if self.access_level()[0] == 0:
-                # Access Level 1 Required to Request DNA
-                self.access_level_1( **kwargs )
-            # Request Relay ENA Block
-            # TODO
-            # Request Relay DNA Block
-            self._read_clean_prompt()
-            if verbose: print("Reading Relay DNA Block...")
-            self.conn.write( commands.DNA )
-            self.dnaDef = protoparser.RelayDnaBlock(
-                self._read_command_response(commands.DNA),
-                encoding='utf-8',
-                verbose=self.debug
+            try:
+                count += 1
+                self.quit()
+                # Determine Command Strings and Relay Information
+                self.autoconfig_relay_definition( verbose=self.debug, **kwargs )
+                if self.fast_meter_supported:
+                    self.autoconfig_fastmeter( verbose=self.debug )
+                if self.fast_meter_demand_supported:
+                    self.autoconfig_fastmeter_demand( verbose=self.debug )
+                if self.fast_meter_peak_demand_supported:
+                    self.autoconfig_fastmeter_peakdemand( verbose=self.debug )
+                if self.fast_operate_supported:
+                    self.autoconfig_fastoperate( verbose=self.debug )
+                # Determine if Level 0, and Escalate Accordingly
+                if self.access_level()[0] == 0:
+                    # Access Level 1 Required to Request DNA
+                    self.access_level_1( **kwargs )
+                # Request Relay ENA Block
+                # TODO
+                # Request Relay DNA Block
+                self._read_clean_prompt()
+                if verbose: print("Reading Relay DNA Block...")
+                self.conn.write( commands.DNA )
+                self.dnaDef = protoparser.RelayDnaBlock(
+                    self._read_command_response(commands.DNA),
+                    encoding='utf-8',
+                    verbose=self.debug
+                )
+                # Request Relay BNA Block
+                # TODO
+                # Request Relay ID Block
+                if verbose: print("Reading Relay ID Block...")
+                self.conn.write( commands.ID )
+                id_block = protoparser.RelayIdBlock(
+                    self._read_command_response(commands.ID),
+                    encoding='utf-8',
+                    verbose=self.debug
+                )
+                # Store Relay Information
+                self.fid    = id_block['FID']
+                self.bfid   = id_block['BFID']
+                self.cid    = id_block['CID']
+                self.devid  = id_block['DEVID']
+                self.partno = id_block['PARTNO']
+                self.config = id_block['CONFIG']
+                # Indicate Successful Autoconfig
+                autoconfig_fail = False
+            except exceptions.MalformedByteArray as err:
+                if self.logger:
+                    self.logger.exception(
+                        "Malformed response received during autoconfiguration.",
+                        exc_info=err
+                    )
+                continue # Try Autoconfig Again
+        # Raise Error if Autoconfiguration Failure Found
+        if autoconfig_fail:
+            raise exceptions.AutoConfigurationFailure(
+                "Automatic Configuration Failed."
             )
-            # Request Relay BNA Block
-            # TODO
-            # Request Relay ID Block
-            if verbose: print("Reading Relay ID Block...")
-            self.conn.write( commands.ID )
-            id_block = protoparser.RelayIdBlock(
-                self._read_command_response(commands.ID),
-                encoding='utf-8',
-                verbose=self.debug
-            )
-            # Store Relay Information
-            self.fid    = id_block['FID']
-            self.bfid   = id_block['BFID']
-            self.cid    = id_block['CID']
-            self.devid  = id_block['DEVID']
-            self.partno = id_block['PARTNO']
-            self.config = id_block['CONFIG']
-            # Return the Relay's FID
-            return self.fid
 
     # Define Method to Pack the Config Messages
     def autoconfig_relay_definition(self, verbose: bool = False):
