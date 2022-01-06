@@ -21,6 +21,7 @@ import logging
 
 # Local Imports
 from selprotopy import exceptions, commands, protoparser, telnetlib_support
+from selprotopy.common import __retry__
 
 # Describe Package for External Interpretation
 _name_ = "selprotopy"
@@ -97,6 +98,7 @@ class SelClient():
                 Relay's described configuration string (set by connection with
                 relay)
     """
+    logger = None
 
     def __init__(self, connApi, logger: logging.Logger = None,
                  verbose: bool = False, debug: bool = False, **kwargs):
@@ -436,73 +438,54 @@ class SelClient():
                         should be used (often for debugging and learning
                         purposes). Defaults to False
         """
-        # Manage Repeating Attempts
-        attempts = int(attempts)
-        count = 0
-        autoconfig_fail = True
-        while (count < attempts) or (attempts == 0):
-            try:
-                count += 1
-                self.quit()
-                # Determine Command Strings and Relay Information
-                self.autoconfig_relay_definition( verbose=self.debug, **kwargs )
-                if self.fast_meter_supported:
-                    self.autoconfig_fastmeter( verbose=self.debug )
-                if self.fast_meter_demand_supported:
-                    self.autoconfig_fastmeter_demand( verbose=self.debug )
-                if self.fast_meter_peak_demand_supported:
-                    self.autoconfig_fastmeter_peakdemand( verbose=self.debug )
-                if self.fast_operate_supported:
-                    self.autoconfig_fastoperate( verbose=self.debug )
-                # Determine if Level 0, and Escalate Accordingly
-                if self.access_level()[0] == 0:
-                    # Access Level 1 Required to Request DNA
-                    self.access_level_1( **kwargs )
-                # Request Relay ENA Block
-                # TODO
-                # Request Relay DNA Block
-                self._read_clean_prompt()
-                if verbose: print("Reading Relay DNA Block...")
-                self.conn.write( commands.DNA )
-                self.dnaDef = protoparser.RelayDnaBlock(
-                    self._read_command_response(commands.DNA),
-                    encoding='utf-8',
-                    verbose=self.debug
-                )
-                # Request Relay BNA Block
-                # TODO
-                # Request Relay ID Block
-                if verbose: print("Reading Relay ID Block...")
-                self.conn.write( commands.ID )
-                id_block = protoparser.RelayIdBlock(
-                    self._read_command_response(commands.ID),
-                    encoding='utf-8',
-                    verbose=self.debug
-                )
-                # Store Relay Information
-                self.fid    = id_block['FID']
-                self.bfid   = id_block['BFID']
-                self.cid    = id_block['CID']
-                self.devid  = id_block['DEVID']
-                self.partno = id_block['PARTNO']
-                self.config = id_block['CONFIG']
-                # Indicate Successful Autoconfig
-                autoconfig_fail = False
-            except exceptions.MalformedByteArray as err:
-                if self.logger:
-                    self.logger.exception(
-                        "Malformed response received during autoconfiguration.",
-                        exc_info=err
-                    )
-                continue # Try Autoconfig Again
-        # Raise Error if Autoconfiguration Failure Found
-        if autoconfig_fail:
-            raise exceptions.AutoConfigurationFailure(
-                "Automatic Configuration Failed."
-            )
+        self.quit()
+        # Determine Command Strings and Relay Information
+        self.autoconfig_relay_definition(attempts=attempts, verbose=self.debug)
+        if self.fast_meter_supported:
+            self.autoconfig_fastmeter( verbose=self.debug )
+        if self.fast_meter_demand_supported:
+            self.autoconfig_fastmeter_demand( verbose=self.debug )
+        if self.fast_meter_peak_demand_supported:
+            self.autoconfig_fastmeter_peakdemand( verbose=self.debug )
+        if self.fast_operate_supported:
+            self.autoconfig_fastoperate( verbose=self.debug )
+        # Determine if Level 0, and Escalate Accordingly
+        if self.access_level()[0] == 0:
+            # Access Level 1 Required to Request DNA
+            self.access_level_1( **kwargs )
+        # Request Relay ENA Block
+        # TODO
+        # Request Relay DNA Block
+        self._read_clean_prompt()
+        if verbose: print("Reading Relay DNA Block...")
+        self.conn.write( commands.DNA )
+        self.dnaDef = protoparser.RelayDnaBlock(
+            self._read_command_response(commands.DNA),
+            encoding='utf-8',
+            verbose=self.debug
+        )
+        # Request Relay BNA Block
+        # TODO
+        # Request Relay ID Block
+        if verbose: print("Reading Relay ID Block...")
+        self.conn.write( commands.ID )
+        id_block = protoparser.RelayIdBlock(
+            self._read_command_response(commands.ID),
+            encoding='utf-8',
+            verbose=self.debug
+        )
+        # Store Relay Information
+        self.fid    = id_block['FID']
+        self.bfid   = id_block['BFID']
+        self.cid    = id_block['CID']
+        self.devid  = id_block['DEVID']
+        self.partno = id_block['PARTNO']
+        self.config = id_block['CONFIG']
 
     # Define Method to Pack the Config Messages
-    def autoconfig_relay_definition(self, verbose: bool = False):
+    @__retry__(fail_msg="Relay Definition Parsing Failed.")
+    def autoconfig_relay_definition(self, attempts: int = 0,
+        verbose: bool = False):
         """
         Autoconfigure SEL Client for Relay Definition Block.
 
@@ -519,6 +502,10 @@ class SelClient():
 
         Parameters
         ----------
+        attempts:       int, optional
+                        Number of autoconfiguration attempts, setting to `0`
+                        will allow for repeated autoconfiguration until all
+                        stages succeed. Defaults to 0
         verbose:        bool, optional
                         Control to dictate whether verbose printing operations
                         should be used (often for debugging purposes).
@@ -571,7 +558,8 @@ class SelClient():
 
 
     # Define Method to Run the Fast Meter Configuration
-    def autoconfig_fastmeter(self, verbose: bool = False):
+    @__retry__(fail_msg="Fast Meter Autoconfig Failed.")
+    def autoconfig_fastmeter(self, attempts: int = 0, verbose: bool = False):
         """
         Autoconfigure Fast Meter for SEL Client.
 
@@ -588,6 +576,10 @@ class SelClient():
 
         Parameters
         ----------
+        attempts:       int, optional
+                        Number of autoconfiguration attempts, setting to `0`
+                        will allow for repeated autoconfiguration until all
+                        stages succeed. Defaults to 0
         verbose:        bool, optional
                         Control to dictate whether verbose printing operations
                         should be used (often for debugging purposes).
@@ -602,7 +594,9 @@ class SelClient():
         )
 
     # Define Method to Run the Fast Meter Demand Configuration
-    def autoconfig_fastmeter_demand(self, verbose: bool = False):
+    @__retry__(fail_msg="Fast Meter Demand Autoconfig Failed.")
+    def autoconfig_fastmeter_demand(self, attempts: int = 0,
+        verbose: bool = False):
         """
         Autoconfigure Fast Meter Demand for SEL Client.
 
@@ -619,6 +613,10 @@ class SelClient():
 
         Parameters
         ----------
+        attempts:       int, optional
+                        Number of autoconfiguration attempts, setting to `0`
+                        will allow for repeated autoconfiguration until all
+                        stages succeed. Defaults to 0
         verbose:        bool, optional
                         Control to dictate whether verbose printing operations
                         should be used (often for debugging purposes).
@@ -633,7 +631,9 @@ class SelClient():
         )
 
     # Define Method to Run the Fast Meter Peak Demand Configuration
-    def autoconfig_fastmeter_peakdemand(self, verbose: bool = False):
+    @__retry__(fail_msg="Fast Meter Peak Demand Autoconfig Failed.")
+    def autoconfig_fastmeter_peakdemand(self, attempts: int = 0,
+        verbose: bool = False):
         """
         Autoconfigure Fast Meter Peak Demand for SEL Client.
 
@@ -650,6 +650,10 @@ class SelClient():
 
         Parameters
         ----------
+        attempts:       int, optional
+                        Number of autoconfiguration attempts, setting to `0`
+                        will allow for repeated autoconfiguration until all
+                        stages succeed. Defaults to 0
         verbose:        bool, optional
                         Control to dictate whether verbose printing operations
                         should be used (often for debugging purposes).
@@ -664,7 +668,8 @@ class SelClient():
         )
 
     # Define Method to Run the Fast Operate Configuration
-    def autoconfig_fastoperate(self, verbose: bool = False):
+    @__retry__(fail_msg="Fast Operate Autoconfig Failed.")
+    def autoconfig_fastoperate(self, attempts: int = 0, verbose: bool = False):
         """
         Autoconfigure Fast Operate for SEL Client.
 
@@ -681,6 +686,10 @@ class SelClient():
 
         Parameters
         ----------
+        attempts:       int, optional
+                        Number of autoconfiguration attempts, setting to `0`
+                        will allow for repeated autoconfiguration until all
+                        stages succeed. Defaults to 0
         verbose:        bool, optional
                         Control to dictate whether verbose printing operations
                         should be used (often for debugging purposes).
@@ -812,7 +821,7 @@ if __name__ == '__main__':
     logging.basicConfig(filename='traffic.log', level=logging.DEBUG)
     logger_obj = logging.getLogger(__name__)
     print('Establishing Connection...')
-    with telnetlib.Telnet('192.168.254.10', 2323) as tn:
+    with telnetlib.Telnet('192.168.254.7', 2000) as tn:
         print('Initializing Client...')
         poller = SelClient( tn, logger=logger_obj, verbose=True, debug=True )
         poller.autoconfig(verbose=True)

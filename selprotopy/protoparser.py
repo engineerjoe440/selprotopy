@@ -75,7 +75,9 @@ def _validate_checksum(bytArr: bytearray):
     except Exception as err:
         # Indicate Malformed Byte Array
         raise MalformedByteArray(
-            f'Length of byte array extracted ({dataLen}) appears invalid.'
+            f"Length of byte array extracted ({dataLen}) appears invalid. "
+            f"Attempted extracting byte at position {dataLen-1} but length is "
+            f"{len(bytArr)}."
         ) from err
     data = bytArr[:dataLen - 1]  # Don't include last byte
     if checksum_byte != eval_checksum(data, constrain=True):

@@ -8,9 +8,12 @@ Supports:
 """
 
 # Import Requirements
+import time
 import math
 import struct
 from typing import AnyStr
+
+from selprotopy import exceptions
 
 
 # Define Simple Function to Cast Binary Integer to List of Bools
@@ -120,6 +123,32 @@ def eval_checksum(data: AnyStr, constrain: bool = False ):
     if constrain:
         checksum = checksum & 0xff # Bit-wise and with 8-bit maximum
     return checksum
+
+def __retry__(delay=0, fail_msg="Automatic Configuration Failed.",
+    log_msg="Malformed response received during autoconfiguration."):
+    """Retry Decorator"""
+    def decorator(decor_method):
+        def wrapper(cls, *args, **kwargs):
+            attempts = 0
+            if 'attempts' in kwargs.keys():
+                attempts = int(kwargs['attempts'])
+            cnt = 0
+            while (cnt < attempts) or (attempts == 0):
+                try:
+                    return_values = decor_method(cls, *args, **kwargs)
+                    return return_values
+                except exceptions.MalformedByteArray as error:
+                    if 'verbose' in kwargs.keys():
+                        if bool(kwargs['verbose']):
+                            print(log_msg)
+                    # On exception, retry till count is exhausted
+                    if cls.logger:
+                        cls.logger.exception(log_msg, exc_info=error)
+                    time.sleep(delay)
+            # Failed Beyond Retry Attempts
+            raise exceptions.AutoConfigurationFailure(fail_msg)
+        return wrapper
+    return decorator
 
 
 # END
