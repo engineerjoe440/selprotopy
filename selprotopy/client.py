@@ -21,8 +21,10 @@ import socket
 import logging
 
 # Local Imports
-from selprotopy import exceptions, commands, protoparser, telnetlib_support
 from selprotopy.common import __retry__, INVALID_COMMAND_STR
+from selprotopy import (
+    exceptions, commands, protoparser, socket_support, telnetlib_support
+)
 
 # `telnetlib` Discards Null Characters, but SEL Protocol Requires them
 telnetlib.Telnet.process_rawq = telnetlib_support.process_rawq
@@ -148,6 +150,9 @@ class SelClient():
         self.fastDemandDef      = None
         self.fastPkDemandDef    = None
 
+        if isinstance(self.conn, socket.socket):
+            self.conn.settimeout(self.timeout)
+
         # Verify Connection by Searching for Prompt
         if 'noverify' not in kwarg_keys:
             if verbose:
@@ -174,7 +179,7 @@ class SelClient():
             if isinstance(self.conn, telnetlib.Telnet):
                 response = self.conn.read_until( commands.CR )
             elif isinstance(self.conn, socket.socket):
-                response = self.conn.recv(1024)
+                response = socket_support.socket_read(self.conn)
             else:
                 # pySerial Method
                 response = self.conn.read_until( commands.CR )
@@ -194,7 +199,7 @@ class SelClient():
         if isinstance(self.conn, telnetlib.Telnet):
             return self.conn.read_very_eager()
         elif isinstance(self.conn, socket.socket):
-            return self.conn.recv(1024)
+            return socket_support.socket_read(self.conn)
         else:
             # pySerial
             return self.conn.read_very_eager()
@@ -224,7 +229,7 @@ class SelClient():
         if isinstance(self.conn, telnetlib.Telnet):
             self.conn.write(data)
         elif isinstance(self.conn, socket.socket):
-            self.conn.send(data)
+            self.conn.sendall(data)
         else:
             # pySerial
             self.conn.write(data)
@@ -235,7 +240,7 @@ class SelClient():
         if isinstance(self.conn, telnetlib.Telnet):
             response = self.conn.read_until(prompt_str, timeout=self.timeout)
         elif isinstance(self.conn, socket.socket):
-            response = self.conn.recv(1024)
+            response = socket_support.socket_read(self.conn)
         # PySerial Does not Support Timeout
         else:
             response = self.conn.read_until(prompt_str)
@@ -260,13 +265,9 @@ class SelClient():
             response += self._read_to_prompt( prompt_str=prompt_str )
             i = 0 if len(response) != sz else i + 1
             # Check for Invalid Command Response from Relay
-            resp_str = response.decode('utf-8')
-            if INVALID_COMMAND_STR in resp_str:
+            if INVALID_COMMAND_STR in response:
                 raise exceptions.InvalidCommand(
-                    "Relay Reports Invalid Command: '{}', \nRAW: '{}'".format(
-                        resp_str,
-                        response,
-                    )
+                    "Relay Reports Invalid Command: '{}'".format(response)
                 )
         return response
 
@@ -866,19 +867,24 @@ if __name__ == '__main__':
     logging.basicConfig(filename='traffic.log', level=logging.DEBUG)
     logger_obj = logging.getLogger(__name__)
     print('Establishing Connection...')
-    with telnetlib.Telnet('192.168.2.210', 23) as tn:
-        print('Initializing Client...')
-        poller = SelClient( tn, logger=logger_obj, verbose=True, debug=True, noverify=True )
-        poller.autoconfig_relay_definition(verbose=True)
-        poller.autoconfig(verbose=True)
-        poller.send_remote_bit_fast_op('RB1', 'pulse')
-        d = None
-        for _ in range(10):
-            d = poller.poll_fast_meter()  # verbose=True)
-            for name, value in d['analogs'].items():
-                print(name, value)
-            time.sleep(1)
-        poller.send_remote_bit_fast_op('RB1', 'pulse')
+    # with telnetlib.Telnet('192.168.2.210', 23) as tn:
+    #     print('Initializing Client...')
+    #     poller = SelClient( tn, logger=logger_obj, verbose=True, debug=True, noverify=True )
+    #     poller.autoconfig_relay_definition(verbose=True)
+    #     poller.autoconfig(verbose=True)
+    #     poller.send_remote_bit_fast_op('RB1', 'pulse')
+    #     d = None
+    #     for _ in range(10):
+    #         d = poller.poll_fast_meter()  # verbose=True)
+    #         for name, value in d['analogs'].items():
+    #             print(name, value)
+    #         time.sleep(1)
+    #     poller.send_remote_bit_fast_op('RB1', 'pulse')
+    sock = socket.create_connection(('192.168.2.210', 23))
+    print('Initializing Client...')
+    poller = SelClient( sock, logger=logger_obj, verbose=True, debug=True )
+    poller.autoconfig_relay_definition(verbose=True)
+    poller.autoconfig(verbose=True)
 
 
 # END

@@ -80,8 +80,14 @@ def _validate_checksum(bytArr: bytearray):
             f"{len(bytArr)}."
         ) from err
     data = bytArr[:dataLen - 1]  # Don't include last byte
-    if checksum_byte != eval_checksum(data, constrain=True):
-        raise ChecksumFail("Invalid Checksum Found for Data Stream.")
+    confirmed = eval_checksum(data, constrain=True)
+    if checksum_byte != confirmed:
+        raise ChecksumFail(
+            "Invalid Checksum Found for Data Stream."
+            "Found: '{}'; Expected: '{}' \n{}".format(
+                checksum_byte, confirmed, bytArr
+            )
+        )
 
 # Simple Function to Cast Byte Array and Clean Ordering
 def _cast_bytearray(data: AnyStr, debug: bool = True):
@@ -96,6 +102,14 @@ def _cast_bytearray(data: AnyStr, debug: bool = True):
             "Invalid response request; missing 'A5' binary heading."
         )
     bytArr = bytearray(data)[offset:]
+    # Strip any Trailing Characters that are Not Needed
+    if commands.LEVEL_0 in bytArr:
+        bytArr = bytArr.split(commands.LEVEL_0)[0]
+    if bytArr.endswith(commands.CR):
+        bytArr = bytArr[:-2]
+    # Attempt to Reconcile Invalid Length by Comparing with Expected Message Len
+    if len(bytArr) > bytArr[bytArr[2] - 1]:
+        bytArr = bytArr.replace(b'\xff\xff', b'\xff')
     _validate_checksum( bytArr=bytArr )
     return bytArr
 
@@ -224,7 +238,7 @@ def RelayDnaBlock(data: AnyStr, encoding: str = '', byteorder: str = 'big',
     dnastring = dnastring.upper()
     # Remove the Leading Command if Present
     if None != re.search(RE_DNA_CONTROL, dnastring):
-        dnastring = re.split(RE_DNA_CONTROL,dnastring)[1]
+        dnastring = re.split(RE_DNA_CONTROL, dnastring)[1]
     # Remove Double Quotes
     dnastring = dnastring.replace('"','')
     # Format the List of Lists
@@ -238,10 +252,14 @@ def RelayDnaBlock(data: AnyStr, encoding: str = '', byteorder: str = 'big',
                 # Capture and Clean the Columns
                 row = [re.sub(RE_HEX_CHAR, '', target) for target in columns[0:8]]
                 # Verify Checksum
-                calc_checksum = eval_checksum( '"{}",'.format('","'.join(row)) )
-                checksum = int.from_bytes( bytes.fromhex(columns[8]),
-                                        byteorder=byteorder,
-                                        signed=signed )
+                calc_checksum = eval_checksum(
+                    '"{}",'.format('","'.join(row))
+                )
+                checksum = int.from_bytes(
+                    bytes.fromhex(columns[8]),
+                    byteorder=byteorder,
+                    signed=signed
+                )
                 # Indicate Failed Checksum Validation
                 if calc_checksum != checksum:
                     # Indicate Checksum Failure
@@ -477,15 +495,21 @@ def FastMeterConfigurationBlock(data: AnyStr, byteorder: str = 'big',
         struct['numdigitalbank']= bytArr[8]
         struct['numcalcblocks'] = bytArr[9]
         # Determine Offsets
-        struct['analogchanoff'] = int.from_bytes( bytArr[10:12],
-                                                  byteorder=byteorder,
-                                                  signed=signed )
-        struct['timestmpoffset']= int.from_bytes( bytArr[12:14],
-                                                  byteorder=byteorder,
-                                                  signed=signed )
-        struct['digitaloffset'] = int.from_bytes( bytArr[14:16],
-                                                  byteorder=byteorder,
-                                                  signed=signed )
+        struct['analogchanoff'] = int.from_bytes(
+            bytArr[10:12],
+            byteorder=byteorder,
+            signed=signed
+        )
+        struct['timestmpoffset']= int.from_bytes(
+            bytArr[12:14],
+            byteorder=byteorder,
+            signed=signed
+        )
+        struct['digitaloffset'] = int.from_bytes(
+            bytArr[14:16],
+            byteorder=byteorder,
+            signed=signed
+        )
         # Iteratively Interpret the Analog Channels
         ind = 16
         struct['analogchannels'] = []
