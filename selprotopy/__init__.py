@@ -21,7 +21,7 @@ import logging
 
 # Local Imports
 from selprotopy import exceptions, commands, protoparser, telnetlib_support
-from selprotopy.common import __retry__
+from selprotopy.common import __retry__, INVALID_COMMAND_STR
 
 # Describe Package for External Interpretation
 _name_ = "selprotopy"
@@ -153,10 +153,13 @@ class SelClient():
         self.fastPkDemandDef    = None
 
         # Verify Connection by Searching for Prompt
-        if verbose: print('Verifying Connection...')
-        if not self._verify_connection():
-            raise exceptions.ConnVerificationFail("Verification Failed.")
-        if verbose: print('Connection Verified.')
+        if 'noverify' not in kwarg_keys:
+            if verbose:
+                print('Verifying Connection...')
+            if not self._verify_connection():
+                raise exceptions.ConnVerificationFail("Verification Failed.")
+            if verbose:
+                print('Connection Verified.')
         self.quit()
         if 'autoconfig' in kwargs.keys():
             # Run Auto-Configuration
@@ -187,13 +190,17 @@ class SelClient():
     def _clear_input_buffer(self):
         try:
             resp = self.conn.read_very_eager()
-            if self.logger: self.logger.info(f'Rx: {resp}')
-            if self.debug: print('Clearing buffer:', resp)
+            if self.logger:
+                self.logger.info(f'Rx: {resp}')
+            if self.debug:
+                print('Clearing buffer:', resp)
             while b'' != resp:
                 time.sleep(self.__inter_cmd_delay__ * 10)
                 resp = self.conn.read_very_eager()
-                if self.logger: self.logger.info(f'Rx: {resp}')
-                if self.debug: print('Clearing buffer:', resp)
+                if self.logger:
+                    self.logger.info(f'Rx: {resp}')
+                if self.debug:
+                    print('Clearing buffer:', resp)
         except Exception:
             self.conn.reset_input_buffer()
 
@@ -225,6 +232,15 @@ class SelClient():
             sz = len(response)  # Capture Previous Size
             response += self._read_to_prompt( prompt_str=prompt_str )
             i = 0 if len(response) != sz else i + 1
+            # Check for Invalid Command Response from Relay
+            resp_str = response.decode('utf-8')
+            if INVALID_COMMAND_STR in resp_str:
+                raise exceptions.InvalidCommand(
+                    "Relay Reports Invalid Command: '{}', \nRAW: '{}'".format(
+                        resp_str,
+                        response,
+                    )
+                )
         return response
 
     # Define Method to Read Until a "Clean" Prompt is Viewed
@@ -512,9 +528,10 @@ class SelClient():
                         Defaults to False
         """
         # Request Relay Definition
-        if verbose: print("Reading Relay Definition Block...")
+        if verbose:
+            print("Reading Relay Definition Block...")
         verbose = verbose or self.debug
-        self.conn.write( commands.RELAY_DEFENITION + commands.CR )
+        self.conn.write(commands.RELAY_DEFENITION + commands.CR )
         definition = protoparser.RelayDefinitionBlock(
             self._read_command_response(commands.RELAY_DEFENITION),
             verbose=verbose
@@ -821,9 +838,10 @@ if __name__ == '__main__':
     logging.basicConfig(filename='traffic.log', level=logging.DEBUG)
     logger_obj = logging.getLogger(__name__)
     print('Establishing Connection...')
-    with telnetlib.Telnet('192.168.254.7', 2000) as tn:
+    with telnetlib.Telnet('192.168.2.210', 23) as tn:
         print('Initializing Client...')
-        poller = SelClient( tn, logger=logger_obj, verbose=True, debug=True )
+        poller = SelClient( tn, logger=logger_obj, verbose=True, debug=True, noverify=True )
+        poller.autoconfig_relay_definition(verbose=True)
         poller.autoconfig(verbose=True)
         poller.send_remote_bit_fast_op('RB1', 'pulse')
         d = None

@@ -15,6 +15,8 @@ from typing import AnyStr
 
 from selprotopy import exceptions
 
+INVALID_COMMAND_STR = "Invalid Command"
+
 
 # Define Simple Function to Cast Binary Integer to List of Bools
 def int_to_bool_list(number: int, byte_like: bool = False,

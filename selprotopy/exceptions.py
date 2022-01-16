@@ -88,6 +88,13 @@ class DnaDigitalsMisMatch(ParseError):
 ###############################################################################
 
 
+# Define Custom Exception for Generic Invalid Command Response
+class InvalidCommand(ProtoError):
+    """Invalid Command Reported by Relay."""
+
+    pass
+
+
 # Define Custom Exception for Invalid Command Type
 class InvalidCommandType(ProtoError):
     """
