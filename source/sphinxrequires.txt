@@ -3,3 +3,5 @@ sphinx
 pyserial
 numpydoc
 sphinx-sitemap
+sphinx-material
+coverage-badge
