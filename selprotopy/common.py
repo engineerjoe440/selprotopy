@@ -1,3 +1,4 @@
+################################################################################
 """
 selprotopy: A Protocol Binding Suite for the SEL Protocol Suite.
 
@@ -6,6 +7,7 @@ Supports:
   - SEL Fast Message
   - SEL Fast Operate
 """
+################################################################################
 
 # Import Requirements
 import time
@@ -23,12 +25,12 @@ def int_to_bool_list(number: int, byte_like: bool = False,
                      reverse: bool = False):
     """
     Convert Integer to List of Booleans.
-    
+
     This function converts an integer to a list of boolean values,
     where the most significant value is stored in the highest point
     of the list. That is, a binary number: 8 would be represented as
     [False, False, False, True]
-    
+
     Parameters
     ----------
     number:     int
@@ -42,7 +44,7 @@ def int_to_bool_list(number: int, byte_like: bool = False,
     reverse:    bool, optional
                 Control to reverse the order of the binary/boolean
                 points.
-    
+
     Returns
     -------
     bin_list:   list of bool
@@ -63,7 +65,7 @@ def int_to_bool_list(number: int, byte_like: bool = False,
     return bin_list
 
 # Define Simple Function to Cast Binary Representation of IEEE 4-Byte FPS
-def ieee4bytefps(binary_bytes: bytes, total_digits: int = 7):
+def ieee_4_byte_fps(binary_bytes: bytes, total_digits: int = 7):
     """
     Convert 4-Bytes to IEEE Floating Point Value.
 
@@ -78,7 +80,7 @@ def ieee4bytefps(binary_bytes: bytes, total_digits: int = 7):
     total_digits:   int, optional
                     Number of digits (i.e. decimal accuracy) which
                     should be evaluated, defaults to 7.
-    
+
     Returns
     -------
     float:          IEEE floating-point representation of the 4-byte
@@ -110,7 +112,7 @@ def eval_checksum(data: AnyStr, constrain: bool = False ):
                 Control to specify whether the value should be
                 constrained to an 8-bit representation, defaults
                 to False.
-    
+
     Returns
     -------
     checksum:   int
@@ -151,6 +153,5 @@ def __retry__(delay=0, fail_msg="Automatic Configuration Failed.",
             raise exceptions.AutoConfigurationFailure(fail_msg)
         return wrapper
     return decorator
-
 
 # END

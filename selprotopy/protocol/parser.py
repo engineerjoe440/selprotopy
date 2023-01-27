@@ -1,3 +1,4 @@
+################################################################################
 """
 selprotopy: A Protocol Binding Suite for the SEL Protocol Suite.
 
@@ -6,14 +7,15 @@ Supports:
   - SEL Fast Message
   - SEL Fast Operate
 """
+################################################################################
 
 # Import Requirements
 import re
 from typing import AnyStr, List
 
 # Local Imports
-from selprotopy import commands
-from selprotopy.common import int_to_bool_list, ieee4bytefps, eval_checksum
+from selprotopy.protocol import commands
+from selprotopy.common import int_to_bool_list, ieee_4_byte_fps, eval_checksum
 from selprotopy.exceptions import MalformedByteArray, ChecksumFail
 from selprotopy.exceptions import MissingA5Head, DnaDigitalsMisMatch
 
@@ -58,35 +60,33 @@ ANALOG_SIZE_LOOKUP = {
 # Define Look-Up-Table for Formatting Functions for Various Analog Channel Types
 ANALOG_TYPE_FORMATTERS = {
     0: int.from_bytes, # 2-Byte Integer
-    1: ieee4bytefps, # 4-Byte IEEE FPS
+    1: ieee_4_byte_fps, # 4-Byte IEEE FPS
     2: None, # 8-Byte IEEE FPS
     3: None, # 8-Byte Time Stamp
 }
 
 
 # Define Simple Function to Validate Checksum for Byte Array
-def _validate_checksum(bytArr: bytearray):
+def _validate_checksum(byte_array: bytearray):
     """Use last byte in a byte array as checksum to verify preceding bytes."""
     # Assume Valid Message, and Find the Length of the Data
-    dataLen = bytArr[2]  # Third Byte, Message Length
+    dataLen = byte_array[2]  # Third Byte, Message Length
     # Collect the Checksum from the Data
     try:
-        checksum_byte = bytArr[dataLen - 1]  # Extract checksum byte
+        checksum_byte = byte_array[dataLen - 1]  # Extract checksum byte
     except Exception as err:
         # Indicate Malformed Byte Array
         raise MalformedByteArray(
             f"Length of byte array extracted ({dataLen}) appears invalid. "
             f"Attempted extracting byte at position {dataLen-1} but length is "
-            f"{len(bytArr)}."
+            f"{len(byte_array)}."
         ) from err
-    data = bytArr[:dataLen - 1]  # Don't include last byte
+    data = byte_array[:dataLen - 1]  # Don't include last byte
     confirmed = eval_checksum(data, constrain=True)
     if checksum_byte != confirmed:
         raise ChecksumFail(
-            "Invalid Checksum Found for Data Stream."
-            "Found: '{}'; Expected: '{}' \n{}".format(
-                checksum_byte, confirmed, bytArr
-            )
+            "Invalid Checksum Found for Data Stream. "+
+            f"Found: '{checksum_byte}'; Expected: '{confirmed}' \n{byte_array}"
         )
 
 # Simple Function to Cast Byte Array and Clean Ordering
@@ -101,22 +101,22 @@ def _cast_bytearray(data: AnyStr, debug: bool = True):
         raise MissingA5Head(
             "Invalid response request; missing 'A5' binary heading."
         )
-    bytArr = bytearray(data)[offset:]
+    byte_array = bytearray(data)[offset:]
     # Strip any Trailing Characters that are Not Needed
-    if commands.LEVEL_0 in bytArr:
-        bytArr = bytArr.split(commands.LEVEL_0)[0]
-    if bytArr.endswith(commands.CR):
-        bytArr = bytArr[:-2]
+    if commands.LEVEL_0 in byte_array:
+        byte_array = byte_array.split(commands.LEVEL_0)[0]
+    if byte_array.endswith(commands.CR):
+        byte_array = byte_array[:-2]
     # Attempt to Reconcile Invalid Length by Comparing with Expected Message Len
-    if len(bytArr) > bytArr[bytArr[2] - 1]:
-        bytArr = bytArr.replace(b'\xff\xff', b'\xff')
-    _validate_checksum( bytArr=bytArr )
-    return bytArr
+    if len(byte_array) > byte_array[byte_array[2] - 1]:
+        byte_array = byte_array.replace(b'\xff\xff', b'\xff')
+    _validate_checksum( byte_array=byte_array )
+    return byte_array
 
 
 ################################################################################
 # Define Clear Prompt Interpreter
-def CleanPrompt(data: AnyStr, encoding: str = 'utf-8' ):
+def clean_prompt(data: AnyStr, encoding: str = 'utf-8' ):
     """Repeatedly use Carriage-Returns to Clear the Prompt for new Commands."""
     if encoding:
         # Decode Bytes
@@ -125,18 +125,20 @@ def CleanPrompt(data: AnyStr, encoding: str = 'utf-8' ):
         except UnicodeDecodeError:
             pass
     match = re.search(RE_CLEAN_PROMPT_CHARS, data)
-    return (match == None)
+    if not match:
+        return False
+    return True
 
 ################################################################################
 # Define Relay ID Block Parser
-def RelayIdBlock(data: AnyStr, encoding: str = '', byteorder: str = 'big',
-                 signed: bool = True, verbose: bool = False):
+def relay_id_block(data: AnyStr, encoding: str = '', byteorder: str = 'big',
+                   signed: bool = True, verbose: bool = False):
     """
     Parse Relay ID Block.
-    
+
     Parser for a relay ID/Firmware ID block to describe the relay's
     firmware version, part number, and configuration.
-    
+
     Parameters
     ----------
     data:       str
@@ -156,7 +158,7 @@ def RelayIdBlock(data: AnyStr, encoding: str = '', byteorder: str = 'big',
                 Defaults to True
     verbose:    bool, optional
                 Control to optionally utilize verbose printing.
-    
+
     Returns
     -------
     results:    dict of str
@@ -165,16 +167,16 @@ def RelayIdBlock(data: AnyStr, encoding: str = '', byteorder: str = 'big',
     """
     if encoding:
         # Decode Bytes
-        idstring = data.decode(encoding)
+        id_string = data.decode(encoding)
     else:
         # Pass Data Directly
-        idstring = data
+        id_string = data
     # Iteratively Identify ID Parameters
     results = {}
     for id_key, re_param in RE_ID_BLOCKS.items():
         try:
             # Capture the Important Pieces from the Input
-            key_result, checksum_chars = re.findall(re_param, idstring)[0]
+            key_result, checksum_chars = re.findall(re_param, id_string)[0]
             # Validate Checksum
             calc_checksum = eval_checksum( f'"{id_key}={key_result}",' )
             checksum = int.from_bytes( bytes.fromhex(checksum_chars),
@@ -191,19 +193,19 @@ def RelayIdBlock(data: AnyStr, encoding: str = '', byteorder: str = 'big',
             if verbose:
                 print(f'Unable to determine {id_key} parameter from relay ID.')
         except Exception:
-            print(idstring, re.findall(re_param, idstring))
+            print(id_string, re.findall(re_param, id_string))
     # Return Parsed ID Components
     return results
 
 # Define Relay DNA Block Parser
-def RelayDnaBlock(data: AnyStr, encoding: str = '', byteorder: str = 'big',
-                  signed: bool = True, verbose: bool = False):
+def relay_dna_block(data: AnyStr, encoding: str = '', byteorder: str = 'big',
+                    signed: bool = True, verbose: bool = False):
     """
     Parse Relay DNA Response Block.
-    
+
     Parser for a relay digital names block to describe the configured
     digital names for a relay.
-    
+
     Parameters
     ----------
     data:       str
@@ -223,7 +225,7 @@ def RelayDnaBlock(data: AnyStr, encoding: str = '', byteorder: str = 'big',
                 Defaults to True
     verbose:    bool, optional
                 Control to optionally utilize verbose printing.
-    
+
     Returns
     -------
     binaries:   list of list
@@ -231,19 +233,19 @@ def RelayDnaBlock(data: AnyStr, encoding: str = '', byteorder: str = 'big',
     """
     if encoding:
         # Decode Bytes
-        dnastring = data.decode(encoding)
+        dna_string = data.decode(encoding)
     else:
         # Pass Data Directly
-        dnastring = data
-    dnastring = dnastring.upper()
+        dna_string = data
+    dna_string = dna_string.upper()
     # Remove the Leading Command if Present
-    if None != re.search(RE_DNA_CONTROL, dnastring):
-        dnastring = re.split(RE_DNA_CONTROL, dnastring)[1]
+    if None != re.search(RE_DNA_CONTROL, dna_string):
+        dna_string = re.split(RE_DNA_CONTROL, dna_string)[1]
     # Remove Double Quotes
-    dnastring = dnastring.replace('"','')
+    dna_string = dna_string.replace('"','')
     # Format the List of Lists
     binaries = []
-    for line in dnastring.split('\n'):
+    for line in dna_string.split('\n'):
         # Verify that Comma is Present
         if ',' in line:
             columns = line.split(',')
@@ -273,10 +275,10 @@ def RelayDnaBlock(data: AnyStr, encoding: str = '', byteorder: str = 'big',
 def RelayBnaBlock(data: AnyStr, encoding: str = '', verbose: bool = False):
     """
     Parse Relay BNA Response Block.
-    
+
     Parser for a relay bit names block to describe the configured
     bit names for a relay.
-    
+
     Parameters
     ----------
     data:       str
@@ -288,23 +290,22 @@ def RelayBnaBlock(data: AnyStr, encoding: str = '', verbose: bool = False):
                 method should be used to decode the data passed.
     verbose:    bool, optional
                 Control to optionally utilize verbose printing.
-    
+
     Returns
     -------
-    bitnames:   list of list
-                List of the target rows with each element's label.
+    list[list[str]]: List of the target rows with each element's label.
     """
     if encoding:
         # Decode Bytes
-        bnastring = data.decode(encoding)
+        bna_string = data.decode(encoding)
     else:
         # Pass Data Directly
-        bnastring = data
+        bna_string = data
     # Remove Double Quotes
-    bnastring = bnastring.replace('"','')
+    bna_string = bna_string.replace('"','')
     # Iteratively Process Lines
-    bitnames = []
-    for line in bnastring.split('\n'):
+    bit_names = []
+    for line in bna_string.split('\n'):
         # Verify that Comma is Present
         if ',' in line:
             entries = line.split(',')
@@ -312,24 +313,25 @@ def RelayBnaBlock(data: AnyStr, encoding: str = '', verbose: bool = False):
             try:
                 names = entries[0:8]
                 names.append( [entries[8]] )
-                bitnames.append( names )
+                bit_names.append( names )
             except Exception:
-                if verbose: print(f"Couldn't parse line: {line}")
+                if verbose:
+                    print(f"Couldn't parse line: {line}")
         else:
             break
-        return bitnames
+        return bit_names
 ################################################################################
 
 
 ################################################################################
 # Define Relay Definition Block Parser
-def RelayDefinitionBlock(data: AnyStr, verbose: bool = False):
+def relay_definition_block(data: AnyStr, verbose: bool = False):
     """
     Parse Relay Definition Block.
-    
+
     Parser for a relay definition block to describe the relay's available
     functional message, control, and event blocks.
-    
+
     Parameters
     ----------
     data:       bytes
@@ -337,7 +339,7 @@ def RelayDefinitionBlock(data: AnyStr, verbose: bool = False):
                 relay using SEL protocol.
     verbose:    bool, optional
                 Control to optionally utilize verbose printing.
-    
+
     Returns
     -------
     struct:     dict
@@ -345,15 +347,15 @@ def RelayDefinitionBlock(data: AnyStr, verbose: bool = False):
                 the relay's definition block.
     """
     # Capture Byte Array for Parsing
-    bytArr = _cast_bytearray(data, verbose)
+    byre_array = _cast_bytearray(data, verbose)
     struct = {}
     try:
         # Parse Data, Load Attributes
-        struct['command']       = bytes(bytArr[:2])
-        struct['length']        = bytArr[2]
-        struct['numprotocolsup']= bytArr[3]
-        struct['fmmessagesup']  = bytArr[4]
-        struct['statusflagssup']= bytArr[5]
+        struct['command']       = bytes(byre_array[:2])
+        struct['length']        = byre_array[2]
+        struct['numprotocolsup']= byre_array[3]
+        struct['fmmessagesup']  = byre_array[4]
+        struct['statusflagssup']= byre_array[5]
         struct['protocolinfo']  = []
         struct['fmcommandinfo'] = []
         struct['statusflaginfo']= []
@@ -368,11 +370,11 @@ def RelayDefinitionBlock(data: AnyStr, verbose: bool = False):
         ind = 6
         for _ in range(struct['fmmessagesup']):
             data_dict = {}
-            data_dict['configcommand'] = bytes(bytArr[ind:ind+2])
-            data_dict['command'] = bytes(bytArr[ind+2:ind+4])
+            data_dict['configcommand'] = bytes(byre_array[ind:ind+2])
+            data_dict['command'] = bytes(byre_array[ind+2:ind+4])
             struct['fmcommandinfo'].append(data_dict)
             ind += 4
-        struct['fmtype'] = bytArr[ind]
+        struct['fmtype'] = byre_array[ind]
         if verbose:
             print("Fast Meter Command Information")
             print(struct['fmcommandinfo'],'\n',struct['fmtype'])
@@ -380,8 +382,8 @@ def RelayDefinitionBlock(data: AnyStr, verbose: bool = False):
         # Iterate Over the Status Flag Commands
         for _ in range(struct['statusflagssup']):
             data_dict = {}
-            data_dict['statusbit'] = bytes(bytArr[ind:ind+2])
-            data_dict['affectedcommand'] = bytes(bytArr[ind+2:ind+8])
+            data_dict['statusbit'] = bytes(byre_array[ind:ind+2])
+            data_dict['affectedcommand'] = bytes(byre_array[ind+2:ind+8])
             struct['statusflaginfo'].append(data_dict)
             ind += 8
         if verbose:
@@ -392,9 +394,9 @@ def RelayDefinitionBlock(data: AnyStr, verbose: bool = False):
         struct['fopcommandinfo']  = ''
         struct['fmsgcommandinfo'] = ''
         for _ in range(struct['numprotocolsup']):
-            data = int_to_bool_list( bytArr[ind] )
+            data = int_to_bool_list( byre_array[ind] )
             data.extend([False,False]) # This should be at least two bits
-            prot = bytArr[ind+1]
+            prot = byre_array[ind+1]
             # Manage SEL-Protocol Types
             if prot == 0:
                 proto_desc = {
@@ -449,15 +451,15 @@ def RelayDefinitionBlock(data: AnyStr, verbose: bool = False):
         raise ValueError("Invalid data string response") from err
 
 # Define Relay Definition Block Parser
-def FastMeterConfigurationBlock(data: AnyStr, byteorder: str = 'big',
-                                signed: bool = True, verbose: bool = False):
+def fast_meter_configuration_block(data: AnyStr, byteorder: str = 'big',
+                                   signed: bool = True, verbose: bool = False):
     """
     Parse Relay Fast Meter Configuration Block.
-    
+
     Parser for a relay's fast meter block to describe
     the relay's available functional message, control,
     and event blocks
-    
+
     Parameters
     ----------
     data:       bytes
@@ -473,7 +475,7 @@ def FastMeterConfigurationBlock(data: AnyStr, byteorder: str = 'big',
                 Defaults to True
     verbose:    bool, optional
                 Control to optionally utilize verbose printing.
-    
+
     Returns
     -------
     struct:     dict
@@ -481,32 +483,32 @@ def FastMeterConfigurationBlock(data: AnyStr, byteorder: str = 'big',
                 the relay's fast meter configuration block.
     """
     # Capture Byte Array for Parsing
-    bytArr = _cast_bytearray(data)
+    byte_arr = _cast_bytearray(data)
     struct = {}
     try:
         # Parse Data, Load Attributes
-        struct['command']       = bytes(bytArr[:2])
-        struct['length']        = bytArr[2]
-        struct['numstatusflags']= bytArr[3]
-        struct['scalefactloc']  = bytArr[4]
-        struct['numscalefact']  = bytArr[5]
-        struct['numanalogins']  = bytArr[6]
-        struct['numsampperchan']= bytArr[7]
-        struct['numdigitalbank']= bytArr[8]
-        struct['numcalcblocks'] = bytArr[9]
+        struct['command']       = bytes(byte_arr[:2])
+        struct['length']        = byte_arr[2]
+        struct['numstatusflags']= byte_arr[3]
+        struct['scalefactloc']  = byte_arr[4]
+        struct['numscalefact']  = byte_arr[5]
+        struct['numanalogins']  = byte_arr[6]
+        struct['numsampperchan']= byte_arr[7]
+        struct['numdigitalbank']= byte_arr[8]
+        struct['numcalcblocks'] = byte_arr[9]
         # Determine Offsets
         struct['analogchanoff'] = int.from_bytes(
-            bytArr[10:12],
+            byte_arr[10:12],
             byteorder=byteorder,
             signed=signed
         )
         struct['timestmpoffset']= int.from_bytes(
-            bytArr[12:14],
+            byte_arr[12:14],
             byteorder=byteorder,
             signed=signed
         )
         struct['digitaloffset'] = int.from_bytes(
-            bytArr[14:16],
+            byte_arr[14:16],
             byteorder=byteorder,
             signed=signed
         )
@@ -515,17 +517,17 @@ def FastMeterConfigurationBlock(data: AnyStr, byteorder: str = 'big',
         struct['analogchannels'] = []
         for _ in range(struct['numanalogins']):
             data_dict = {}
-            bytstr = bytes(bytArr[ind:ind+6])
+            bytstr = bytes(byte_arr[ind:ind+6])
             data_dict['name'] = ''
             for byte in bytstr:
                 char = chr(byte)
                 if byte != 0:
                     data_dict['name']    += char
             ind += 6
-            data_dict['channeltype'] = bytArr[ind]
-            data_dict['factortype']  = bytArr[ind+1]
+            data_dict['channeltype'] = byte_arr[ind]
+            data_dict['factortype']  = byte_arr[ind+1]
             data_dict['scaleoffset'] = int.from_bytes(
-                bytArr[ind:ind+2],
+                byte_arr[ind:ind+2],
                 byteorder=byteorder,
                 signed=signed
             )
@@ -542,7 +544,7 @@ def FastMeterConfigurationBlock(data: AnyStr, byteorder: str = 'big',
             # vConDN:   Delta Connected, Negative Sequence
             # iConDP:   Delta Connected, Positive Sequence
             # iConDN:   Delta Connected, Negative Sequence
-            val = bytArr[ind]
+            val = byte_arr[ind]
             [rot, vConDP, vConDN, iConDP, iConDN, _, _, _] = int_to_bool_list(
                 val,
                 byte_like=True
@@ -566,7 +568,7 @@ def FastMeterConfigurationBlock(data: AnyStr, byteorder: str = 'big',
                 data_dict['current'] = 'Y'
             ind += 1
             # Determine the Calculation Type
-            val = bytArr[ind]
+            val = byte_arr[ind]
             data_dict['type'] = val
             ind += 1
             if val == 0:
@@ -587,17 +589,17 @@ def FastMeterConfigurationBlock(data: AnyStr, byteorder: str = 'big',
                     '2-1/2 element Δ power with two sets of currents'
                 )
             # Determine Skew Correction offset, Rs offset, and Xs offset
-            data_dict['skewoffset'] = bytes(bytArr[ind:ind+2])
-            data_dict['rsoffset'] = bytes(bytArr[ind+2:ind+4])
-            data_dict['xsoffset'] = bytes(bytArr[ind+4:ind+6])
+            data_dict['skewoffset'] = bytes(byte_arr[ind:ind+2])
+            data_dict['rsoffset'] = bytes(byte_arr[ind+2:ind+4])
+            data_dict['xsoffset'] = bytes(byte_arr[ind+4:ind+6])
             # Determine Current Indicies
             ind += 1
-            data_dict['iaindex'] = bytArr[ind+0]
-            data_dict['ibindex'] = bytArr[ind+1]
-            data_dict['icindex'] = bytArr[ind+2]
-            data_dict['vaindex'] = bytArr[ind+3]
-            data_dict['vbindex'] = bytArr[ind+4]
-            data_dict['vcindex'] = bytArr[ind+5]
+            data_dict['iaindex'] = byte_arr[ind+0]
+            data_dict['ibindex'] = byte_arr[ind+1]
+            data_dict['icindex'] = byte_arr[ind+2]
+            data_dict['vaindex'] = byte_arr[ind+3]
+            data_dict['vbindex'] = byte_arr[ind+4]
+            data_dict['vcindex'] = byte_arr[ind+5]
             # Store Dictionary
             struct['calcblocks'].append(data_dict)
         if verbose:
@@ -620,14 +622,14 @@ def FastMeterConfigurationBlock(data: AnyStr, byteorder: str = 'big',
         raise ValueError("Invalid data string response") from err
 
 # Define Function to Parse a Fast Operate Configuration Block
-def FastOpConfigurationBlock(data: AnyStr, byteorder: str = 'big',
-                             signed: bool = True, verbose: bool = False):
+def fast_op_configuration_block(data: AnyStr, byteorder: str = 'big',
+                                signed: bool = True, verbose: bool = False):
     """
     Parse Fast Operate Configuration Block.
-    
+
     Parser for a fast operate configuration block to describe
     the relay's available fast operate options.
-    
+
     Parameters
     ----------
     data:       bytes
@@ -643,7 +645,7 @@ def FastOpConfigurationBlock(data: AnyStr, byteorder: str = 'big',
                 Defaults to True
     verbose:    bool, optional
                 Control to optionally utilize verbose printing.
-    
+
     Returns
     -------
     struct:     dict
@@ -651,37 +653,37 @@ def FastOpConfigurationBlock(data: AnyStr, byteorder: str = 'big',
                 the relay's fast meter configuration block.
     """
     # Capture Byte Array for Parsing
-    bytArr = _cast_bytearray(data)
+    byte_array = _cast_bytearray(data)
     struct = {}
     try:
         # Parse Data, Load Attributes
-        struct['command']       = bytes(bytArr[:2])
-        struct['length']        = bytArr[2]
-        struct['numbreakers']   = bytArr[3]
-        struct['numremotebits'] = int.from_bytes( bytArr[4:6],
+        struct['command']       = bytes(byte_array[:2])
+        struct['length']        = byte_array[2]
+        struct['numbreakers']   = byte_array[3]
+        struct['numremotebits'] = int.from_bytes( byte_array[4:6],
                                                   byteorder=byteorder,
                                                   signed=signed )
-        struct['pulsesupported']= bytArr[6]
-        _                       = bytArr[7]  # reservedpoint
+        struct['pulsesupported']= byte_array[6]
+        _                       = byte_array[7]  # reservedpoint
         # Iterate Over Breaker Bits
         ind = 8
         struct['breakerconfig'] = []
         for _ in range(struct['numbreakers']):
             struct['breakerconfig'].append({
-                'open'  : bytArr[ind],
-                'close' : bytArr[ind+1],
+                'open'  : byte_array[ind],
+                'close' : byte_array[ind+1],
             })
             ind += 2
         # Iterate Over Remote Bits
         struct['remotebitconfig'] = []
         for _ in range(struct['numremotebits']):
             remotebitstruct = {
-                'clear' : bytArr[ind],
-                'set'   : bytArr[ind+1],
+                'clear' : byte_array[ind],
+                'set'   : byte_array[ind+1],
             }
             ind += 2
             if struct['pulsesupported'] == 1:
-                remotebitstruct['pulse'] = bytArr[ind]
+                remotebitstruct['pulse'] = byte_array[ind]
                 ind += 1
             # Append Structure
             struct['remotebitconfig'].append(remotebitstruct)
@@ -700,15 +702,15 @@ def FastOpConfigurationBlock(data: AnyStr, byteorder: str = 'big',
 
 ################################################################################
 # Define Function to Parse a Fast Meter Response Given the Configuration
-def FastMeterBlock(data: AnyStr, definition: dict, dna_def: List[List[str]],
-                   byteorder: str = 'big', signed: str = True,
-                   verbose: bool = False ):
+def fast_meter_block(data: AnyStr, definition: dict, dna_def: List[List[str]],
+                     byteorder: str = 'big', signed: str = True,
+                     verbose: bool = False ):
     """
     Parse Fast Meter Response Block.
-    
+
     Parser for a relay's fast meter block for the various analog
     and digital points.
-    
+
     Parameters
     ----------
     data:       bytes
@@ -730,7 +732,7 @@ def FastMeterBlock(data: AnyStr, definition: dict, dna_def: List[List[str]],
                 Defaults to True
     verbose:    bool, optional
                 Control to optionally utilize verbose printing.
-    
+
     Returns
     -------
     struct:     dict
@@ -738,13 +740,13 @@ def FastMeterBlock(data: AnyStr, definition: dict, dna_def: List[List[str]],
                 the relay's fast meter data points.
     """
     # Capture Byte Array for Parsing
-    bytArr = _cast_bytearray( data )
+    byte_array = _cast_bytearray( data )
     struct = {}
     try:
         # Parse Data, Load Attributes
-        struct['command']       = bytes(bytArr[:2])
-        struct['length']        = bytArr[2]
-        struct['statusflag']    = bytArr[3:3+definition['numstatusflags']]
+        struct['command']       = bytes(byte_array[:2])
+        struct['length']        = byte_array[2]
+        struct['statusflag']    = byte_array[3:3+definition['numstatusflags']]
         if verbose:
             print("Generic Fast Meter Block Information")
             print("Command:", struct['command'])
@@ -766,7 +768,7 @@ def FastMeterBlock(data: AnyStr, definition: dict, dna_def: List[List[str]],
                 if scale_type == 255:
                     scale = 1
                 # Extract Value to be Interpreted
-                value = bytes(bytArr[ind:ind+size])
+                value = bytes(byte_array[ind:ind+size])
                 # Apply Formatting
                 value = ANALOG_TYPE_FORMATTERS[type]( value )
                 # Evaluate Result
@@ -804,7 +806,7 @@ def FastMeterBlock(data: AnyStr, definition: dict, dna_def: List[List[str]],
             # Grab the Applicable Names for this Target Row (byte)
             point_names = dna_def[target_row_index][:8] # grab first 8 entries
             # Grab the list of binary statuses from the target row info
-            target_data = int_to_bool_list(bytArr[ind+target_row_index],
+            target_data = int_to_bool_list(byte_array[ind+target_row_index],
                                             byte_like=True, reverse=True)
             target_row = dict(zip(point_names,target_data))
             # Load the Digital Dictionary with new Points
@@ -816,7 +818,5 @@ def FastMeterBlock(data: AnyStr, definition: dict, dna_def: List[List[str]],
     except IndexError:
         raise ValueError("Invalid data string response")
 ################################################################################
-
-
 
 # END

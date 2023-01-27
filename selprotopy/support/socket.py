@@ -1,3 +1,4 @@
+################################################################################
 """
 selprotopy: A Protocol Binding Suite for the SEL Protocol Suite.
 
@@ -12,6 +13,7 @@ To use `telnetlib_support`, without importing `selprotopy` directly, use:
 telnetlib.Telnet.process_rawq = process_rawq
 ```
 """
+################################################################################
 
 # Socket Support: We need to read without blocking forever!
 import socket

@@ -1,3 +1,4 @@
+################################################################################
 """
 selprotopy: A Protocol Binding Suite for the SEL Protocol Suite.
 
@@ -7,12 +8,13 @@ Supports:
   - SEL Fast Operate
 
 Author(s):
-  - Joe Stanley: joe_stanley@selinc.com
+  - Joe Stanley: engineerjoe440@yahoo.com
 
 Homepage: https://github.com/engineerjoe440/sel-proto-py
 
 SEL Protocol Application Guide: https://selinc.com/api/download/5026/
 """
+################################################################################
 
 # Standard Imports
 import time
@@ -23,17 +25,19 @@ import logging
 # Local Imports
 from selprotopy.common import __retry__, INVALID_COMMAND_STR
 from selprotopy import (
-    exceptions, commands, protoparser, socket_support, telnetlib_support
+    exceptions
 )
+from selprotopy.protocol import commands, parser
+from selprotopy.support import socket, telnet
 
 # `telnetlib` Discards Null Characters, but SEL Protocol Requires them
-telnetlib.Telnet.process_rawq = telnetlib_support.process_rawq
+telnetlib.Telnet.process_rawq = telnet.process_rawq
 
 
 # Define Simple Polling Client
 class SelClient():
     """
-    `SelClient` Class for Polling an SEL Relay/IED.
+    `SelClient` Class for Polling an SEL Relay/Intelligent Electronic Device.
 
     The basic polling class intended to interact with an SEL relay which has
     already been connected to by way of a Telnet or Serial connection using one
@@ -50,7 +54,7 @@ class SelClient():
     autoconfig_now:     bool, optional
                         Control to activate automatic configuration with the
                         connected relay at time of class initialization, this
-                        should normally be set to True to allow autoconfig.
+                        should normally be set to True to allow auto-config.
                         Defaults to True
     validConnChecks:    int, optional
                         Integer control to indicate maximum number of
@@ -96,7 +100,6 @@ class SelClient():
                 Relay's described configuration string (set by connection with
                 relay)
     """
-    logger = None
 
     def __init__(self, connApi, logger: logging.Logger = None,
                  verbose: bool = False, debug: bool = False, **kwargs):
@@ -179,7 +182,7 @@ class SelClient():
             if isinstance(self.conn, telnetlib.Telnet):
                 response = self.conn.read_until( commands.CR )
             elif isinstance(self.conn, socket.socket):
-                response = socket_support.socket_read(self.conn)
+                response = socket.socket_read(self.conn)
             else:
                 # pySerial Method
                 response = self.conn.read_until( commands.CR )
@@ -192,14 +195,14 @@ class SelClient():
                 time.sleep( self.__inter_cmd_delay__ )
         # Return Status
         return connected
-    
+
     # Define Method to Handle Eager Reading Between Connection Methods
     def _read_eager(self):
         # Switch on Connection Type
         if isinstance(self.conn, telnetlib.Telnet):
             return self.conn.read_very_eager()
         elif isinstance(self.conn, socket.socket):
-            return socket_support.socket_read(self.conn)
+            return socket.socket_read(self.conn)
         else:
             # pySerial
             return self.conn.read_very_eager()
@@ -222,7 +225,7 @@ class SelClient():
         except Exception:
             # pySerial Method
             self.conn.reset_input_buffer()
-    
+
     # Define Method to Handle Writing for telnetlib-vs-socket
     def _write(self, data):
         # Switch on Writing Mechanism
@@ -240,7 +243,7 @@ class SelClient():
         if isinstance(self.conn, telnetlib.Telnet):
             response = self.conn.read_until(prompt_str, timeout=self.timeout)
         elif isinstance(self.conn, socket.socket):
-            response = socket_support.socket_read(self.conn)
+            response = socket.socket_read(self.conn)
         # PySerial Does not Support Timeout
         else:
             response = self.conn.read_until(prompt_str)
@@ -267,7 +270,7 @@ class SelClient():
             # Check for Invalid Command Response from Relay
             if INVALID_COMMAND_STR in response:
                 raise exceptions.InvalidCommand(
-                    "Relay Reports Invalid Command: '{}'".format(response)
+                    f"Relay Reports Invalid Command: '{response}'"
                 )
         return response
 
@@ -281,7 +284,7 @@ class SelClient():
             if self.debug:
                 print('Clean prompt response:', response)
             # Count the Number of Clean Prompt Responses
-            if protoparser.CleanPrompt(response):
+            if parser.clean_prompt(response):
                 count += 1
             else:
                 count = 0
@@ -292,8 +295,10 @@ class SelClient():
     # Define Method to Attempt Reading Everything (only for telnetlib)
     def _read_everything(self):
         response = self._read_eager()
-        if self.logger: self.logger.info(f'Rx: {response}')
-        if self.debug: print(response)
+        if self.logger:
+            self.logger.info(f'Rx: {response}')
+        if self.debug:
+            print(response)
         return response
 
     # Define Method to Identify Current Access Level
@@ -504,7 +509,7 @@ class SelClient():
         self._read_clean_prompt()
         if verbose: print("Reading Relay DNA Block...")
         self._write( commands.DNA )
-        self.dnaDef = protoparser.RelayDnaBlock(
+        self.dnaDef = parser.relay_dna_block(
             self._read_command_response(commands.DNA),
             encoding='utf-8',
             verbose=self.debug
@@ -514,7 +519,7 @@ class SelClient():
         # Request Relay ID Block
         if verbose: print("Reading Relay ID Block...")
         self._write( commands.ID )
-        id_block = protoparser.RelayIdBlock(
+        id_block = parser.relay_id_block(
             self._read_command_response(commands.ID),
             encoding='utf-8',
             verbose=self.debug
@@ -560,9 +565,9 @@ class SelClient():
         if verbose:
             print("Reading Relay Definition Block...")
         verbose = verbose or self.debug
-        self._write(commands.RELAY_DEFENITION + commands.CR )
-        definition = protoparser.RelayDefinitionBlock(
-            self._read_command_response(commands.RELAY_DEFENITION),
+        self._write(commands.RELAY_DEFINITION + commands.CR )
+        definition = parser.relay_definition_block(
+            self._read_command_response(commands.RELAY_DEFINITION),
             verbose=verbose
         )
         # Load the Relay Definition Information and Request the Meter Blocks
@@ -634,7 +639,7 @@ class SelClient():
         # Fast Meter
         self._read_clean_prompt()
         self._write( self.fmconfigcommand1 + commands.CR )
-        self.fastMeterDef = protoparser.FastMeterConfigurationBlock(
+        self.fastMeterDef = parser.fast_meter_configuration_block(
             self._read_to_prompt(),
             verbose=verbose,
         )
@@ -671,7 +676,7 @@ class SelClient():
         # Fast Meter Demand
         self._read_clean_prompt()
         self._write( self.fmconfigcommand2 + commands.CR )
-        self.fastDemandDef = protoparser.FastMeterConfigurationBlock(
+        self.fastDemandDef = parser.fast_meter_configuration_block(
             self._read_to_prompt(),
             verbose=verbose,
         )
@@ -708,7 +713,7 @@ class SelClient():
         # Fast Meter Peak Demand
         self._read_clean_prompt()
         self._write( self.fmconfigcommand3 + commands.CR )
-        self.fastPkDemandDef = protoparser.FastMeterConfigurationBlock(
+        self.fastPkDemandDef = parser.fast_meter_configuration_block(
             self._read_to_prompt(),
             verbose=verbose,
         )
@@ -744,7 +749,7 @@ class SelClient():
         # Fast Meter Peak Demand
         self._read_clean_prompt()
         self._write( self.fopcommandinfo + commands.CR )
-        self.fastOpDef = protoparser.FastOpConfigurationBlock(
+        self.fastOpDef = parser.fast_op_configuration_block(
             self._read_to_prompt(),
             verbose=verbose,
         )
@@ -784,7 +789,7 @@ class SelClient():
         # Poll Client for Data
         self._read_clean_prompt()
         self._write( self.fmcommand1 + commands.CR )
-        response = protoparser.FastMeterBlock(
+        response = parser.fast_meter_block(
             self._read_command_response(
                 self.fmcommand1
             ),

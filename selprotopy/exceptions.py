@@ -1,3 +1,4 @@
+################################################################################
 """
 selprotopy: A Protocol Binding Suite for the SEL Protocol Suite.
 
@@ -6,25 +7,17 @@ Supports:
   - SEL Fast Message
   - SEL Fast Operate
 """
-
+################################################################################
 
 # Define Various Custom Exception Types
 class CommError(Exception):
     """Base Class for Communications Errors."""
 
-    pass
-
-
 class ParseError(CommError):
     """Base Class for Parsing Errors."""
 
-    pass
-
-
 class ProtoError(Exception):
     """Base Class for Protocol Errors."""
-
-    pass
 
 
 ###############################################################################
@@ -38,8 +31,6 @@ class MalformedByteArray(CommError):
     communications caused by a communications failure.
     """
 
-    pass
-
 
 # Define Custom Exception for Invalid Checksum
 class ChecksumFail(CommError):
@@ -50,14 +41,10 @@ class ChecksumFail(CommError):
     communications failure.
     """
 
-    pass
-
 
 # Define Custom Exception to Indicate Connection Verification Failure
 class ConnVerificationFail(CommError):
     """Communications could not be verified."""
-
-    pass
 
 ###############################################################################
 
@@ -71,8 +58,6 @@ class MissingA5Head(ParseError):
     required A5[C1] heading.
     """
 
-    pass
-
 
 # Define Custom Exception for SEL Protocol DNA/Digitals Count Mismatch
 class DnaDigitalsMisMatch(ParseError):
@@ -83,16 +68,12 @@ class DnaDigitalsMisMatch(ParseError):
     definition, may be caused by a communications error, or failed parse.
     """
 
-    pass
-
 ###############################################################################
 
 
 # Define Custom Exception for Generic Invalid Command Response
 class InvalidCommand(ProtoError):
     """Invalid Command Reported by Relay."""
-
-    pass
 
 
 # Define Custom Exception for Invalid Command Type
@@ -104,8 +85,6 @@ class InvalidCommandType(ProtoError):
     ['SET', 'CLEAR', 'PULSE', 'OPEN', 'CLOSE'].
     """
 
-    pass
-
 
 # Define Custom Exception for Invalid Control Type
 class InvalidControlType(ProtoError):
@@ -116,17 +95,12 @@ class InvalidControlType(ProtoError):
     ['REMOTE_BIT', 'BREAKER_BIT'].
     """
 
-    pass
-
-# Define Generic Autoconfiguration Failure Exception
+# Define Generic Auto-configuration Failure Exception
 class AutoConfigurationFailure(CommError):
     """
     Automatic Configuration Failure
 
-    Failed to complete the autoconfig process with the connected relay.
+    Failed to complete the auto-config process with the connected relay.
     """
-
-    pass
-
 
 # END
