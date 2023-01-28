@@ -83,5 +83,6 @@ class TCPSELClient(SelClient):
     ):
         """Connect over Serial to the SEL Protocol Device."""
         # Establish a TCP Connection
+        connection=None # TODO
         # Attach Super Object
         super().__init__(connApi=connection, **kwargs)
