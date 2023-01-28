@@ -130,7 +130,7 @@ def eval_checksum(data: AnyStr, constrain: bool = False ):
 
 def __retry__(delay=0, fail_msg="Automatic Configuration Failed.",
     log_msg="Malformed response received during auto-configuration."):
-    """Decorator to Handle Retrying a Specific Operation."""
+    """Decorate Functions and Methods to Handle Retrying Specific Operations."""
     def decorator(decor_method):
         def wrapper(cls, *args, **kwargs):
             attempts = 0
