@@ -16,7 +16,7 @@ SEL Protocol Application Guide: https://selinc.com/api/download/5026/
 """
 ################################################################################
 
-from serial import Serial
+import serial
 
 from selprotopy.client.base import SelClient
 
@@ -79,7 +79,31 @@ class SerialSELClient(SelClient):
                 relay)
     """
 
-    def __init__(self, serial_device: str, **kwargs):
+    def __init__(
+        self,
+        port=None,
+        baudrate=9600,
+        bytesize=serial.EIGHTBITS,
+        parity=serial.PARITY_NONE,
+        stopbits=serial.STOPBITS_ONE,
+        timeout=None,
+        xonxoff=False,
+        rtscts=False,
+        write_timeout=None,
+        **kwargs
+    ):
         """Connect over Serial to the SEL Protocol Device."""
-        connection = Serial(serial_device)
+        # Establish Serial Connection
+        connection = serial.Serial(
+            port=port,
+            baudrate=baudrate,
+            bytesize=bytesize,
+            parity=parity,
+            stopbits=stopbits,
+            timeout=timeout,
+            xonxoff=xonxoff,
+            rtscts=rtscts,
+            write_timeout=write_timeout
+        )
+        # Attach Super Object
         super().__init__(connApi=connection, **kwargs)
