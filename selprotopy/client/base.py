@@ -480,8 +480,8 @@ class SelClient():
         Parameters
         ----------
         attempts:       int, optional
-                        Number of autoconfiguration attempts, setting to `0`
-                        will allow for repeated autoconfiguration until all
+                        Number of auto-configuration attempts, setting to `0`
+                        will allow for repeated auto-configuration until all
                         stages succeed. Defaults to 0
         verbose:        bool, optional
                         Control to dictate whether verbose printing operations
@@ -553,8 +553,8 @@ class SelClient():
         Parameters
         ----------
         attempts:       int, optional
-                        Number of autoconfiguration attempts, setting to `0`
-                        will allow for repeated autoconfiguration until all
+                        Number of auto-configuration attempts, setting to `0`
+                        will allow for repeated auto-configuration until all
                         stages succeed. Defaults to 0
         verbose:        bool, optional
                         Control to dictate whether verbose printing operations
@@ -628,8 +628,8 @@ class SelClient():
         Parameters
         ----------
         attempts:       int, optional
-                        Number of autoconfiguration attempts, setting to `0`
-                        will allow for repeated autoconfiguration until all
+                        Number of auto-configuration attempts, setting to `0`
+                        will allow for repeated auto-configuration until all
                         stages succeed. Defaults to 0
         verbose:        bool, optional
                         Control to dictate whether verbose printing operations
@@ -665,8 +665,8 @@ class SelClient():
         Parameters
         ----------
         attempts:       int, optional
-                        Number of autoconfiguration attempts, setting to `0`
-                        will allow for repeated autoconfiguration until all
+                        Number of auto-configuration attempts, setting to `0`
+                        will allow for repeated auto-configuration until all
                         stages succeed. Defaults to 0
         verbose:        bool, optional
                         Control to dictate whether verbose printing operations
@@ -702,8 +702,8 @@ class SelClient():
         Parameters
         ----------
         attempts:       int, optional
-                        Number of autoconfiguration attempts, setting to `0`
-                        will allow for repeated autoconfiguration until all
+                        Number of auto-configuration attempts, setting to `0`
+                        will allow for repeated auto-configuration until all
                         stages succeed. Defaults to 0
         verbose:        bool, optional
                         Control to dictate whether verbose printing operations
@@ -738,8 +738,8 @@ class SelClient():
         Parameters
         ----------
         attempts:       int, optional
-                        Number of autoconfiguration attempts, setting to `0`
-                        will allow for repeated autoconfiguration until all
+                        Number of auto-configuration attempts, setting to `0`
+                        will allow for repeated auto-configuration until all
                         stages succeed. Defaults to 0
         verbose:        bool, optional
                         Control to dictate whether verbose printing operations

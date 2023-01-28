@@ -98,7 +98,7 @@ class InvalidControlType(ProtoError):
 # Define Generic Auto-configuration Failure Exception
 class AutoConfigurationFailure(CommError):
     """
-    Automatic Configuration Failure
+    Automatic Configuration Failure.
 
     Failed to complete the auto-config process with the connected relay.
     """

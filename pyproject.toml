@@ -20,3 +20,11 @@ Home = "https://selprotopy.readthedocs.io/en/latest/"
 Repository = "https://github.com/engineerjoe440/selprotopy/"
 PyPI = "https://pypi.org/project/selprotopy/"
 Issues = "https://github.com/engineerjoe440/selprotopy/issues"
+
+[project.optional-dependencies]
+serial = [
+    "pyserial",
+]
+full = [
+    "pyserial",
+]

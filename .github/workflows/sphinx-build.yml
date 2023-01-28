@@ -26,7 +26,7 @@ jobs:
       - name: Build Sphinx docs
         if: success()
         run: |
-          pip install .
+          pip install .[full]
           python3 -c "import selprotopy; print('selprotopy.__file__')"
           sphinx-build -M html docsource docs
 
