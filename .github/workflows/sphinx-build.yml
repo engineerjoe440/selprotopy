@@ -22,7 +22,7 @@ jobs:
       - name: Install dependencies
         run: |
           #pip install -r requirements.txt
-          pip install -r source/sphinxrequires.txt
+          pip install -r docsource/sphinxrequires.txt
       - name: Build Sphinx docs
         if: success()
         run: |
