@@ -1,39 +1,38 @@
+################################################################################
 """
 selprotopy: A Protocol Binding Suite for the SEL Protocol Suite.
 
 Supports:
-  - SEL Fast Meter
-  - SEL Fast Message
-  - SEL Fast Operate
+    - SEL Fast Meter
+    - SEL Fast Message
+    - SEL Fast Operate
 
 Author(s):
-  - Joe Stanley: joe_stanley@selinc.com
+    - Joe Stanley: engineerjoe440@yahoo.com
 
 Homepage: https://github.com/engineerjoe440/sel-proto-py
 
 SEL Protocol Application Guide: https://selinc.com/api/download/5026/
 """
+################################################################################
 
 # Standard Imports
 import time
-import telnetlib
-import socket
 import logging
 
 # Local Imports
-from selprotopy.common import __retry__, INVALID_COMMAND_STR
-from selprotopy import (
-    exceptions, commands, protoparser, socket_support, telnetlib_support
+from selprotopy.common import (
+    retry, INVALID_COMMAND_STR, RemoteBitControlType, BreakerBitControlType
 )
-
-# `telnetlib` Discards Null Characters, but SEL Protocol Requires them
-telnetlib.Telnet.process_rawq = telnetlib_support.process_rawq
+from selprotopy import exceptions
+from selprotopy.protocol import commands, parser
+from selprotopy.support import socket
 
 
 # Define Simple Polling Client
-class SelClient():
+class SELClient():
     """
-    `SelClient` Class for Polling an SEL Relay/IED.
+    `SELClient` Class for Polling an SEL Relay/Intelligent Electronic Device.
 
     The basic polling class intended to interact with an SEL relay which has
     already been connected to by way of a Telnet or Serial connection using one
@@ -50,7 +49,7 @@ class SelClient():
     autoconfig_now:     bool, optional
                         Control to activate automatic configuration with the
                         connected relay at time of class initialization, this
-                        should normally be set to True to allow autoconfig.
+                        should normally be set to True to allow auto-config.
                         Defaults to True
     validConnChecks:    int, optional
                         Integer control to indicate maximum number of
@@ -96,7 +95,6 @@ class SelClient():
                 Relay's described configuration string (set by connection with
                 relay)
     """
-    logger = None
 
     def __init__(self, connApi, logger: logging.Logger = None,
                  verbose: bool = False, debug: bool = False, **kwargs):
@@ -136,21 +134,21 @@ class SelClient():
         self.fast_operate_supported = False
 
         # Define the Various Command Defaults
-        self.fmconfigcommand1   = commands.FM_CONFIG_BLOCK
-        self.fmcommand1         = commands.FM_DEMAND_CONFIG_BLOCK
-        self.fmconfigcommand2   = commands.FM_PEAK_CONFIG_BLOCK
-        self.fmcommand2         = commands.FAST_METER_REGULAR
-        self.fmconfigcommand3   = commands.FAST_METER_DEMAND
-        self.fmcommand3         = commands.FAST_METER_PEAK_DEMAND
-        self.fopcommandinfo     = commands.FO_CONFIG_BLOCK
-        self.fmsgcommandinfo    = commands.FAST_MSG_CONFIG_BLOCK
+        self.fm_config_command_1 = commands.FM_CONFIG_BLOCK
+        self.fm_command_1 = commands.FM_DEMAND_CONFIG_BLOCK
+        self.fm_config_command_2 = commands.FM_PEAK_CONFIG_BLOCK
+        self.fm_command_2 = commands.FAST_METER_REGULAR
+        self.fm_config_command_3 = commands.FAST_METER_DEMAND
+        self.fm_command_3 = commands.FAST_METER_PEAK_DEMAND
+        self.fop_command_info = commands.FO_CONFIG_BLOCK
+        self.fmsg_command_info = commands.FAST_MSG_CONFIG_BLOCK
 
         # Allocate Space for Relay Definition Responses
-        self.fastMeterDef       = None
-        self.fastDemandDef      = None
-        self.fastPkDemandDef    = None
+        self.fast_meter_definition = None
+        self.fast_demand_definition = None
+        self.fast_peak_demand_definition = None
 
-        if isinstance(self.conn, socket.socket):
+        if hasattr(self.conn, 'settimeout'):
             self.conn.settimeout(self.timeout)
 
         # Verify Connection by Searching for Prompt
@@ -162,7 +160,7 @@ class SelClient():
             if verbose:
                 print('Connection Verified.')
         self.quit()
-        if 'autoconfig' in kwargs.keys():
+        if 'autoconfig' in kwargs:
             # Run Auto-Configuration
             if not isinstance(kwargs['autoconfig'], bool):
                 self.autoconfig(verbose=verbose)
@@ -176,33 +174,32 @@ class SelClient():
         # Iteratively attempt to see relay's response
         for _ in range(self.__num_con_check__):
             self._write( commands.CR + commands.CR + commands.CR )
-            if isinstance(self.conn, telnetlib.Telnet):
+            if hasattr(self.conn, "read_until"):
                 response = self.conn.read_until( commands.CR )
-            elif isinstance(self.conn, socket.socket):
-                response = socket_support.socket_read(self.conn)
+            elif hasattr(self.conn, 'socket_read'):
+                response = socket.socket_read(self.conn)
             else:
                 # pySerial Method
                 response = self.conn.read_until( commands.CR )
-            if self.debug: print(response)
+            if self.debug:
+                print(response)
             if commands.LEVEL_0 in response:
                 # Relay Responded
                 connected = True
                 break
-            else:
-                time.sleep( self.__inter_cmd_delay__ )
+            time.sleep( self.__inter_cmd_delay__ )
         # Return Status
         return connected
-    
+
     # Define Method to Handle Eager Reading Between Connection Methods
     def _read_eager(self):
         # Switch on Connection Type
-        if isinstance(self.conn, telnetlib.Telnet):
+        if hasattr(self.conn, "read_until"):
             return self.conn.read_very_eager()
-        elif isinstance(self.conn, socket.socket):
-            return socket_support.socket_read(self.conn)
-        else:
-            # pySerial
-            return self.conn.read_very_eager()
+        elif hasattr(self.conn, 'socket_read'):
+            return socket.socket_read(self.conn)
+        # pySerial
+        return self.conn.read_very_eager()
 
     # Define Method to "Clear" the Buffer
     def _clear_input_buffer(self):
@@ -222,13 +219,13 @@ class SelClient():
         except Exception:
             # pySerial Method
             self.conn.reset_input_buffer()
-    
+
     # Define Method to Handle Writing for telnetlib-vs-socket
     def _write(self, data):
         # Switch on Writing Mechanism
-        if isinstance(self.conn, telnetlib.Telnet):
+        if hasattr(self.conn, "read_until"):
             self.conn.write(data)
-        elif isinstance(self.conn, socket.socket):
+        elif hasattr(self.conn, 'sendall'):
             self.conn.sendall(data)
         else:
             # pySerial
@@ -236,14 +233,18 @@ class SelClient():
 
     # Define Method to Read All Data to Next Relay Prompt
     def _read_to_prompt(self, prompt_str=commands.PROMPT):
-        # Telnetlib Supports a Timeout
-        if isinstance(self.conn, telnetlib.Telnet):
-            response = self.conn.read_until(prompt_str, timeout=self.timeout)
-        elif isinstance(self.conn, socket.socket):
-            response = socket_support.socket_read(self.conn)
-        # PySerial Does not Support Timeout
-        else:
-            response = self.conn.read_until(prompt_str)
+        if hasattr(self.conn, "read_until"):
+            try:
+                # Telnetlib Supports a Timeout
+                response = self.conn.read_until(
+                    prompt_str,
+                    timeout=self.timeout
+                )
+            # PySerial Does not Support Timeout
+            except TypeError:
+                response = self.conn.read_until(prompt_str)
+        elif hasattr(self.conn, 'socket_read'):
+            response = socket.socket_read(self.conn)
         if self.logger:
             self.logger.debug(f'Rx: {response}')
         if self.debug:
@@ -267,12 +268,21 @@ class SelClient():
             # Check for Invalid Command Response from Relay
             if INVALID_COMMAND_STR in response:
                 raise exceptions.InvalidCommand(
-                    "Relay Reports Invalid Command: '{}'".format(response)
+                    f"Relay Reports Invalid Command: '{response}'"
                 )
         return response
 
     # Define Method to Read Until a "Clean" Prompt is Viewed
     def _read_clean_prompt(self):
+        """
+        Read and Send Carriage Return Characters to Clean Prompt.
+
+        Strategy
+        --------
+
+        Continue to send <CR><LF> until the counted "clean" responses reaches 3
+        or more.
+        """
         count = 0
         response = b''
         while count < 3:
@@ -281,7 +291,7 @@ class SelClient():
             if self.debug:
                 print('Clean prompt response:', response)
             # Count the Number of Clean Prompt Responses
-            if protoparser.CleanPrompt(response):
+            if parser.clean_prompt(response):
                 count += 1
             else:
                 count = 0
@@ -292,8 +302,10 @@ class SelClient():
     # Define Method to Attempt Reading Everything (only for telnetlib)
     def _read_everything(self):
         response = self._read_eager()
-        if self.logger: self.logger.info(f'Rx: {response}')
-        if self.debug: print(response)
+        if self.logger:
+            self.logger.info(f'Rx: {response}')
+        if self.debug:
+            print(response)
         return response
 
     # Define Method to Identify Current Access Level
@@ -374,7 +386,8 @@ class SelClient():
         # Identify Current Access Level
         time.sleep(self.__inter_cmd_delay__)
         level, _ = self.access_level()
-        if self.debug: print("Logging in to ACC")
+        if self.debug:
+            print("Logging in to ACC")
         self._write( commands.GO_ACC )
         # Provide Password
         if level == 0:
@@ -383,10 +396,12 @@ class SelClient():
             time.sleep( self.__inter_cmd_delay__ )
         resp = self._read_to_prompt( commands.LEVEL_0 )
         if b'Invalid' in resp:
-            if self.debug: print("Log-In Failed")
+            if self.debug:
+                print("Log-In Failed")
             return False
         else:
-            if self.debug: print("Log-In Succeeded")
+            if self.debug:
+                print("Log-In Succeeded")
             return True
 
     # Define Method to Access Level 2
@@ -422,7 +437,8 @@ class SelClient():
         if level == 0:
             if not self.access_level_1( **kwargs ):
                 return False
-        if self.debug: print("Logging in to 2AC")
+        if self.debug:
+            print("Logging in to 2AC")
         self._write( commands.GO_2AC )
         if level in [0, 1]:
             time.sleep( int(self.__inter_cmd_delay__ * 3) )
@@ -430,16 +446,18 @@ class SelClient():
             time.sleep( self.__inter_cmd_delay__ )
         resp = self._read_to_prompt( commands.LEVEL_0 )
         if b'Invalid' in resp:
-            if self.debug: print("Log-In Failed")
+            if self.debug:
+                print("Log-In Failed")
             return False
         else:
-            if self.debug: print("Log-In Succeeded")
+            if self.debug:
+                print("Log-In Succeeded")
             return True
 
     # Define Method to Perform Auto-Configuration Process
     def autoconfig( self, attempts: int = 0, verbose: bool = False, **kwargs ):
         """
-        Autoconfigure SELClient Instance.
+        Auto-Configure SELClient Instance.
 
         Method to operate the standard auto-configuration process
         with a connected relay to identify the system parameters of
@@ -475,8 +493,8 @@ class SelClient():
         Parameters
         ----------
         attempts:       int, optional
-                        Number of autoconfiguration attempts, setting to `0`
-                        will allow for repeated autoconfiguration until all
+                        Number of auto-configuration attempts, setting to `0`
+                        will allow for repeated auto-configuration until all
                         stages succeed. Defaults to 0
         verbose:        bool, optional
                         Control to dictate whether verbose printing operations
@@ -502,9 +520,10 @@ class SelClient():
         # TODO
         # Request Relay DNA Block
         self._read_clean_prompt()
-        if verbose: print("Reading Relay DNA Block...")
+        if verbose:
+            print("Reading Relay DNA Block...")
         self._write( commands.DNA )
-        self.dnaDef = protoparser.RelayDnaBlock(
+        self.dnaDef = parser.relay_dna_block(
             self._read_command_response(commands.DNA),
             encoding='utf-8',
             verbose=self.debug
@@ -512,9 +531,10 @@ class SelClient():
         # Request Relay BNA Block
         # TODO
         # Request Relay ID Block
-        if verbose: print("Reading Relay ID Block...")
+        if verbose:
+            print("Reading Relay ID Block...")
         self._write( commands.ID )
-        id_block = protoparser.RelayIdBlock(
+        id_block = parser.relay_id_block(
             self._read_command_response(commands.ID),
             encoding='utf-8',
             verbose=self.debug
@@ -528,7 +548,7 @@ class SelClient():
         self.config = id_block['CONFIG']
 
     # Define Method to Pack the Config Messages
-    @__retry__(fail_msg="Relay Definition Parsing Failed.")
+    @retry(fail_msg="Relay Definition Parsing Failed.")
     def autoconfig_relay_definition(self, attempts: int = 0,
         verbose: bool = False):
         """
@@ -548,8 +568,8 @@ class SelClient():
         Parameters
         ----------
         attempts:       int, optional
-                        Number of autoconfiguration attempts, setting to `0`
-                        will allow for repeated autoconfiguration until all
+                        Number of auto-configuration attempts, setting to `0`
+                        will allow for repeated auto-configuration until all
                         stages succeed. Defaults to 0
         verbose:        bool, optional
                         Control to dictate whether verbose printing operations
@@ -560,51 +580,51 @@ class SelClient():
         if verbose:
             print("Reading Relay Definition Block...")
         verbose = verbose or self.debug
-        self._write(commands.RELAY_DEFENITION + commands.CR )
-        definition = protoparser.RelayDefinitionBlock(
-            self._read_command_response(commands.RELAY_DEFENITION),
+        self._write(commands.RELAY_DEFINITION + commands.CR )
+        definition = parser.relay_definition_block(
+            self._read_command_response(commands.RELAY_DEFINITION),
             verbose=verbose
         )
         # Load the Relay Definition Information and Request the Meter Blocks
         if definition['fmmessagesup'] >= 1:
             if verbose:
                 print("Reading Fast Meter Definition Block...")
-            self.fmconfigcommand1   = \
+            self.fm_config_command_1   = \
                 definition['fmcommandinfo'][0]['configcommand']
-            self.fmcommand1         = \
+            self.fm_command_1         = \
                 definition['fmcommandinfo'][0]['command']
             self.fast_meter_supported = True
         if definition['fmmessagesup'] >= 2:
             if verbose:
                 print("Reading Fast Meter Demand Definition Block...")
-            self.fmconfigcommand2   = \
+            self.fm_config_command_2   = \
                 definition['fmcommandinfo'][1]['configcommand']
-            self.fmcommand2         = \
+            self.fm_command_2         = \
                 definition['fmcommandinfo'][1]['command']
             self.fast_meter_demand_supported = True
         if definition['fmmessagesup'] >= 3:
             if verbose:
                 print("Reading Fast Meter Peak Demand Definition Block...")
-            self.fmconfigcommand3   = \
+            self.fm_config_command_3   = \
                 definition['fmcommandinfo'][2]['configcommand']
-            self.fmcommand3         = \
+            self.fm_command_3         = \
                 definition['fmcommandinfo'][2]['command']
             self.fast_meter_peak_demand_supported = True
         # Interpret the Fast Operate Information if Present
         if definition['fopcommandinfo'] != '':
             if verbose:
                 print("Reading Fast Operate Definition Block...")
-            self.fopcommandinfo     = definition['fopcommandinfo']
+            self.fop_command_info     = definition['fopcommandinfo']
             self.fast_operate_supported = True
         # Interpret the Fast Message Information if Present
         if definition['fmsgcommandinfo'] != '':
             if verbose:
                 print("Reading Fast Message Definition Block...")
-            self.fmsgcommandinfo    = definition['fmsgcommandinfo']
+            self.fmsg_command_info    = definition['fmsgcommandinfo']
 
 
     # Define Method to Run the Fast Meter Configuration
-    @__retry__(fail_msg="Fast Meter Autoconfig Failed.")
+    @retry(fail_msg="Fast Meter Autoconfig Failed.")
     def autoconfig_fastmeter(self, attempts: int = 0, verbose: bool = False):
         """
         Autoconfigure Fast Meter for SEL Client.
@@ -623,8 +643,8 @@ class SelClient():
         Parameters
         ----------
         attempts:       int, optional
-                        Number of autoconfiguration attempts, setting to `0`
-                        will allow for repeated autoconfiguration until all
+                        Number of auto-configuration attempts, setting to `0`
+                        will allow for repeated auto-configuration until all
                         stages succeed. Defaults to 0
         verbose:        bool, optional
                         Control to dictate whether verbose printing operations
@@ -633,14 +653,14 @@ class SelClient():
         """
         # Fast Meter
         self._read_clean_prompt()
-        self._write( self.fmconfigcommand1 + commands.CR )
-        self.fastMeterDef = protoparser.FastMeterConfigurationBlock(
+        self._write( self.fm_config_command_1 + commands.CR )
+        self.fast_meter_definition = parser.fast_meter_configuration_block(
             self._read_to_prompt(),
             verbose=verbose,
         )
 
     # Define Method to Run the Fast Meter Demand Configuration
-    @__retry__(fail_msg="Fast Meter Demand Autoconfig Failed.")
+    @retry(fail_msg="Fast Meter Demand Autoconfig Failed.")
     def autoconfig_fastmeter_demand(self, attempts: int = 0,
         verbose: bool = False):
         """
@@ -660,8 +680,8 @@ class SelClient():
         Parameters
         ----------
         attempts:       int, optional
-                        Number of autoconfiguration attempts, setting to `0`
-                        will allow for repeated autoconfiguration until all
+                        Number of auto-configuration attempts, setting to `0`
+                        will allow for repeated auto-configuration until all
                         stages succeed. Defaults to 0
         verbose:        bool, optional
                         Control to dictate whether verbose printing operations
@@ -670,14 +690,14 @@ class SelClient():
         """
         # Fast Meter Demand
         self._read_clean_prompt()
-        self._write( self.fmconfigcommand2 + commands.CR )
-        self.fastDemandDef = protoparser.FastMeterConfigurationBlock(
+        self._write( self.fm_config_command_2 + commands.CR )
+        self.fast_demand_definition = parser.fast_meter_configuration_block(
             self._read_to_prompt(),
             verbose=verbose,
         )
 
     # Define Method to Run the Fast Meter Peak Demand Configuration
-    @__retry__(fail_msg="Fast Meter Peak Demand Autoconfig Failed.")
+    @retry(fail_msg="Fast Meter Peak Demand Autoconfig Failed.")
     def autoconfig_fastmeter_peakdemand(self, attempts: int = 0,
         verbose: bool = False):
         """
@@ -697,8 +717,8 @@ class SelClient():
         Parameters
         ----------
         attempts:       int, optional
-                        Number of autoconfiguration attempts, setting to `0`
-                        will allow for repeated autoconfiguration until all
+                        Number of auto-configuration attempts, setting to `0`
+                        will allow for repeated auto-configuration until all
                         stages succeed. Defaults to 0
         verbose:        bool, optional
                         Control to dictate whether verbose printing operations
@@ -707,14 +727,14 @@ class SelClient():
         """
         # Fast Meter Peak Demand
         self._read_clean_prompt()
-        self._write( self.fmconfigcommand3 + commands.CR )
-        self.fastPkDemandDef = protoparser.FastMeterConfigurationBlock(
+        self._write( self.fm_config_command_3 + commands.CR )
+        self.fast_peak_demand_definition = parser.fast_meter_configuration_block(
             self._read_to_prompt(),
             verbose=verbose,
         )
 
     # Define Method to Run the Fast Operate Configuration
-    @__retry__(fail_msg="Fast Operate Autoconfig Failed.")
+    @retry(fail_msg="Fast Operate Autoconfig Failed.")
     def autoconfig_fastoperate(self, attempts: int = 0, verbose: bool = False):
         """
         Autoconfigure Fast Operate for SEL Client.
@@ -733,8 +753,8 @@ class SelClient():
         Parameters
         ----------
         attempts:       int, optional
-                        Number of autoconfiguration attempts, setting to `0`
-                        will allow for repeated autoconfiguration until all
+                        Number of auto-configuration attempts, setting to `0`
+                        will allow for repeated auto-configuration until all
                         stages succeed. Defaults to 0
         verbose:        bool, optional
                         Control to dictate whether verbose printing operations
@@ -743,8 +763,8 @@ class SelClient():
         """
         # Fast Meter Peak Demand
         self._read_clean_prompt()
-        self._write( self.fopcommandinfo + commands.CR )
-        self.fastOpDef = protoparser.FastOpConfigurationBlock(
+        self._write( self.fop_command_info + commands.CR )
+        self.fastOpDef = parser.fast_op_configuration_block(
             self._read_to_prompt(),
             verbose=verbose,
         )
@@ -773,7 +793,7 @@ class SelClient():
                         Defaults to False
         """
         # Verify that Configuration is Valid
-        if self.fastMeterDef is None:
+        if self.fast_meter_definition is None:
             # TODO: Add Custom Exception to be More Explicit
             raise ValueError("Client has not been auto-configured yet!")
         # Raise to Appropriate Access Level if Needed
@@ -783,12 +803,12 @@ class SelClient():
             self.access_level_2( **kwargs )
         # Poll Client for Data
         self._read_clean_prompt()
-        self._write( self.fmcommand1 + commands.CR )
-        response = protoparser.FastMeterBlock(
+        self._write( self.fm_command_1 + commands.CR )
+        response = parser.fast_meter_block(
             self._read_command_response(
-                self.fmcommand1
+                self.fm_command_1
             ),
-            self.fastMeterDef,
+            self.fast_meter_definition,
             self.dnaDef,
             verbose=verbose,
         )
@@ -796,8 +816,11 @@ class SelClient():
         return response
 
     # Define Method to Send Fast Operate Command for Breaker Bit
-    def send_breaker_bit_fast_op(self, control_point: str,
-                                 command: str = 'trip'):
+    def send_breaker_bit_fast_op(
+        self,
+        control_point: str,
+        command: BreakerBitControlType = BreakerBitControlType.TRIP
+    ):
         """
         Send a Fast Operate Breaker Bit Control.
 
@@ -814,9 +837,9 @@ class SelClient():
                         Particular Remote Bit point which should be
                         controlled, should be of format 'RBxx' where
                         'xx' represents the remote bit number.
-        command:        str, optional
+        command:        BreakerBitControlType, optional
                         Command type which will be sent, must be of:
-                        ['SET', 'CLEAR', 'PULSE', 'OPEN', 'CLOSE'].
+                        ['TRIP', 'CLOSE'].
                         Defaults to 'trip'
         """
         # Write the Command
@@ -829,8 +852,11 @@ class SelClient():
         self._write( command_str )
 
     # Define Method to Send Fast Operate Command for Remote Bit
-    def send_remote_bit_fast_op(self, control_point: str,
-                                command: str = 'pulse'):
+    def send_remote_bit_fast_op(
+        self,
+        control_point: str,
+        command: RemoteBitControlType = RemoteBitControlType.PULSE
+    ):
         """
         Send a Fast Operate Remote Bit Control.
 
@@ -847,7 +873,7 @@ class SelClient():
                         Particular Remote Bit point which should be
                         controlled, should be of format 'RBxx' where
                         'xx' represents the remote bit number.
-        command:        str, optional
+        command:        RemoteBitControlType, optional
                         Command type which will be sent, must be of:
                         ['SET', 'CLEAR', 'PULSE', 'OPEN', 'CLOSE'].
                         Defaults to 'pulse'
@@ -869,7 +895,7 @@ if __name__ == '__main__':
     print('Establishing Connection...')
     # with telnetlib.Telnet('192.168.2.210', 23) as tn:
     #     print('Initializing Client...')
-    #     poller = SelClient( tn, logger=logger_obj, verbose=True, debug=True, noverify=True )
+    #     poller = SELClient( tn, logger=logger_obj, verbose=True, debug=True, noverify=True )
     #     poller.autoconfig_relay_definition(verbose=True)
     #     poller.autoconfig(verbose=True)
     #     poller.send_remote_bit_fast_op('RB1', 'pulse')
@@ -882,7 +908,7 @@ if __name__ == '__main__':
     #     poller.send_remote_bit_fast_op('RB1', 'pulse')
     sock = socket.create_connection(('192.168.2.210', 23))
     print('Initializing Client...')
-    poller = SelClient( sock, logger=logger_obj, verbose=True, debug=True )
+    poller = SELClient( sock, logger=logger_obj, verbose=True, debug=True )
     poller.autoconfig_relay_definition(verbose=True)
     poller.autoconfig(verbose=True)
 

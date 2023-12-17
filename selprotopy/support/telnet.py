@@ -1,10 +1,11 @@
+################################################################################
 """
 selprotopy: A Protocol Binding Suite for the SEL Protocol Suite.
 
 Supports:
-  - SEL Fast Meter
-  - SEL Fast Message
-  - SEL Fast Operate
+    - SEL Fast Meter
+    - SEL Fast Message
+    - SEL Fast Operate
 
 To use `telnetlib_support`, without importing `selprotopy` directly, use:
 
@@ -12,6 +13,7 @@ To use `telnetlib_support`, without importing `selprotopy` directly, use:
 telnetlib.Telnet.process_rawq = process_rawq
 ```
 """
+################################################################################
 
 # Telnetlib Support: Don't eat the Null Characters, They're Important!
 import telnetlib
@@ -89,7 +91,5 @@ def process_rawq(self):
         pass
     self.cookedq = self.cookedq + buf[0]
     self.sbdataq = self.sbdataq + buf[1]
-
-
 
 # END

@@ -16,14 +16,12 @@ SEL Protocol Application Guide: https://selinc.com/api/download/5026/
 """
 ################################################################################
 
-# Standard Imports
-import telnetlib
+try:
+    from selprotopy.client.serial import *
+except ImportError:
+    pass
 
-# Local Imports
-from selprotopy.support import telnet
-
-# Describe Package for External Interpretation
-__version__ = "0.1.0"
-
-# `telnetlib` Discards Null Characters, but SEL Protocol Requires them
-telnetlib.Telnet.process_rawq = telnet.process_rawq
+try:
+    from selprotopy.client.ethernet import *
+except ImportError:
+    pass

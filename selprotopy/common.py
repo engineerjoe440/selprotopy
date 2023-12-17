@@ -1,21 +1,40 @@
+################################################################################
 """
 selprotopy: A Protocol Binding Suite for the SEL Protocol Suite.
 
 Supports:
-  - SEL Fast Meter
-  - SEL Fast Message
-  - SEL Fast Operate
+    - SEL Fast Meter
+    - SEL Fast Message
+    - SEL Fast Operate
 """
+################################################################################
 
 # Import Requirements
 import time
 import math
 import struct
 from typing import AnyStr
+from enum import Enum
 
 from selprotopy import exceptions
 
 INVALID_COMMAND_STR = b"Invalid Command"
+
+
+class BreakerBitControlType(str, Enum):
+    """Control Type for Remote Bits."""
+
+    CLOSE = "CLOSE"
+    TRIP = "TRIP"
+
+class RemoteBitControlType(str, Enum):
+    """Control Type for Remote Bits."""
+
+    SET = "SET"
+    CLEAR = "CLEAR"
+    PULSE = "PULSE"
+    OPEN = "OPEN"
+    CLOSE = "CLOSE"
 
 
 # Define Simple Function to Cast Binary Integer to List of Bools
@@ -23,12 +42,12 @@ def int_to_bool_list(number: int, byte_like: bool = False,
                      reverse: bool = False):
     """
     Convert Integer to List of Booleans.
-    
+
     This function converts an integer to a list of boolean values,
     where the most significant value is stored in the highest point
     of the list. That is, a binary number: 8 would be represented as
     [False, False, False, True]
-    
+
     Parameters
     ----------
     number:     int
@@ -42,7 +61,7 @@ def int_to_bool_list(number: int, byte_like: bool = False,
     reverse:    bool, optional
                 Control to reverse the order of the binary/boolean
                 points.
-    
+
     Returns
     -------
     bin_list:   list of bool
@@ -63,7 +82,7 @@ def int_to_bool_list(number: int, byte_like: bool = False,
     return bin_list
 
 # Define Simple Function to Cast Binary Representation of IEEE 4-Byte FPS
-def ieee4bytefps(binary_bytes: bytes, total_digits: int = 7):
+def ieee_4_byte_fps(binary_bytes: bytes, total_digits: int = 7):
     """
     Convert 4-Bytes to IEEE Floating Point Value.
 
@@ -78,7 +97,7 @@ def ieee4bytefps(binary_bytes: bytes, total_digits: int = 7):
     total_digits:   int, optional
                     Number of digits (i.e. decimal accuracy) which
                     should be evaluated, defaults to 7.
-    
+
     Returns
     -------
     float:          IEEE floating-point representation of the 4-byte
@@ -110,7 +129,7 @@ def eval_checksum(data: AnyStr, constrain: bool = False ):
                 Control to specify whether the value should be
                 constrained to an 8-bit representation, defaults
                 to False.
-    
+
     Returns
     -------
     checksum:   int
@@ -126,9 +145,9 @@ def eval_checksum(data: AnyStr, constrain: bool = False ):
         checksum = checksum & 0xff # Bit-wise and with 8-bit maximum
     return checksum
 
-def __retry__(delay=0, fail_msg="Automatic Configuration Failed.",
-    log_msg="Malformed response received during autoconfiguration."):
-    """Retry Decorator"""
+def retry(delay=0, fail_msg="Automatic Configuration Failed.",
+    log_msg="Malformed response received during auto-configuration."):
+    """Decorate Functions and Methods to Handle Retrying Specific Operations."""
     def decorator(decor_method):
         def wrapper(cls, *args, **kwargs):
             attempts = 0
@@ -143,6 +162,7 @@ def __retry__(delay=0, fail_msg="Automatic Configuration Failed.",
                     if 'verbose' in kwargs.keys():
                         if bool(kwargs['verbose']):
                             print(log_msg)
+                            print(error)
                     # On exception, retry till count is exhausted
                     if cls.logger:
                         cls.logger.exception(log_msg, exc_info=error)
@@ -151,6 +171,5 @@ def __retry__(delay=0, fail_msg="Automatic Configuration Failed.",
             raise exceptions.AutoConfigurationFailure(fail_msg)
         return wrapper
     return decorator
-
 
 # END

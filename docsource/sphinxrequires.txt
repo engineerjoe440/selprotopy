@@ -1,0 +1,8 @@
+wheel
+sphinx
+pyserial
+numpydoc
+myst-parser
+sphinx-sitemap
+sphinx-immaterial
+coverage-badge
