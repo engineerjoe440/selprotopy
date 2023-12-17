@@ -7,4 +7,4 @@
    :toctree: api
    :template: module.rst
 
-   selprotopy.telnetlib_support
+   selprotopy.support.telnet

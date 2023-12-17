@@ -1,4 +1,4 @@
-.. _selprotopy.SelClient:
+.. _selprotopy.SELClient:
 
 .. rubric:: Modules
 

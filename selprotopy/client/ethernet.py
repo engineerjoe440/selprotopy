@@ -22,7 +22,7 @@ __all__ = ["TCPSELClient"]
 
 class TCPSELClient(SELClient):
     """
-    `SelClient` Class for Polling an SEL Relay/Intelligent Electronic Device.
+    `SELClient` Class for Polling an SEL Relay/Intelligent Electronic Device.
 
     The basic polling class intended to interact with an SEL relay which has
     already been connected to by way of a TCP socket connection.

@@ -1,7 +1,7 @@
 API Reference
 =============
 
-.. autoclass:: selprotopy.SelClient
+.. autoclass:: selprotopy.SELClient
    :members:
 
 

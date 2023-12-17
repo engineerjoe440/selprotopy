@@ -895,7 +895,7 @@ if __name__ == '__main__':
     print('Establishing Connection...')
     # with telnetlib.Telnet('192.168.2.210', 23) as tn:
     #     print('Initializing Client...')
-    #     poller = SelClient( tn, logger=logger_obj, verbose=True, debug=True, noverify=True )
+    #     poller = SELClient( tn, logger=logger_obj, verbose=True, debug=True, noverify=True )
     #     poller.autoconfig_relay_definition(verbose=True)
     #     poller.autoconfig(verbose=True)
     #     poller.send_remote_bit_fast_op('RB1', 'pulse')
