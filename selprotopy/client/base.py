@@ -275,6 +275,12 @@ class SelClient():
 
     # Define Method to Read Until a "Clean" Prompt is Viewed
     def _read_clean_prompt(self):
+        """
+        Strategy:
+
+        Continue to send <CR><LF> until the counted "clean" responses reaches 3
+        or more.
+        """
         count = 0
         response = b''
         while count < 3:

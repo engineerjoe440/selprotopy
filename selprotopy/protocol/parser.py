@@ -20,7 +20,7 @@ from selprotopy.exceptions import MalformedByteArray, ChecksumFail
 from selprotopy.exceptions import MissingA5Head, DnaDigitalsMisMatch
 
 # Define Clean Prompt Characters for RegEx
-RE_CLEAN_PROMPT_CHARS = re.compile(r'^[^\x02\x03\=\r\n\> ]*$')
+RE_CLEAN_PROMPT_CHARS = re.compile(r'\=\r\n')
 
 # Define DNA Control Character String for RegEx
 RE_DNA_CONTROL = re.compile(r'\>?.*DNA')
@@ -124,10 +124,7 @@ def clean_prompt(data: AnyStr, encoding: str = 'utf-8' ):
             data = data.decode(encoding)
         except UnicodeDecodeError:
             pass
-    match = re.search(RE_CLEAN_PROMPT_CHARS, data)
-    if not match:
-        return False
-    return True
+    return re.search(RE_CLEAN_PROMPT_CHARS, data) is not None
 
 ################################################################################
 # Define Relay ID Block Parser
