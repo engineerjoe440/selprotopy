@@ -31,7 +31,7 @@ Parse Errors
 Protocol Exceptions
 ===================
 
-.. autoexception:: selprotopy.exceptions.InvalidConmmandType
+.. autoexception:: selprotopy.exceptions.InvalidCommandType
 
 .. autoexception:: selprotopy.exceptions.InvalidControlType
 
