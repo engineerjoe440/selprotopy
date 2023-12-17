@@ -233,14 +233,18 @@ class SelClient():
 
     # Define Method to Read All Data to Next Relay Prompt
     def _read_to_prompt(self, prompt_str=commands.PROMPT):
-        # Telnetlib Supports a Timeout
         if hasattr(self.conn, "read_until"):
-            response = self.conn.read_until(prompt_str, timeout=self.timeout)
+            try:
+                # Telnetlib Supports a Timeout
+                response = self.conn.read_until(
+                    prompt_str,
+                    timeout=self.timeout
+                )
+            # PySerial Does not Support Timeout
+            except TypeError:
+                response = self.conn.read_until(prompt_str)
         elif hasattr(self.conn, 'socket_read'):
             response = socket.socket_read(self.conn)
-        # PySerial Does not Support Timeout
-        else:
-            response = self.conn.read_until(prompt_str)
         if self.logger:
             self.logger.debug(f'Rx: {response}')
         if self.debug:
