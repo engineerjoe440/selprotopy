@@ -107,9 +107,6 @@ def _cast_bytearray(data: AnyStr, debug: bool = True):
         byte_array = byte_array.split(commands.LEVEL_0)[0]
     if byte_array.endswith(commands.CR):
         byte_array = byte_array[:-2]
-    # Attempt to Reconcile Invalid Length by Comparing with Expected Message Len
-    if len(byte_array) > byte_array[byte_array[2] - 1]:
-        byte_array = byte_array.replace(b'\xff\xff', b'\xff')
     _validate_checksum( byte_array=byte_array )
     return byte_array
 
