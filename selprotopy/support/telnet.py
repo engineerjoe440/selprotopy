@@ -3,9 +3,9 @@
 selprotopy: A Protocol Binding Suite for the SEL Protocol Suite.
 
 Supports:
-  - SEL Fast Meter
-  - SEL Fast Message
-  - SEL Fast Operate
+    - SEL Fast Meter
+    - SEL Fast Message
+    - SEL Fast Operate
 
 To use `telnetlib_support`, without importing `selprotopy` directly, use:
 

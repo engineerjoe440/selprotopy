@@ -3,9 +3,9 @@
 selprotopy: A Protocol Binding Suite for the SEL Protocol Suite.
 
 Supports:
-  - SEL Fast Meter
-  - SEL Fast Message
-  - SEL Fast Operate
+    - SEL Fast Meter
+    - SEL Fast Message
+    - SEL Fast Operate
 
 To use `telnetlib_support`, without importing `selprotopy` directly, use:
 
@@ -21,7 +21,7 @@ import socket
 def socket_read(sock: socket.socket):
     """Read from the socket without blocking indefinitely."""
     data = b''
-    oldata = b''
+    old_data = b''
     timeout = sock.gettimeout()
     sock.settimeout(0.1)
     while True:
@@ -32,11 +32,11 @@ def socket_read(sock: socket.socket):
             except AttributeError:
                 # Windows
                 data += sock.recv(1024)
-            if data == oldata:
+            if data == old_data:
                 break
         except socket.timeout:
             break
-        oldata = data
+        old_data = data
     # Finished Collecting
     sock.settimeout(timeout)
     return data

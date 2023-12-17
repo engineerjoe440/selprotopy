@@ -3,12 +3,12 @@
 selprotopy: A Protocol Binding Suite for the SEL Protocol Suite.
 
 Supports:
-  - SEL Fast Meter
-  - SEL Fast Message
-  - SEL Fast Operate
+    - SEL Fast Meter
+    - SEL Fast Message
+    - SEL Fast Operate
 
 Author(s):
-  - Joe Stanley: engineerjoe440@yahoo.com
+    - Joe Stanley: engineerjoe440@yahoo.com
 
 Homepage: https://github.com/engineerjoe440/sel-proto-py
 
@@ -153,7 +153,7 @@ class SelClient():
         self.fastDemandDef      = None
         self.fastPkDemandDef    = None
 
-        if isinstance(self.conn, socket.socket):
+        if hasattr(self.conn, 'settimeout'):
             self.conn.settimeout(self.timeout)
 
         # Verify Connection by Searching for Prompt
@@ -165,7 +165,7 @@ class SelClient():
             if verbose:
                 print('Connection Verified.')
         self.quit()
-        if 'autoconfig' in kwargs.keys():
+        if 'autoconfig' in kwargs:
             # Run Auto-Configuration
             if not isinstance(kwargs['autoconfig'], bool):
                 self.autoconfig(verbose=verbose)
@@ -181,18 +181,18 @@ class SelClient():
             self._write( commands.CR + commands.CR + commands.CR )
             if isinstance(self.conn, telnetlib.Telnet):
                 response = self.conn.read_until( commands.CR )
-            elif isinstance(self.conn, socket.socket):
+            elif hasattr(self.conn, 'socket_read'):
                 response = socket.socket_read(self.conn)
             else:
                 # pySerial Method
                 response = self.conn.read_until( commands.CR )
-            if self.debug: print(response)
+            if self.debug:
+                print(response)
             if commands.LEVEL_0 in response:
                 # Relay Responded
                 connected = True
                 break
-            else:
-                time.sleep( self.__inter_cmd_delay__ )
+            time.sleep( self.__inter_cmd_delay__ )
         # Return Status
         return connected
 
@@ -201,11 +201,10 @@ class SelClient():
         # Switch on Connection Type
         if isinstance(self.conn, telnetlib.Telnet):
             return self.conn.read_very_eager()
-        elif isinstance(self.conn, socket.socket):
+        elif hasattr(self.conn, 'socket_read'):
             return socket.socket_read(self.conn)
-        else:
-            # pySerial
-            return self.conn.read_very_eager()
+        # pySerial
+        return self.conn.read_very_eager()
 
     # Define Method to "Clear" the Buffer
     def _clear_input_buffer(self):
@@ -231,7 +230,7 @@ class SelClient():
         # Switch on Writing Mechanism
         if isinstance(self.conn, telnetlib.Telnet):
             self.conn.write(data)
-        elif isinstance(self.conn, socket.socket):
+        elif hasattr(self.conn, 'sendall'):
             self.conn.sendall(data)
         else:
             # pySerial
@@ -242,7 +241,7 @@ class SelClient():
         # Telnetlib Supports a Timeout
         if isinstance(self.conn, telnetlib.Telnet):
             response = self.conn.read_until(prompt_str, timeout=self.timeout)
-        elif isinstance(self.conn, socket.socket):
+        elif hasattr(self.conn, 'socket_read'):
             response = socket.socket_read(self.conn)
         # PySerial Does not Support Timeout
         else:
@@ -379,7 +378,8 @@ class SelClient():
         # Identify Current Access Level
         time.sleep(self.__inter_cmd_delay__)
         level, _ = self.access_level()
-        if self.debug: print("Logging in to ACC")
+        if self.debug:
+            print("Logging in to ACC")
         self._write( commands.GO_ACC )
         # Provide Password
         if level == 0:
@@ -388,10 +388,12 @@ class SelClient():
             time.sleep( self.__inter_cmd_delay__ )
         resp = self._read_to_prompt( commands.LEVEL_0 )
         if b'Invalid' in resp:
-            if self.debug: print("Log-In Failed")
+            if self.debug:
+                print("Log-In Failed")
             return False
         else:
-            if self.debug: print("Log-In Succeeded")
+            if self.debug:
+                print("Log-In Succeeded")
             return True
 
     # Define Method to Access Level 2
@@ -427,7 +429,8 @@ class SelClient():
         if level == 0:
             if not self.access_level_1( **kwargs ):
                 return False
-        if self.debug: print("Logging in to 2AC")
+        if self.debug:
+            print("Logging in to 2AC")
         self._write( commands.GO_2AC )
         if level in [0, 1]:
             time.sleep( int(self.__inter_cmd_delay__ * 3) )
@@ -435,16 +438,18 @@ class SelClient():
             time.sleep( self.__inter_cmd_delay__ )
         resp = self._read_to_prompt( commands.LEVEL_0 )
         if b'Invalid' in resp:
-            if self.debug: print("Log-In Failed")
+            if self.debug:
+                print("Log-In Failed")
             return False
         else:
-            if self.debug: print("Log-In Succeeded")
+            if self.debug:
+                print("Log-In Succeeded")
             return True
 
     # Define Method to Perform Auto-Configuration Process
     def autoconfig( self, attempts: int = 0, verbose: bool = False, **kwargs ):
         """
-        Autoconfigure SELClient Instance.
+        Auto-Configure SELClient Instance.
 
         Method to operate the standard auto-configuration process
         with a connected relay to identify the system parameters of
@@ -507,7 +512,8 @@ class SelClient():
         # TODO
         # Request Relay DNA Block
         self._read_clean_prompt()
-        if verbose: print("Reading Relay DNA Block...")
+        if verbose:
+            print("Reading Relay DNA Block...")
         self._write( commands.DNA )
         self.dnaDef = parser.relay_dna_block(
             self._read_command_response(commands.DNA),
@@ -517,7 +523,8 @@ class SelClient():
         # Request Relay BNA Block
         # TODO
         # Request Relay ID Block
-        if verbose: print("Reading Relay ID Block...")
+        if verbose:
+            print("Reading Relay ID Block...")
         self._write( commands.ID )
         id_block = parser.relay_id_block(
             self._read_command_response(commands.ID),

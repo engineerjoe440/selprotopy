@@ -3,12 +3,12 @@
 selprotopy: A Protocol Binding Suite for the SEL Protocol Suite.
 
 Supports:
-  - SEL Fast Meter
-  - SEL Fast Message
-  - SEL Fast Operate
+    - SEL Fast Meter
+    - SEL Fast Message
+    - SEL Fast Operate
 
 Author(s):
-  - Joe Stanley: engineerjoe440@yahoo.com
+    - Joe Stanley: engineerjoe440@yahoo.com
 
 Homepage: https://github.com/engineerjoe440/sel-proto-py
 
