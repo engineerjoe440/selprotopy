@@ -10,22 +10,12 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
-# import re
-# import sys
-# print("Build with:", sys.version)
-# parent_dir = os.path.dirname(os.getcwd())
-# initfile = os.path.join(parent_dir,'selprotopy','__init__.py')
-# sys.path.insert(0,parent_dir)
-# print(parent_dir)
-# # Gather Version Information from Python File
-# with open(initfile) as fh:
-    # file_str = fh.read()
-    # name = re.search('_name_ = \"(.*)\"', file_str).group(1)
-    # ver = re.search('_version_ = \"(.*)\"', file_str).group(1)
-    # # Version Breakdown:
-    # # MAJOR CHANGE . MINOR CHANGE . MICRO CHANGE
-    # print("Sphinx HTML Build For:",name,"   Version:",ver)
+import os
+import sys
+print("Build with:", sys.version)
+parent_dir = os.path.dirname(os.path.dirname(__file__))
+sys.path.insert(0,parent_dir)
+print(parent_dir)
 
 
 # Verify Import

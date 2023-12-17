@@ -15,7 +15,9 @@ import re
 from selprotopy.common import ieee_4_byte_fps
 
 # Define Clean Prompt Characters for RegEx
-RE_CLEAN_PROMPT_CHARS = re.compile(r'\=\r\n')
+RE_CLEAN_PROMPT_CHARS = re.compile(
+    r'\=\>{0,2}\r\n|\>{0,2}\r\n\=|\r\n\=\>{0,2}|\n\=\>{0,2}\r'
+)
 
 # Define DNA Control Character String for RegEx
 RE_DNA_CONTROL = re.compile(r'\>?.*DNA')

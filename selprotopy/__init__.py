@@ -23,7 +23,7 @@ import telnetlib
 from selprotopy.support import telnet
 
 # Describe Package for External Interpretation
-__version__ = "0.1.1"
+__version__ = "0.1.2"
 
 # `telnetlib` Discards Null Characters, but SEL Protocol Requires them
 telnetlib.Telnet.process_rawq = telnet.process_rawq
