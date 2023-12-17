@@ -1,6 +1,0 @@
-selprotopy.protoparser.CleanPrompt
-==================================
-
-.. currentmodule:: selprotopy.protoparser
-
-.. autofunction:: CleanPrompt
