@@ -7,4 +7,4 @@
    :toctree: api
    :template: module.rst
 
-   selprotopy.commands
+   selprotopy.protocol.commands

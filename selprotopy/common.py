@@ -23,11 +23,13 @@ INVALID_COMMAND_STR = b"Invalid Command"
 
 class BreakerBitControlType(str, Enum):
     """Control Type for Remote Bits."""
+
     CLOSE = "CLOSE"
     TRIP = "TRIP"
 
 class RemoteBitControlType(str, Enum):
     """Control Type for Remote Bits."""
+
     SET = "SET"
     CLEAR = "CLEAR"
     PULSE = "PULSE"

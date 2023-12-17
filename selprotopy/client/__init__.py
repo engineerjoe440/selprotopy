@@ -15,3 +15,13 @@ Homepage: https://github.com/engineerjoe440/sel-proto-py
 SEL Protocol Application Guide: https://selinc.com/api/download/5026/
 """
 ################################################################################
+
+try:
+    from selprotopy.client.serial import *
+except ImportError:
+    pass
+
+try:
+    from selprotopy.client.ethernet import *
+except ImportError:
+    pass

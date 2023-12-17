@@ -16,9 +16,11 @@ SEL Protocol Application Guide: https://selinc.com/api/download/5026/
 """
 ################################################################################
 
-from selprotopy.client.base import SelClient
+from selprotopy.client.base import SELClient
 
-class TCPSELClient(SelClient):
+__all__ = ["TCPSELClient"]
+
+class TCPSELClient(SELClient):
     """
     `SelClient` Class for Polling an SEL Relay/Intelligent Electronic Device.
 

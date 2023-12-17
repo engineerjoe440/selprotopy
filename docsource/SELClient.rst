@@ -7,4 +7,4 @@
    :toctree: api
    :template: class.rst
 
-   selprotopy.SelClient
+   selprotopy.client.base.SELClient

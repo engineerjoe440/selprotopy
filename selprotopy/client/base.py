@@ -30,9 +30,9 @@ from selprotopy.support import socket
 
 
 # Define Simple Polling Client
-class SelClient():
+class SELClient():
     """
-    `SelClient` Class for Polling an SEL Relay/Intelligent Electronic Device.
+    `SELClient` Class for Polling an SEL Relay/Intelligent Electronic Device.
 
     The basic polling class intended to interact with an SEL relay which has
     already been connected to by way of a Telnet or Serial connection using one
@@ -134,19 +134,19 @@ class SelClient():
         self.fast_operate_supported = False
 
         # Define the Various Command Defaults
-        self.fmconfigcommand1   = commands.FM_CONFIG_BLOCK
-        self.fmcommand1         = commands.FM_DEMAND_CONFIG_BLOCK
-        self.fmconfigcommand2   = commands.FM_PEAK_CONFIG_BLOCK
-        self.fmcommand2         = commands.FAST_METER_REGULAR
-        self.fmconfigcommand3   = commands.FAST_METER_DEMAND
-        self.fmcommand3         = commands.FAST_METER_PEAK_DEMAND
-        self.fopcommandinfo     = commands.FO_CONFIG_BLOCK
-        self.fmsgcommandinfo    = commands.FAST_MSG_CONFIG_BLOCK
+        self.fm_config_command_1 = commands.FM_CONFIG_BLOCK
+        self.fm_command_1 = commands.FM_DEMAND_CONFIG_BLOCK
+        self.fm_config_command_2 = commands.FM_PEAK_CONFIG_BLOCK
+        self.fm_command_2 = commands.FAST_METER_REGULAR
+        self.fm_config_command_3 = commands.FAST_METER_DEMAND
+        self.fm_command_3 = commands.FAST_METER_PEAK_DEMAND
+        self.fop_command_info = commands.FO_CONFIG_BLOCK
+        self.fmsg_command_info = commands.FAST_MSG_CONFIG_BLOCK
 
         # Allocate Space for Relay Definition Responses
-        self.fastMeterDef       = None
-        self.fastDemandDef      = None
-        self.fastPkDemandDef    = None
+        self.fast_meter_definition = None
+        self.fast_demand_definition = None
+        self.fast_peak_demand_definition = None
 
         if hasattr(self.conn, 'settimeout'):
             self.conn.settimeout(self.timeout)
@@ -275,7 +275,10 @@ class SelClient():
     # Define Method to Read Until a "Clean" Prompt is Viewed
     def _read_clean_prompt(self):
         """
-        Strategy:
+        Read and Send Carriage Return Characters to Clean Prompt.
+
+        Strategy
+        --------
 
         Continue to send <CR><LF> until the counted "clean" responses reaches 3
         or more.
@@ -586,38 +589,38 @@ class SelClient():
         if definition['fmmessagesup'] >= 1:
             if verbose:
                 print("Reading Fast Meter Definition Block...")
-            self.fmconfigcommand1   = \
+            self.fm_config_command_1   = \
                 definition['fmcommandinfo'][0]['configcommand']
-            self.fmcommand1         = \
+            self.fm_command_1         = \
                 definition['fmcommandinfo'][0]['command']
             self.fast_meter_supported = True
         if definition['fmmessagesup'] >= 2:
             if verbose:
                 print("Reading Fast Meter Demand Definition Block...")
-            self.fmconfigcommand2   = \
+            self.fm_config_command_2   = \
                 definition['fmcommandinfo'][1]['configcommand']
-            self.fmcommand2         = \
+            self.fm_command_2         = \
                 definition['fmcommandinfo'][1]['command']
             self.fast_meter_demand_supported = True
         if definition['fmmessagesup'] >= 3:
             if verbose:
                 print("Reading Fast Meter Peak Demand Definition Block...")
-            self.fmconfigcommand3   = \
+            self.fm_config_command_3   = \
                 definition['fmcommandinfo'][2]['configcommand']
-            self.fmcommand3         = \
+            self.fm_command_3         = \
                 definition['fmcommandinfo'][2]['command']
             self.fast_meter_peak_demand_supported = True
         # Interpret the Fast Operate Information if Present
         if definition['fopcommandinfo'] != '':
             if verbose:
                 print("Reading Fast Operate Definition Block...")
-            self.fopcommandinfo     = definition['fopcommandinfo']
+            self.fop_command_info     = definition['fopcommandinfo']
             self.fast_operate_supported = True
         # Interpret the Fast Message Information if Present
         if definition['fmsgcommandinfo'] != '':
             if verbose:
                 print("Reading Fast Message Definition Block...")
-            self.fmsgcommandinfo    = definition['fmsgcommandinfo']
+            self.fmsg_command_info    = definition['fmsgcommandinfo']
 
 
     # Define Method to Run the Fast Meter Configuration
@@ -650,8 +653,8 @@ class SelClient():
         """
         # Fast Meter
         self._read_clean_prompt()
-        self._write( self.fmconfigcommand1 + commands.CR )
-        self.fastMeterDef = parser.fast_meter_configuration_block(
+        self._write( self.fm_config_command_1 + commands.CR )
+        self.fast_meter_definition = parser.fast_meter_configuration_block(
             self._read_to_prompt(),
             verbose=verbose,
         )
@@ -687,8 +690,8 @@ class SelClient():
         """
         # Fast Meter Demand
         self._read_clean_prompt()
-        self._write( self.fmconfigcommand2 + commands.CR )
-        self.fastDemandDef = parser.fast_meter_configuration_block(
+        self._write( self.fm_config_command_2 + commands.CR )
+        self.fast_demand_definition = parser.fast_meter_configuration_block(
             self._read_to_prompt(),
             verbose=verbose,
         )
@@ -724,8 +727,8 @@ class SelClient():
         """
         # Fast Meter Peak Demand
         self._read_clean_prompt()
-        self._write( self.fmconfigcommand3 + commands.CR )
-        self.fastPkDemandDef = parser.fast_meter_configuration_block(
+        self._write( self.fm_config_command_3 + commands.CR )
+        self.fast_peak_demand_definition = parser.fast_meter_configuration_block(
             self._read_to_prompt(),
             verbose=verbose,
         )
@@ -760,7 +763,7 @@ class SelClient():
         """
         # Fast Meter Peak Demand
         self._read_clean_prompt()
-        self._write( self.fopcommandinfo + commands.CR )
+        self._write( self.fop_command_info + commands.CR )
         self.fastOpDef = parser.fast_op_configuration_block(
             self._read_to_prompt(),
             verbose=verbose,
@@ -790,7 +793,7 @@ class SelClient():
                         Defaults to False
         """
         # Verify that Configuration is Valid
-        if self.fastMeterDef is None:
+        if self.fast_meter_definition is None:
             # TODO: Add Custom Exception to be More Explicit
             raise ValueError("Client has not been auto-configured yet!")
         # Raise to Appropriate Access Level if Needed
@@ -800,12 +803,12 @@ class SelClient():
             self.access_level_2( **kwargs )
         # Poll Client for Data
         self._read_clean_prompt()
-        self._write( self.fmcommand1 + commands.CR )
+        self._write( self.fm_command_1 + commands.CR )
         response = parser.fast_meter_block(
             self._read_command_response(
-                self.fmcommand1
+                self.fm_command_1
             ),
-            self.fastMeterDef,
+            self.fast_meter_definition,
             self.dnaDef,
             verbose=verbose,
         )
@@ -905,7 +908,7 @@ if __name__ == '__main__':
     #     poller.send_remote_bit_fast_op('RB1', 'pulse')
     sock = socket.create_connection(('192.168.2.210', 23))
     print('Initializing Client...')
-    poller = SelClient( sock, logger=logger_obj, verbose=True, debug=True )
+    poller = SELClient( sock, logger=logger_obj, verbose=True, debug=True )
     poller.autoconfig_relay_definition(verbose=True)
     poller.autoconfig(verbose=True)
 

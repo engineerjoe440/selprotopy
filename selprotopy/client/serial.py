@@ -18,9 +18,11 @@ SEL Protocol Application Guide: https://selinc.com/api/download/5026/
 
 import serial
 
-from selprotopy.client.base import SelClient
+from selprotopy.client.base import SELClient
 
-class SerialSELClient(SelClient):
+__all__ = ["SerialSELClient"]
+
+class SerialSELClient(SELClient):
     """
     `SelClient` Class for Polling an SEL Relay/Intelligent Electronic Device.
 
@@ -99,8 +101,6 @@ class SerialSELClient(SelClient):
             baudrate=baudrate,
             bytesize=bytesize,
             parity=parity,
-            stopbits=stopbits,
-            timeout=timeout,
             xonxoff=xonxoff,
             rtscts=rtscts,
             write_timeout=write_timeout
