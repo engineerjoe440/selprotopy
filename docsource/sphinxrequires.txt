@@ -4,5 +4,5 @@ pyserial
 numpydoc
 myst-parser
 sphinx-sitemap
-sphinx-material
+sphinx-immaterial
 coverage-badge

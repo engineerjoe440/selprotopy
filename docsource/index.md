@@ -1,3 +1,5 @@
+:hero: <b><i>Python Bindings for the SEL Protocol Suite</i></b>
+
 # SELPROTOPY: Python Bindings for the SEL Protocol Suite
 
 `selprotopy` is intended to be used as a protocol binding suite for the SEL
@@ -23,10 +25,10 @@ detail about the protocol's implementation.
 
 ```{toctree}
 ---
-    maxdepth: 1
+maxdepth: 1
 ---
    
-    selprotopy
+selprotopy
 ```
 
 ```{warning}

@@ -53,14 +53,13 @@ extensions = [
     'sphinx.ext.napoleon',
     'sphinx.ext.autosummary',
     'numpydoc',
-    'sphinx_sitemap',
+    #'sphinx_sitemap',
     'myst_parser',
+    'sphinx_immaterial',
 ]
 autosummary_generate = True
 numpydoc_show_class_members = True
 
-# Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -73,46 +72,50 @@ exclude_patterns = []
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_baseurl = "https://selprotopy.readthedocs.io/en/latest/"
-html_theme = 'sphinx_material'
+html_theme = 'sphinx_immaterial'
 html_title = 'selprotopy'
 html_logo  = '../logo/selprotopy.png'
 html_favicon = '../logo/relay.png'
 html_theme_options = {
 
-    # Set the name of the project to appear in the navigation.
-    'nav_title': 'SELProtoPy',
-
     # Specify a base_url used to generate sitemap.xml. If not
     # specified, then no sitemap will be built.
-    'base_url': 'https://selprotopy.readthedocs.io/en/latest/',
+    'site_url': 'https://selprotopy.readthedocs.io/en/latest/',
 
     # Set the color and the accent color
-    'theme_color': '#08385D',
-    'color_primary': 'light-blue',
-    'color_accent': 'blue',
+    "palette": [
+        {
+            "primary": "light-blue",
+            "accent": "blue",
+            "media": "(prefers-color-scheme: light)",
+            "scheme": "default",
+            "toggle": {
+                "icon": "material/toggle-switch-off-outline",
+                "name": "Switch to dark mode",
+            }
+        },
+        {
+            "primary": "blue",
+            "accent": "light-blue",
+            "media": "(prefers-color-scheme: dark)",
+            "scheme": "slate",
+            "toggle": {
+                "icon": "material/toggle-switch",
+                "name": "Switch to light mode",
+            }
+        },
+    ],
 
     # Set the repo location to get a badge with stats
     'repo_url': 'https://github.com/engineerjoe440/selprotopy/',
     'repo_name': 'selprotopy',
 
-    # Set the leading text at the top of the index page and others
-    "heroes": {
-        "index": "<b><i>Python Bindings for the SEL Protocol Suite</i></b>",
+    "icon": {
+        "repo": "fontawesome/brands/github",
+        "logo": "material/library",
     },
-
-    # Visible levels of the global TOC; -1 means unlimited
-    'globaltoc_depth': 2,
-    # If False, expand all TOC entries
-    'globaltoc_collapse': False,
-    # If True, show hidden TOC entries
-    'globaltoc_includehidden': False,
 }
 
-# Add any paths that contain custom static files (such as style sheets) here,
-# relative to this directory. They are copied after the builtin static files,
-# so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['static']
 
 
 
