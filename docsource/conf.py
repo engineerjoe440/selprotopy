@@ -73,6 +73,7 @@ exclude_patterns = []
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
+html_baseurl = "https://selprotopy.readthedocs.io/en/latest/"
 html_theme = 'sphinx_material'
 html_title = 'selprotopy'
 html_logo  = '../logo/selprotopy.png'
