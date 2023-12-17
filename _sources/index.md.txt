@@ -1,4 +1,6 @@
+---
 :hero: <b><i>Python Bindings for the SEL Protocol Suite</i></b>
+---
 
 # SELPROTOPY: Python Bindings for the SEL Protocol Suite
 
