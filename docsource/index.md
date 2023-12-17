@@ -11,11 +11,11 @@ Operate; each of which are proprietary protocols designed by
 with protective electric relays, and other intelligent electronic devices.
 
 ```{note}
-    This project, although binding SEL Protocol, is not sponsored, tested, or
-    vetted in any way by Schweitzer Engineering Laboratories (SEL). This project
-    is authored and maintained as an open-source project. Testing is performed
-    on a very small set of hardware running in the author's basement. In short,
-    this project has no association with SEL.
+This project, although binding SEL Protocol, is not sponsored, tested, or
+vetted in any way by Schweitzer Engineering Laboratories (SEL). This project
+is authored and maintained as an open-source project. Testing is performed
+on a very small set of hardware running in the author's basement. In short,
+this project has no association with SEL.
 ```
 
 ## Protocol Documentation
@@ -34,11 +34,11 @@ selprotopy
 ```
 
 ```{warning}
-    *Since this project is not rigorously tested across all SEL devices or in a
-    wide variety of use-cases, any time this project is used, it should first be
-    thoroughly tested. This project is not intended to serve protection-class
-    systems in any capacity. It should primarily be used for research,
-    exploration, and other learning objectives.*
+*Since this project is not rigorously tested across all SEL devices or in a
+wide variety of use-cases, any time this project is used, it should first be
+thoroughly tested. This project is not intended to serve protection-class
+systems in any capacity. It should primarily be used for research,
+exploration, and other learning objectives.*
 ```
 
 ### Installation
