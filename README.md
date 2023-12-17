@@ -7,20 +7,22 @@ Schweitzer Engineering Laboratories (SEL) Protocol Bindings in Python
 [![License](https://img.shields.io/pypi/l/selprotopy.svg?color=blue)](https://github.com/engineerjoe440/selprotopy/blob/master/LICENSE.txt)
 
 
-[![Build Status](http://jenkins.stanleysolutionsnw.com/buildStatus/icon?job=SELProtoPy-CI)](http://jenkins.stanleysolutionsnw.com/job/SELProtoPy-CI/)
+<!-- [![Build Status](http://jenkins.stanleysolutionsnw.com/buildStatus/icon?job=SELProtoPy-CI)](http://jenkins.stanleysolutionsnw.com/job/SELProtoPy-CI/) -->
 [![pydocstyle](https://github.com/engineerjoe440/selprotopy/actions/workflows/pydocstyle.yml/badge.svg?branch=master)](https://github.com/engineerjoe440/selprotopy/actions/workflows/pydocstyle.yml)
 [![pylint](https://github.com/engineerjoe440/selprotopy/actions/workflows/pylint.yml/badge.svg)](https://github.com/engineerjoe440/selprotopy/actions/workflows/pylint.yml)
 
 ***This project is still in early stages, much is still to come.***
 
-## Description:
+## Description
+
 `selprotopy` is intended to be used as a protocol binding suite for the SEL Protocol
 suite which includes SEL Fast Meter, SEL Fast Message, and SEL Fast Operate; each of
 which are proprietary protocols designed by
 [Schweitzer Engineering Laboratories](https://selinc.com/) for use primarily with
 protective electric relays, and other intelligent electronic devices.
 
-# :warning: Caution:
+# ⚠️ Caution
+
 ***This project, although binding SEL Protocol, is not sponsored, tested, or vetted in any
 way by Schweitzer Engineering Laboratories (SEL). This project is authored and maintained
 as an open-source project. Testing is performed on a very small set of hardware running
@@ -31,7 +33,8 @@ of use-cases, any time this project is used, it should first be thoroughly teste
 project is not intended to serve protection-class systems in any capacity. It should
 primarily be used for research, exploration, and other learning objectives.*
 
-## Protocol Documentation:
+## :books: Protocol Documentation
+
 SEL Protocol was introduced in the early 1990s to support various communications and
 control of SEL protective relays. SEL provided a very supportive
 [application guide](https://selinc.com/api/download/5026/?lang=en) which provides great
