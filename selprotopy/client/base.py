@@ -18,20 +18,15 @@ SEL Protocol Application Guide: https://selinc.com/api/download/5026/
 
 # Standard Imports
 import time
-import telnetlib
-import socket
 import logging
 
 # Local Imports
-from selprotopy.common import __retry__, INVALID_COMMAND_STR
-from selprotopy import (
-    exceptions
+from selprotopy.common import (
+    retry, INVALID_COMMAND_STR, RemoteBitControlType, BreakerBitControlType
 )
+from selprotopy import exceptions
 from selprotopy.protocol import commands, parser
-from selprotopy.support import socket, telnet
-
-# `telnetlib` Discards Null Characters, but SEL Protocol Requires them
-telnetlib.Telnet.process_rawq = telnet.process_rawq
+from selprotopy.support import socket
 
 
 # Define Simple Polling Client
@@ -179,7 +174,7 @@ class SelClient():
         # Iteratively attempt to see relay's response
         for _ in range(self.__num_con_check__):
             self._write( commands.CR + commands.CR + commands.CR )
-            if isinstance(self.conn, telnetlib.Telnet):
+            if hasattr(self.conn, "read_until"):
                 response = self.conn.read_until( commands.CR )
             elif hasattr(self.conn, 'socket_read'):
                 response = socket.socket_read(self.conn)
@@ -199,7 +194,7 @@ class SelClient():
     # Define Method to Handle Eager Reading Between Connection Methods
     def _read_eager(self):
         # Switch on Connection Type
-        if isinstance(self.conn, telnetlib.Telnet):
+        if hasattr(self.conn, "read_until"):
             return self.conn.read_very_eager()
         elif hasattr(self.conn, 'socket_read'):
             return socket.socket_read(self.conn)
@@ -228,7 +223,7 @@ class SelClient():
     # Define Method to Handle Writing for telnetlib-vs-socket
     def _write(self, data):
         # Switch on Writing Mechanism
-        if isinstance(self.conn, telnetlib.Telnet):
+        if hasattr(self.conn, "read_until"):
             self.conn.write(data)
         elif hasattr(self.conn, 'sendall'):
             self.conn.sendall(data)
@@ -239,7 +234,7 @@ class SelClient():
     # Define Method to Read All Data to Next Relay Prompt
     def _read_to_prompt(self, prompt_str=commands.PROMPT):
         # Telnetlib Supports a Timeout
-        if isinstance(self.conn, telnetlib.Telnet):
+        if hasattr(self.conn, "read_until"):
             response = self.conn.read_until(prompt_str, timeout=self.timeout)
         elif hasattr(self.conn, 'socket_read'):
             response = socket.socket_read(self.conn)
@@ -546,7 +541,7 @@ class SelClient():
         self.config = id_block['CONFIG']
 
     # Define Method to Pack the Config Messages
-    @__retry__(fail_msg="Relay Definition Parsing Failed.")
+    @retry(fail_msg="Relay Definition Parsing Failed.")
     def autoconfig_relay_definition(self, attempts: int = 0,
         verbose: bool = False):
         """
@@ -622,7 +617,7 @@ class SelClient():
 
 
     # Define Method to Run the Fast Meter Configuration
-    @__retry__(fail_msg="Fast Meter Autoconfig Failed.")
+    @retry(fail_msg="Fast Meter Autoconfig Failed.")
     def autoconfig_fastmeter(self, attempts: int = 0, verbose: bool = False):
         """
         Autoconfigure Fast Meter for SEL Client.
@@ -658,7 +653,7 @@ class SelClient():
         )
 
     # Define Method to Run the Fast Meter Demand Configuration
-    @__retry__(fail_msg="Fast Meter Demand Autoconfig Failed.")
+    @retry(fail_msg="Fast Meter Demand Autoconfig Failed.")
     def autoconfig_fastmeter_demand(self, attempts: int = 0,
         verbose: bool = False):
         """
@@ -695,7 +690,7 @@ class SelClient():
         )
 
     # Define Method to Run the Fast Meter Peak Demand Configuration
-    @__retry__(fail_msg="Fast Meter Peak Demand Autoconfig Failed.")
+    @retry(fail_msg="Fast Meter Peak Demand Autoconfig Failed.")
     def autoconfig_fastmeter_peakdemand(self, attempts: int = 0,
         verbose: bool = False):
         """
@@ -732,7 +727,7 @@ class SelClient():
         )
 
     # Define Method to Run the Fast Operate Configuration
-    @__retry__(fail_msg="Fast Operate Autoconfig Failed.")
+    @retry(fail_msg="Fast Operate Autoconfig Failed.")
     def autoconfig_fastoperate(self, attempts: int = 0, verbose: bool = False):
         """
         Autoconfigure Fast Operate for SEL Client.
@@ -814,8 +809,11 @@ class SelClient():
         return response
 
     # Define Method to Send Fast Operate Command for Breaker Bit
-    def send_breaker_bit_fast_op(self, control_point: str,
-                                 command: str = 'trip'):
+    def send_breaker_bit_fast_op(
+        self,
+        control_point: str,
+        command: BreakerBitControlType = BreakerBitControlType.TRIP
+    ):
         """
         Send a Fast Operate Breaker Bit Control.
 
@@ -832,9 +830,9 @@ class SelClient():
                         Particular Remote Bit point which should be
                         controlled, should be of format 'RBxx' where
                         'xx' represents the remote bit number.
-        command:        str, optional
+        command:        BreakerBitControlType, optional
                         Command type which will be sent, must be of:
-                        ['SET', 'CLEAR', 'PULSE', 'OPEN', 'CLOSE'].
+                        ['TRIP', 'CLOSE'].
                         Defaults to 'trip'
         """
         # Write the Command
@@ -847,8 +845,11 @@ class SelClient():
         self._write( command_str )
 
     # Define Method to Send Fast Operate Command for Remote Bit
-    def send_remote_bit_fast_op(self, control_point: str,
-                                command: str = 'pulse'):
+    def send_remote_bit_fast_op(
+        self,
+        control_point: str,
+        command: RemoteBitControlType = RemoteBitControlType.PULSE
+    ):
         """
         Send a Fast Operate Remote Bit Control.
 
@@ -865,7 +866,7 @@ class SelClient():
                         Particular Remote Bit point which should be
                         controlled, should be of format 'RBxx' where
                         'xx' represents the remote bit number.
-        command:        str, optional
+        command:        RemoteBitControlType, optional
                         Command type which will be sent, must be of:
                         ['SET', 'CLEAR', 'PULSE', 'OPEN', 'CLOSE'].
                         Defaults to 'pulse'

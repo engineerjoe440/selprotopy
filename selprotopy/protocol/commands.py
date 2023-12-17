@@ -10,10 +10,13 @@ Supports:
 ################################################################################
 
 # Standard Package Imports
+from typing import Union
 import re
 
 # Local Imports
-from selprotopy.common import eval_checksum
+from selprotopy.common import (
+    eval_checksum, BreakerBitControlType, RemoteBitControlType
+)
 from selprotopy.exceptions import InvalidControlType
 
 # Define Various Binary Requests
@@ -102,8 +105,12 @@ def event_record_request(event_number: int):
 
 ################################################################################
 # Define Function to Prepare Fast Operate Command
-def prepare_fastop_command(control_type: str, control_point: str, command: str,
-                           fastop_def: dict):
+def prepare_fastop_command(
+    control_type: str,
+    control_point: str,
+    command: Union[BreakerBitControlType, RemoteBitControlType],
+    fastop_def: dict
+):
     """
     Prepare a fast operate command for a relay.
 
@@ -126,7 +133,7 @@ def prepare_fastop_command(control_type: str, control_point: str, command: str,
     if isinstance(control_point, str):
         control_point = int(re.findall(r'(\d+)',control_point)[0])
     # Verify the Command Type
-    if command.lower() not in ['set', 'clear', 'pulse', 'open', 'close']:
+    if command.lower() not in ['set', 'clear', 'pulse', 'open', 'close', 'trip']:
         # Indicate invalid command type
         raise ValueError("Invalid command type")
     # Set up Breaker or Remote Control
@@ -139,7 +146,7 @@ def prepare_fastop_command(control_type: str, control_point: str, command: str,
         raise InvalidControlType("Invalid control type described.")
     command_string += bytes([6]) # Length (in bytes)
     try:
-        control = fastop_def['remotebitconfig'][control_point-1][command]
+        control = fastop_def['remotebitconfig'][control_point-1][str(command)]
         print("control", control)
     except KeyError as err:
         raise ValueError("Improper command type for control point.") from err

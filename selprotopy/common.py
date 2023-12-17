@@ -14,10 +14,25 @@ import time
 import math
 import struct
 from typing import AnyStr
+from enum import Enum
 
 from selprotopy import exceptions
 
 INVALID_COMMAND_STR = b"Invalid Command"
+
+
+class BreakerBitControlType(str, Enum):
+    """Control Type for Remote Bits."""
+    CLOSE = "CLOSE"
+    TRIP = "TRIP"
+
+class RemoteBitControlType(str, Enum):
+    """Control Type for Remote Bits."""
+    SET = "SET"
+    CLEAR = "CLEAR"
+    PULSE = "PULSE"
+    OPEN = "OPEN"
+    CLOSE = "CLOSE"
 
 
 # Define Simple Function to Cast Binary Integer to List of Bools
@@ -128,7 +143,7 @@ def eval_checksum(data: AnyStr, constrain: bool = False ):
         checksum = checksum & 0xff # Bit-wise and with 8-bit maximum
     return checksum
 
-def __retry__(delay=0, fail_msg="Automatic Configuration Failed.",
+def retry(delay=0, fail_msg="Automatic Configuration Failed.",
     log_msg="Malformed response received during auto-configuration."):
     """Decorate Functions and Methods to Handle Retrying Specific Operations."""
     def decorator(decor_method):
@@ -145,6 +160,7 @@ def __retry__(delay=0, fail_msg="Automatic Configuration Failed.",
                     if 'verbose' in kwargs.keys():
                         if bool(kwargs['verbose']):
                             print(log_msg)
+                            print(error)
                     # On exception, retry till count is exhausted
                     if cls.logger:
                         cls.logger.exception(log_msg, exc_info=error)

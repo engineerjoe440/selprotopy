@@ -70,18 +70,18 @@ ANALOG_TYPE_FORMATTERS = {
 def _validate_checksum(byte_array: bytearray):
     """Use last byte in a byte array as checksum to verify preceding bytes."""
     # Assume Valid Message, and Find the Length of the Data
-    dataLen = byte_array[2]  # Third Byte, Message Length
+    data_length = byte_array[2]  # Third Byte, Message Length
     # Collect the Checksum from the Data
     try:
-        checksum_byte = byte_array[dataLen - 1]  # Extract checksum byte
-    except Exception as err:
+        checksum_byte = byte_array[data_length - 1]  # Extract checksum byte
+    except IndexError as err:
         # Indicate Malformed Byte Array
         raise MalformedByteArray(
-            f"Length of byte array extracted ({dataLen}) appears invalid. "
-            f"Attempted extracting byte at position {dataLen-1} but length is "
-            f"{len(byte_array)}."
+            f"Length of byte array extracted ({data_length}) appears invalid. "
+            f"Attempted extracting byte at position {data_length-1} but length "
+            f"is {len(byte_array)}."
         ) from err
-    data = byte_array[:dataLen - 1]  # Don't include last byte
+    data = byte_array[:data_length - 1]  # Don't include last byte
     confirmed = eval_checksum(data, constrain=True)
     if checksum_byte != confirmed:
         raise ChecksumFail(
