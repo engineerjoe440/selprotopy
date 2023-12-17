@@ -146,7 +146,11 @@ def prepare_fastop_command(
         raise InvalidControlType("Invalid control type described.")
     command_string += bytes([6]) # Length (in bytes)
     try:
-        control = fastop_def['remotebitconfig'][control_point-1][str(command)]
+        try:
+            command_opt = command.value
+        except AttributeError:
+            command_opt = str(command)
+        control = fastop_def['remotebitconfig'][control_point-1][command_opt]
         print("control", control)
     except KeyError as err:
         raise ValueError("Improper command type for control point.") from err
