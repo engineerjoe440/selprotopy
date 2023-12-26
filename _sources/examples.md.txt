@@ -8,7 +8,7 @@ surrounding this tool.
 ```{toctree}
 ---
 maxdepth: 1
-glob: true
+glob:
 ---
 
 examples/*
