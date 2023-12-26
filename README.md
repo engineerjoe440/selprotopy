@@ -11,6 +11,10 @@ Schweitzer Engineering Laboratories (SEL) Protocol Bindings in Python
 [![pydocstyle](https://github.com/engineerjoe440/selprotopy/actions/workflows/pydocstyle.yml/badge.svg?branch=master)](https://github.com/engineerjoe440/selprotopy/actions/workflows/pydocstyle.yml)
 [![pylint](https://github.com/engineerjoe440/selprotopy/actions/workflows/pylint.yml/badge.svg)](https://github.com/engineerjoe440/selprotopy/actions/workflows/pylint.yml)
 
+GitHub Pages (development documentation): https://engineerjoe440.github.io/selprotopy/
+
+ReadTheDocs (production documentation): https://selprotopy.readthedocs.io/
+
 ***This project is still in early stages, much is still to come.***
 
 ## Description
@@ -43,7 +47,7 @@ and thoroughly documents the core framework of SEL Protocol. This guide is the b
 the bindings provided here. The guide can be accessed with a free account on the SEL
 website: [](https://selinc.com/)
 
-## Installation:
+## Installation
 
 **From PyPI as a Python Package**
 
@@ -63,7 +67,7 @@ To install `selprotopy` from GitHub:
 5. Verify that it's been installed by opening a Python instance and importing:
     `>>> import selprotopy` If no errors arise, the package has been installed.
 
-## Contributing:
+## Contributing
 
 Want to get involved? We'd love to have your help!
 
@@ -73,7 +77,7 @@ bug, or just have questions, jump over to the
 
 If you want to add features, or contribute yourself, feel free to open a pull-request.
 
-### Contact Info:
+### Contact Info
 :information_source: *As mentioned in the
 [caution](https://github.com/engineerjoe440/selprotopy#warning-caution) above, this
 project is not associated with Schweitzer Engineering Laboratories (SEL) in any
