@@ -16,6 +16,8 @@ SEL Protocol Application Guide: https://selinc.com/api/download/5026/
 """
 ################################################################################
 
+from typing import Optional
+
 from selprotopy.client.base import SELClient
 
 __all__ = ["TCPSELClient"]
@@ -81,10 +83,12 @@ class TCPSELClient(SELClient):
 
     def __init__(
         self,
+        ip_address: str,
+        port: Optional[int] = 23,
         **kwargs
     ):
         """Connect over Serial to the SEL Protocol Device."""
         # Establish a TCP Connection
-        connection=None # TODO
+        connection = socket.create_connection((ip_address, port))
         # Attach Super Object
         super().__init__(connApi=connection, **kwargs)

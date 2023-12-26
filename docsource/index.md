@@ -31,6 +31,7 @@ maxdepth: 1
 ---
    
 selprotopy
+examples
 ```
 
 ```{warning}
