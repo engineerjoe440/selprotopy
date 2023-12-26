@@ -19,6 +19,7 @@ SEL Protocol Application Guide: https://selinc.com/api/download/5026/
 from typing import Optional
 
 from selprotopy.client.base import SELClient
+from selprotopy.support import socket
 
 __all__ = ["TCPSELClient"]
 
