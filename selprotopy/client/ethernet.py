@@ -90,6 +90,6 @@ class TCPSELClient(SELClient):
     ):
         """Connect over Serial to the SEL Protocol Device."""
         # Establish a TCP Connection
-        connection = socket.create_connection((ip_address, port))
+        connection = socket.socket.create_connection((ip_address, port))
         # Attach Super Object
         super().__init__(connApi=connection, **kwargs)
