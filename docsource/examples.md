@@ -11,7 +11,7 @@ maxdepth: 1
 glob:
 ---
 
-examples/*
+client_examples/*
 ```
 
 ```{note}
